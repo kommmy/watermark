@@ -12,6 +12,12 @@ struct iPhoneNativeTemplate: View {
             Image(uiImage: image).resizable().aspectRatio(contentMode: .fit)
 
             HStack(spacing: 6) {
+                Image("brand_apple")
+                    .renderingMode(.template)
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundColor(.black)
+                    .frame(width: barHeight * 0.34, height: barHeight * 0.34)
                 Text("Shot on ")
                     .font(.system(size: barHeight * 0.30, weight: .regular))
                     .foregroundColor(.black)

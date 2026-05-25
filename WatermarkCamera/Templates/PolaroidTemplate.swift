@@ -17,6 +17,10 @@ struct PolaroidTemplate: View {
                 .padding(.horizontal, paddingSide)
 
             VStack(spacing: paddingSide * 0.18) {
+                Image("brand_polaroid")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: image.size.width * 0.32, height: captionSize * 1.2)
                 Text(meta.cameraModel ?? "untitled")
                     .font(.custom("Snell Roundhand", size: captionSize))
                     .foregroundColor(Color(white: 0.13))

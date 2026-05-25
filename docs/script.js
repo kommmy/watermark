@@ -10,6 +10,16 @@ const SAMPLE_LANDSCAPE = "./sample.svg";
 const SAMPLE_CAMERA    = "./sample-camera.svg";
 const SAMPLE_PORTRAIT  = "./sample-portrait.svg";
 
+const LOGO = {
+  leica: "./assets/logos/brand_leica.svg",
+  fujifilm: "./assets/logos/brand_fujifilm.svg",
+  sony: "./assets/logos/brand_sony.svg",
+  hasselblad: "./assets/logos/brand_hasselblad.svg",
+  ricoh: "./assets/logos/brand_ricoh.svg",
+  apple: "./assets/logos/brand_apple.svg",
+  polaroid: "./assets/logos/brand_polaroid.svg",
+};
+
 const DEFAULT_DATA = {
   image: SAMPLE_LANDSCAPE,
   cameraModel: "LEICA Q3",
@@ -109,7 +119,7 @@ const RENDERERS = {
         <img src="${escapeHtml(d.image)}" class="photo" alt="" />
         <div class="bar">
           <div class="brand">
-            <span class="logo">LEICA</span>
+            <img src="${LOGO.leica}" class="logo logo-img" alt="Leica" />
             <div class="model">
               <div class="name">${escapeHtml(d.cameraModel)}</div>
               ${d.lensModel ? `<div class="lens">${escapeHtml(d.lensModel)}</div>` : ""}
@@ -131,7 +141,7 @@ const RENDERERS = {
         <img src="${escapeHtml(d.image)}" class="photo" alt="" />
         <div class="bar">
           <div class="brand">
-            <span class="logo">LEICA</span>
+            <img src="${LOGO.leica}" class="logo logo-img" alt="Leica" />
             <div class="model">
               <div class="name">${escapeHtml(d.cameraModel)}</div>
               ${d.lensModel ? `<div class="lens">${escapeHtml(d.lensModel)}</div>` : ""}
@@ -153,7 +163,7 @@ const RENDERERS = {
         <img src="${escapeHtml(d.image)}" class="photo" alt="" />
         <div class="bar">
           <div class="brand">
-            <div class="logo">FUJIFILM</div>
+            <img src="${LOGO.fujifilm}" class="logo logo-img" alt="Fujifilm" />
             <div class="name">${escapeHtml(d.cameraModel || "X SERIES")}</div>
           </div>
           <div class="spacer"></div>
@@ -172,7 +182,7 @@ const RENDERERS = {
         <img src="${escapeHtml(d.image)}" class="photo" alt="" />
         <div class="strip-bottom"></div>
         <div class="bar">
-          <span class="name">FUJIFILM ${escapeHtml(d.cameraModel || "")}</span>
+          <span class="name"><img src="${LOGO.fujifilm}" class="logo logo-img" alt="Fujifilm" /> ${escapeHtml(d.cameraModel || "")}</span>
           <span class="spacer"></span>
           <span class="params">${escapeHtml(paramsLine(d))}</span>
         </div>
@@ -184,7 +194,7 @@ const RENDERERS = {
       <div class="canvas tpl-sony">
         <img src="${escapeHtml(d.image)}" class="photo" alt="" />
         <div class="overlay">
-          <div class="brand">SONY</div>
+          <img src="${LOGO.sony}" class="brand-logo brand-logo-invert" alt="Sony" />
           ${d.cameraModel ? `<div class="model">${escapeHtml(d.cameraModel)}</div>` : ""}
           <div class="sep"></div>
           <div class="line">${escapeHtml(paramsLine(d))}</div>
@@ -200,8 +210,7 @@ const RENDERERS = {
         <div class="footer-bar">
           <div class="brand">
             <div class="row">
-              <span class="h-dot">H</span>
-              <span class="name">HASSELBLAD</span>
+              <img src="${LOGO.hasselblad}" class="brand-logo" alt="Hasselblad" />
             </div>
             ${d.cameraModel ? `<div class="model">${escapeHtml(d.cameraModel)}</div>` : ""}
           </div>
@@ -218,7 +227,7 @@ const RENDERERS = {
       <div class="canvas dark tpl-ricoh-gr">
         <img src="${escapeHtml(d.image)}" class="photo" alt="" />
         <div class="bar">
-          <span class="logo">GR</span>
+          <img src="${LOGO.ricoh}" class="logo logo-img logo-invert" alt="Ricoh" />
           <div class="brand">
             <div class="name">${escapeHtml(d.cameraModel || "RICOH GR III")}</div>
             ${d.lensModel ? `<div class="sub">${escapeHtml(d.lensModel)}</div>` : ""}
@@ -237,7 +246,7 @@ const RENDERERS = {
       <div class="canvas tpl-iphone">
         <img src="${escapeHtml(d.image)}" class="photo" alt="" />
         <div class="bar">
-          <div class="shot">Shot on <span class="device">${escapeHtml(d.cameraModel || "iPhone")}</span></div>
+          <div class="shot"><img src="${LOGO.apple}" class="apple-logo" alt="Apple" /> Shot on <span class="device">${escapeHtml(d.cameraModel || "iPhone")}</span></div>
         </div>
       </div>`;
   },
@@ -248,6 +257,7 @@ const RENDERERS = {
         <div class="photo-wrap">
           <img src="${escapeHtml(d.image)}" class="photo" alt="" />
         </div>
+        <img src="${LOGO.polaroid}" class="polaroid-logo" alt="Polaroid" />
         <div class="caption">${escapeHtml(d.cameraModel || "untitled")}</div>
         <div class="params">${escapeHtml(d.date || "")}</div>
       </div>`;

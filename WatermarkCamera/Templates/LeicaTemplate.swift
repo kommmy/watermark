@@ -16,13 +16,10 @@ struct LeicaTemplate: View {
 
             HStack(alignment: .center, spacing: 0) {
                 HStack(spacing: barHeight * 0.22) {
-                    Text("LEICA")
-                        .font(.system(size: barHeight * 0.32, weight: .heavy))
-                        .foregroundColor(.white)
-                        .tracking(barHeight * 0.02)
-                        .padding(.horizontal, barHeight * 0.2)
-                        .padding(.vertical, barHeight * 0.08)
-                        .background(Color(red: 0.86, green: 0.07, blue: 0.13))
+                    Image("brand_leica")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: barHeight * 0.74, height: barHeight * 0.74)
 
                     VStack(alignment: .leading, spacing: barHeight * 0.05) {
                         Text(meta.cameraModel ?? meta.brand.displayName)

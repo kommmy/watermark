@@ -94,7 +94,7 @@ WatermarkCamera/
 │   ├── TemplateStrip.swift          # 横向 12 套模板选择条
 │   └── MetadataEditorSheet.swift    # 手动覆盖 EXIF
 ├── Resources/
-│   └── Assets.xcassets              # AppIcon / AccentColor / 品牌 logo 占位
+│   └── Assets.xcassets              # AppIcon / AccentColor / 真实品牌 logo
 └── Info.plist
 ```
 
@@ -132,15 +132,15 @@ PhotosPicker × N → [UIImage] → PuzzleLayout.makeView(images:, options:)
 3. 在 `Views/Cards/PuzzleLayoutCard.swift` 的 `cover` switch 里加封面 placeholder。
 4. 在 `docs/script.js` 的 `LAYOUTS` + `LAYOUT_RENDERERS` 里加同名 id 的 Web 版本。
 
-## 替换品牌 logo（用真矢量图）
+## 品牌 logo
 
-第一版为了不踩品牌商标问题，模板里都用了 `Text("LEICA")` 这样的纯文字 logo。如需更贴近真机印刷字样：
+当前版本已经内置真实品牌 SVG logo：
 
-1. 把品牌矢量 logo（建议 SVG 转 PDF）拖入 `Resources/Assets.xcassets`，命名 `brand_leica` / `brand_fujifilm` / `brand_sony` / `brand_hasselblad` 等。
-2. 在 Asset 设置里勾选 **Preserve Vector Data**、Render As 选 **Template Image**。
-3. 把对应模板里的 `Text("LEICA")` 换成 `Image("brand_leica").resizable().aspectRatio(contentMode: .fit).frame(height: barHeight * 0.5)`。
+1. iOS 端放在 `Resources/Assets.xcassets/brand_*.imageset`，模板里用 `Image("brand_leica")` / `Image("brand_sony")` 等直接引用。
+2. Web 端放在 `docs/assets/logos/brand_*.svg`，`docs/script.js` 通过 `LOGO` 常量引用。
+3. 新增品牌时两端保持同名，例如 `brand_nikon`，这样 Web 和 iOS 的模板 id 容易对齐。
 
-> 品牌 logo 受商标法保护，自用 OK，公开发布或上架请确保已获得授权或使用替代设计。
+> 当前按自用/演示处理真实 logo；如后续上架 App Store，再按实际发布需求调整。
 
 ## 已知限制
 

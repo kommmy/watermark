@@ -16,11 +16,16 @@ struct FujiFilmStripTemplate: View {
             perforationStrip
 
             HStack(spacing: barHeight * 0.3) {
-                Text("FUJIFILM \(meta.cameraModel ?? "")")
-                    .font(.system(size: barHeight * 0.28, weight: .bold))
-                    .tracking(barHeight * 0.04)
-                    .foregroundColor(Color(white: 0.94))
-                    .lineLimit(1)
+                HStack(spacing: barHeight * 0.18) {
+                    Image("brand_fujifilm")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: barHeight * 1.65, height: barHeight * 0.30, alignment: .leading)
+                    Text(meta.cameraModel ?? "")
+                        .font(.system(size: barHeight * 0.22, weight: .bold))
+                        .foregroundColor(Color(white: 0.94))
+                        .lineLimit(1)
+                }
                 Spacer(minLength: 0)
                 Text(meta.paramsLine)
                     .font(.system(size: barHeight * 0.26, weight: .medium, design: .monospaced))

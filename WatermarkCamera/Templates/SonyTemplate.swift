@@ -13,10 +13,12 @@ struct SonyTemplate: View {
             Image(uiImage: image).resizable().aspectRatio(contentMode: .fit)
 
             VStack(alignment: .leading, spacing: unit * 0.35) {
-                Text("SONY")
-                    .font(.system(size: unit * 1.4, weight: .black))
-                    .tracking(unit * 0.12)
+                Image("brand_sony")
+                    .renderingMode(.template)
+                    .resizable()
+                    .scaledToFit()
                     .foregroundColor(.white)
+                    .frame(width: unit * 5.1, height: unit * 1.15, alignment: .leading)
                 if let model = meta.cameraModel {
                     Text(model)
                         .font(.system(size: unit * 0.85, weight: .medium))

@@ -12,15 +12,12 @@ struct RicohGRTemplate: View {
             Image(uiImage: image).resizable().aspectRatio(contentMode: .fit)
 
             HStack(spacing: barHeight * 0.3) {
-                Text("GR")
-                    .font(.system(size: barHeight * 0.34, weight: .heavy))
-                    .tracking(barHeight * 0.04)
+                Image("brand_ricoh")
+                    .renderingMode(.template)
+                    .resizable()
+                    .scaledToFit()
                     .foregroundColor(.white)
-                    .padding(.horizontal, barHeight * 0.18)
-                    .padding(.vertical, barHeight * 0.06)
-                    .overlay(
-                        Rectangle().stroke(Color.white, lineWidth: 1)
-                    )
+                    .frame(width: barHeight * 1.65, height: barHeight * 0.30, alignment: .leading)
 
                 VStack(alignment: .leading, spacing: barHeight * 0.04) {
                     Text(meta.cameraModel ?? "RICOH GR III")

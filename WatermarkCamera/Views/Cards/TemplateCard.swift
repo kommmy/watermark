@@ -67,23 +67,26 @@ struct TemplateCard: View {
     private var accentBar: some View {
         switch template {
         case .leica:
-            HStack(spacing: 0) {
-                Rectangle().fill(Color(red: 0.86, green: 0.07, blue: 0.13)).frame(width: 26)
-                Rectangle().fill(Color.white)
+            HStack {
+                Image("brand_leica").resizable().scaledToFit().frame(width: 18, height: 18)
+                Spacer()
             }
+            .padding(.horizontal, 6)
+            .background(Color.white)
             .frame(height: 18)
 
         case .leica_mono:
-            HStack(spacing: 0) {
-                Rectangle().fill(Color(red: 0.86, green: 0.07, blue: 0.13)).frame(width: 26)
-                Rectangle().fill(Color.black)
+            HStack {
+                Image("brand_leica").resizable().scaledToFit().frame(width: 18, height: 18)
+                Spacer()
             }
+            .padding(.horizontal, 6)
+            .background(Color.black)
             .frame(height: 18).overlay(Rectangle().stroke(Color.white.opacity(0.2), lineWidth: 0.5))
 
         case .fujifilm, .fuji_strip:
             HStack(spacing: 4) {
-                Text("FUJIFILM").font(.system(size: 8, weight: .heavy))
-                    .foregroundColor(Color(white: 0.94)).tracking(1.2)
+                Image("brand_fujifilm").resizable().scaledToFit().frame(width: 52, height: 10)
                 Spacer()
             }
             .padding(.horizontal, 8).frame(height: 18).background(Color.black)
@@ -91,7 +94,8 @@ struct TemplateCard: View {
         case .sony:
             HStack {
                 Spacer()
-                Text("SONY").font(.system(size: 7, weight: .heavy)).foregroundColor(.white).tracking(1.5)
+                Image("brand_sony").renderingMode(.template).resizable().scaledToFit()
+                    .foregroundColor(.white).frame(width: 34, height: 8)
                     .padding(.horizontal, 6).padding(.vertical, 2)
                     .background(Color.black.opacity(0.6))
                     .clipShape(RoundedRectangle(cornerRadius: 3))
@@ -100,28 +104,32 @@ struct TemplateCard: View {
 
         case .hasselblad:
             HStack(spacing: 4) {
-                Text("H").font(.system(size: 9, weight: .heavy)).foregroundColor(.white)
-                    .frame(width: 12, height: 12).background(Circle().fill(Color.black))
-                Text("HASSELBLAD").font(.system(size: 7, weight: .heavy)).foregroundColor(.black).tracking(0.5)
+                Image("brand_hasselblad").renderingMode(.template).resizable().scaledToFit()
+                    .foregroundColor(.black).frame(width: 68, height: 8)
                 Spacer()
             }
             .padding(.horizontal, 8).frame(height: 22).background(Color.white)
 
         case .ricoh_gr:
             HStack {
-                Text("GR").font(.system(size: 10, weight: .heavy)).foregroundColor(.white)
-                    .padding(.horizontal, 4).padding(.vertical, 1)
-                    .overlay(Rectangle().stroke(Color.white, lineWidth: 1))
+                Image("brand_ricoh").renderingMode(.template).resizable().scaledToFit()
+                    .foregroundColor(.white).frame(width: 44, height: 10)
                 Spacer()
             }
             .padding(.horizontal, 8).frame(height: 22).background(Color.black)
 
         case .iphone:
-            Text("Shot on iPhone").font(.system(size: 9, weight: .medium))
-                .foregroundColor(.black).frame(maxWidth: .infinity).frame(height: 22).background(Color.white)
+            HStack(spacing: 4) {
+                Image("brand_apple").renderingMode(.template).resizable().scaledToFit()
+                    .foregroundColor(.black).frame(width: 8, height: 10)
+                Text("Shot on iPhone").font(.system(size: 9, weight: .medium)).foregroundColor(.black)
+            }
+            .frame(maxWidth: .infinity).frame(height: 22).background(Color.white)
 
         case .polaroid:
-            Rectangle().fill(Color.white).frame(height: 32)
+            Image("brand_polaroid").resizable().scaledToFit()
+                .frame(width: 70, height: 18)
+                .frame(maxWidth: .infinity).frame(height: 32).background(Color.white)
 
         case .minimal:
             HStack(spacing: 4) {

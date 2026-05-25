@@ -15,10 +15,10 @@ struct FujiTemplate: View {
 
             HStack(alignment: .center, spacing: 0) {
                 VStack(alignment: .leading, spacing: barHeight * 0.08) {
-                    Text("FUJIFILM")
-                        .font(.system(size: barHeight * 0.32, weight: .black))
-                        .foregroundColor(warmWhite)
-                        .tracking(barHeight * 0.05)
+                    Image("brand_fujifilm")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: barHeight * 1.8, height: barHeight * 0.34, alignment: .leading)
                     Text(meta.cameraModel ?? "X SERIES")
                         .font(.system(size: barHeight * 0.18))
                         .foregroundColor(warmWhite.opacity(0.7))

@@ -19,20 +19,12 @@ struct HasselbladTemplate: View {
 
             HStack(alignment: .firstTextBaseline, spacing: pad * 0.5) {
                 VStack(alignment: .leading, spacing: footerHeight * 0.08) {
-                    HStack(spacing: footerHeight * 0.12) {
-                        Text("H")
-                            .font(.system(size: footerHeight * 0.55, weight: .black))
-                            .foregroundColor(.white)
-                            .frame(
-                                width: footerHeight * 0.55,
-                                height: footerHeight * 0.55
-                            )
-                            .background(Circle().fill(Color.black))
-                        Text("HASSELBLAD")
-                            .font(.system(size: footerHeight * 0.32, weight: .bold))
-                            .foregroundColor(.black)
-                            .tracking(footerHeight * 0.04)
-                    }
+                    Image("brand_hasselblad")
+                        .renderingMode(.template)
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundColor(.black)
+                        .frame(width: footerHeight * 3.2, height: footerHeight * 0.36, alignment: .leading)
                     if let model = meta.cameraModel {
                         Text(model)
                             .font(.system(size: footerHeight * 0.22))
