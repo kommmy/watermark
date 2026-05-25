@@ -46,7 +46,9 @@ struct FujiTemplate: View {
     }
 }
 
-#Preview {
-    FujiTemplate(image: UIImage(systemName: "photo")!, meta: .preview)
-        .frame(width: 600)
+struct FujiTemplate_Previews: PreviewProvider {
+    static var previews: some View {
+        FujiTemplate(image: UIImage(systemName: "photo")!, meta: .preview)
+            .frame(width: 600)
+    }
 }

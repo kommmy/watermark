@@ -26,6 +26,12 @@ jobs:
       - name: Generate Xcode project
         run: xcodegen generate
 
+      - name: List schemes
+        run: xcodebuild -list -project WatermarkCamera.xcodeproj
+
+      - name: Show available simulators
+        run: xcrun simctl list devices available iOS | head -40
+
       - name: Build (no code signing)
         run: |
           set -o pipefail
@@ -33,12 +39,23 @@ jobs:
             -project WatermarkCamera.xcodeproj \
             -scheme WatermarkCamera \
             -configuration Debug \
+            -sdk iphonesimulator \
             -destination 'generic/platform=iOS Simulator' \
             -derivedDataPath build \
             clean build \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO
+            CODE_SIGNING_ALLOWED=NO \
+            | tee xcodebuild.log
+
+      - name: Upload build log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcodebuild-log
+          path: xcodebuild.log
+          if-no-files-found: warn
+          retention-days: 7
 
       - name: Upload built .app (for inspection)
         if: success()

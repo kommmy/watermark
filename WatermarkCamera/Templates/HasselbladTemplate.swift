@@ -64,7 +64,9 @@ struct HasselbladTemplate: View {
     }
 }
 
-#Preview {
-    HasselbladTemplate(image: UIImage(systemName: "photo")!, meta: .preview)
-        .frame(width: 600)
+struct HasselbladTemplate_Previews: PreviewProvider {
+    static var previews: some View {
+        HasselbladTemplate(image: UIImage(systemName: "photo")!, meta: .preview)
+            .frame(width: 600)
+    }
 }

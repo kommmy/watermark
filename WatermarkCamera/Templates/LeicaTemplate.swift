@@ -66,7 +66,9 @@ struct LeicaTemplate: View {
     }
 }
 
-#Preview {
-    LeicaTemplate(image: UIImage(systemName: "photo")!, meta: .preview)
-        .frame(width: 600)
+struct LeicaTemplate_Previews: PreviewProvider {
+    static var previews: some View {
+        LeicaTemplate(image: UIImage(systemName: "photo")!, meta: .preview)
+            .frame(width: 600)
+    }
 }

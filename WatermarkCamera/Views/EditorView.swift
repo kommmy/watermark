@@ -178,9 +178,10 @@ struct EditorView: View {
 
     /// 直接弹系统分享面板（UIActivityViewController），免 iOS 16 上 ShareLink 对 UIImage 类型的限制。
     private func presentShareSheet(image: UIImage) {
-        guard let scene = UIApplication.shared.connectedScenes
-                .compactMap({ $0 as? UIWindowScene }).first,
-              let root = scene.keyWindow?.rootViewController
+        let windows = UIApplication.shared.connectedScenes
+            .compactMap { $0 as? UIWindowScene }
+            .flatMap { $0.windows }
+        guard let root = (windows.first(where: \.isKeyWindow) ?? windows.first)?.rootViewController
         else { return }
         let vc = UIActivityViewController(activityItems: [image], applicationActivities: nil)
         // 找到最上层 controller 来 present，避免被 NavigationStack 拦截。
@@ -217,8 +218,3 @@ private struct ToastView: View {
     }
 }
 
-private extension UIWindowScene {
-    var keyWindow: UIWindow? {
-        windows.first(where: { $0.isKeyWindow }) ?? windows.first
-    }
-}

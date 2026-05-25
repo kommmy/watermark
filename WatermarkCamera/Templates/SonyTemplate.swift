@@ -52,7 +52,9 @@ struct SonyTemplate: View {
     }
 }
 
-#Preview {
-    SonyTemplate(image: UIImage(systemName: "photo")!, meta: .preview)
-        .frame(width: 600)
+struct SonyTemplate_Previews: PreviewProvider {
+    static var previews: some View {
+        SonyTemplate(image: UIImage(systemName: "photo")!, meta: .preview)
+            .frame(width: 600)
+    }
 }

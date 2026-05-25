@@ -40,7 +40,9 @@ struct MinimalTemplate: View {
     }
 }
 
-#Preview {
-    MinimalTemplate(image: UIImage(systemName: "photo")!, meta: .preview)
-        .frame(width: 600)
+struct MinimalTemplate_Previews: PreviewProvider {
+    static var previews: some View {
+        MinimalTemplate(image: UIImage(systemName: "photo")!, meta: .preview)
+            .frame(width: 600)
+    }
 }

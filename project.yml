@@ -23,8 +23,6 @@ targets:
       - path: WatermarkCamera
         excludes:
           - "Info.plist"
-    resources:
-      - WatermarkCamera/Resources/Assets.xcassets
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.example.WatermarkCamera
