@@ -1,0 +1,58 @@
+import SwiftUI
+
+/// 索尼风格：右下角悬浮的半透明黑色圆角卡片，SONY + 机身 + 参数三段式。
+/// 与图片叠加，不挤压原图比例。
+struct SonyTemplate: View {
+    let image: UIImage
+    let meta: PhotoMetadata
+
+    private var unit: CGFloat { max(min(image.size.width, image.size.height) * 0.022, 14) }
+
+    var body: some View {
+        ZStack(alignment: .bottomTrailing) {
+            Image(uiImage: image).resizable().aspectRatio(contentMode: .fit)
+
+            VStack(alignment: .leading, spacing: unit * 0.35) {
+                Text("SONY")
+                    .font(.system(size: unit * 1.4, weight: .black))
+                    .tracking(unit * 0.12)
+                    .foregroundColor(.white)
+                if let model = meta.cameraModel {
+                    Text(model)
+                        .font(.system(size: unit * 0.85, weight: .medium))
+                        .foregroundColor(.white.opacity(0.85))
+                        .lineLimit(1)
+                }
+                Rectangle()
+                    .fill(Color.white.opacity(0.25))
+                    .frame(height: 1)
+                    .padding(.vertical, unit * 0.15)
+                Text(meta.paramsLine)
+                    .font(.system(size: unit * 0.85, weight: .semibold, design: .monospaced))
+                    .foregroundColor(.white)
+                    .lineLimit(1)
+                if let date = meta.dateText {
+                    Text(date)
+                        .font(.system(size: unit * 0.7, design: .monospaced))
+                        .foregroundColor(.white.opacity(0.7))
+                        .lineLimit(1)
+                }
+            }
+            .padding(unit * 1.2)
+            .background(
+                RoundedRectangle(cornerRadius: unit * 0.8, style: .continuous)
+                    .fill(Color.black.opacity(0.55))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: unit * 0.8, style: .continuous)
+                            .stroke(Color.white.opacity(0.12), lineWidth: 0.5)
+                    )
+            )
+            .padding(unit * 2)
+        }
+    }
+}
+
+#Preview {
+    SonyTemplate(image: UIImage(systemName: "photo")!, meta: .preview)
+        .frame(width: 600)
+}

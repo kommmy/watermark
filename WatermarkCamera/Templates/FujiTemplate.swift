@@ -1,0 +1,52 @@
+import SwiftUI
+
+/// 富士胶片风格：黑底信息条，左侧 FUJIFILM logo + 机身，右侧参数 + 拍摄日期。
+/// 文字偏暖白色以致敬胶片机背的菜单印刷字。
+struct FujiTemplate: View {
+    let image: UIImage
+    let meta: PhotoMetadata
+
+    private var barHeight: CGFloat { max(image.size.height * 0.10, 56) }
+    private let warmWhite = Color(red: 0.94, green: 0.92, blue: 0.86)
+
+    var body: some View {
+        VStack(spacing: 0) {
+            Image(uiImage: image).resizable().aspectRatio(contentMode: .fit)
+
+            HStack(alignment: .center, spacing: 0) {
+                VStack(alignment: .leading, spacing: barHeight * 0.08) {
+                    Text("FUJIFILM")
+                        .font(.system(size: barHeight * 0.32, weight: .black))
+                        .foregroundColor(warmWhite)
+                        .tracking(barHeight * 0.05)
+                    Text(meta.cameraModel ?? "X SERIES")
+                        .font(.system(size: barHeight * 0.18))
+                        .foregroundColor(warmWhite.opacity(0.7))
+                        .lineLimit(1)
+                }
+
+                Spacer(minLength: barHeight * 0.4)
+
+                VStack(alignment: .trailing, spacing: barHeight * 0.08) {
+                    Text(meta.paramsLine)
+                        .font(.system(size: barHeight * 0.22, weight: .semibold, design: .monospaced))
+                        .foregroundColor(warmWhite)
+                        .lineLimit(1)
+                    Text(meta.dateText ?? "")
+                        .font(.system(size: barHeight * 0.16, design: .monospaced))
+                        .foregroundColor(warmWhite.opacity(0.6))
+                        .lineLimit(1)
+                }
+            }
+            .padding(.horizontal, barHeight * 0.5)
+            .frame(height: barHeight)
+            .frame(maxWidth: .infinity)
+            .background(Color(white: 0.08))
+        }
+    }
+}
+
+#Preview {
+    FujiTemplate(image: UIImage(systemName: "photo")!, meta: .preview)
+        .frame(width: 600)
+}
