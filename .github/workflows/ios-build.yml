@@ -11,14 +11,16 @@ jobs:
   build:
     name: Build for iOS Simulator
     runs-on: macos-14
-    timeout-minutes: 20
+    timeout-minutes: 25
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
       - name: Show Xcode version
-        run: xcodebuild -version
+        run: |
+          xcodebuild -version
+          xcode-select -p
 
       - name: Install XcodeGen
         run: brew install xcodegen
@@ -26,15 +28,29 @@ jobs:
       - name: Generate Xcode project
         run: xcodegen generate
 
-      - name: List schemes
-        run: xcodebuild -list -project WatermarkCamera.xcodeproj
-
-      - name: Show available simulators
-        run: xcrun simctl list devices available iOS | head -40
-
-      - name: Build (no code signing)
+      - name: Build with verbose output
         run: |
+          set +e
           set -o pipefail
+
+          echo "::group::Project file listing"
+          ls -la WatermarkCamera.xcodeproj/ || true
+          echo "::endgroup::"
+
+          echo "::group::xcodebuild -list"
+          xcodebuild -list -project WatermarkCamera.xcodeproj 2>&1 | tee list.log
+          LIST_RC=${PIPESTATUS[0]}
+          echo "::endgroup::"
+
+          if [ "$LIST_RC" -ne 0 ]; then
+            echo "::error::xcodebuild -list failed with exit code $LIST_RC"
+            tail -30 list.log | while IFS= read -r line; do
+              [ -n "$line" ] && echo "::error::$line"
+            done
+            exit "$LIST_RC"
+          fi
+
+          echo "::group::xcodebuild build"
           xcodebuild \
             -project WatermarkCamera.xcodeproj \
             -scheme WatermarkCamera \
@@ -46,22 +62,27 @@ jobs:
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
-            | tee xcodebuild.log
+            2>&1 | tee xcodebuild.log
+          BUILD_RC=${PIPESTATUS[0]}
+          echo "::endgroup::"
 
-      - name: Upload build log on failure
-        if: failure()
+          if [ "$BUILD_RC" -ne 0 ]; then
+            echo "::error::xcodebuild build failed with exit code $BUILD_RC"
+            grep -E '(error:|warning:|note:)' xcodebuild.log | head -60 | while IFS= read -r line; do
+              [ -n "$line" ] && echo "::error::$line"
+            done
+            exit "$BUILD_RC"
+          fi
+
+      - name: Upload artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: xcodebuild-log
-          path: xcodebuild.log
+          name: build-logs
+          path: |
+            xcodebuild.log
+            list.log
+            WatermarkCamera.xcodeproj/project.pbxproj
+            build/Build/Products/Debug-iphonesimulator/WatermarkCamera.app
           if-no-files-found: warn
-          retention-days: 7
-
-      - name: Upload built .app (for inspection)
-        if: success()
-        uses: actions/upload-artifact@v4
-        with:
-          name: WatermarkCamera-Simulator
-          path: build/Build/Products/Debug-iphonesimulator/WatermarkCamera.app
-          if-no-files-found: error
           retention-days: 7

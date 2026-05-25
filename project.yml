@@ -20,9 +20,12 @@ targets:
     platform: iOS
     deploymentTarget: "16.0"
     sources:
-      - path: WatermarkCamera
-        excludes:
-          - "Info.plist"
+      - path: WatermarkCamera/App
+      - path: WatermarkCamera/Models
+      - path: WatermarkCamera/Services
+      - path: WatermarkCamera/Templates
+      - path: WatermarkCamera/Views
+      - path: WatermarkCamera/Resources
     settings:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.example.WatermarkCamera
