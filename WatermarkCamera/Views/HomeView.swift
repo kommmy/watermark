@@ -1,116 +1,44 @@
 import SwiftUI
-import PhotosUI
 
-/// 首页：选图入口 + 简介。选好图后跳转到 `EditorView`。
+/// App 根视图：4 Tab（推荐 / 水印 / 拼图 / 我的）+ 深色主题。
+/// 实际的选图、模板列表、编辑流程都下放到每个 Tab 自己处理。
 struct HomeView: View {
-    @State private var selectedItem: PhotosPickerItem?
-    @State private var loadedImage: UIImage?
-    @State private var metadata: PhotoMetadata = .empty
-    @State private var isLoading = false
-    @State private var navigate = false
-    @State private var errorMessage: String?
+    @State private var tab: Tab = .discover
+
+    enum Tab: Hashable { case discover, watermark, puzzle, me }
 
     var body: some View {
-        NavigationStack {
-            ZStack {
-                LinearGradient(
-                    colors: [Color(white: 0.97), Color(white: 0.92)],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                .ignoresSafeArea()
+        TabView(selection: $tab) {
+            DiscoverTab(switchTo: { tab = $0 })
+                .tabItem { Label("推荐", systemImage: "flame") }
+                .tag(Tab.discover)
 
-                VStack(spacing: 36) {
-                    Spacer().frame(height: 40)
+            WatermarkTab()
+                .tabItem { Label("水印", systemImage: "camera.macro") }
+                .tag(Tab.watermark)
 
-                    Image(systemName: "camera.aperture")
-                        .font(.system(size: 96, weight: .ultraLight))
-                        .foregroundStyle(.black)
+            PuzzleTab()
+                .tabItem { Label("拼图", systemImage: "square.grid.2x2") }
+                .tag(Tab.puzzle)
 
-                    VStack(spacing: 10) {
-                        Text("相机水印")
-                            .font(.system(size: 34, weight: .bold))
-                            .foregroundColor(.black)
-                        Text("一键给照片打上相机风格水印")
-                            .font(.system(size: 15))
-                            .foregroundColor(.secondary)
-                    }
-
-                    Spacer()
-
-                    PhotosPicker(
-                        selection: $selectedItem,
-                        matching: .images,
-                        photoLibrary: .shared()
-                    ) {
-                        HStack(spacing: 10) {
-                            if isLoading {
-                                ProgressView()
-                                    .progressViewStyle(.circular)
-                                    .tint(.white)
-                            } else {
-                                Image(systemName: "photo.on.rectangle.angled")
-                            }
-                            Text(isLoading ? "正在读取 EXIF…" : "选择照片")
-                                .font(.headline)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .padding(.vertical, 18)
-                        .background(Color.black)
-                        .foregroundColor(.white)
-                        .clipShape(Capsule())
-                    }
-                    .disabled(isLoading)
-                    .padding(.horizontal, 32)
-
-                    Text("支持 JPEG / HEIC / RAW，全程本地处理")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .padding(.bottom, 32)
-                }
-            }
-            .navigationDestination(isPresented: $navigate) {
-                if let img = loadedImage {
-                    EditorView(image: img, initialMetadata: metadata)
-                }
-            }
-            .onChange(of: selectedItem) { newItem in
-                guard let newItem else { return }
-                Task { await load(newItem) }
-            }
-            .alert(
-                "无法读取照片",
-                isPresented: Binding(
-                    get: { errorMessage != nil },
-                    set: { if !$0 { errorMessage = nil } }
-                )
-            ) {
-                Button("好的", role: .cancel) {}
-            } message: {
-                Text(errorMessage ?? "")
-            }
+            MeTab()
+                .tabItem { Label("我的", systemImage: "person") }
+                .tag(Tab.me)
         }
+        .tint(.white)
+        .preferredColorScheme(.dark)
+        .onAppear(perform: configureTabBarAppearance)
     }
 
-    private func load(_ item: PhotosPickerItem) async {
-        isLoading = true
-        defer { isLoading = false }
+    /// 让底部 TabBar 在深色主题下保持半透明黑色，跟 PixFrame 风格一致。
+    private func configureTabBarAppearance() {
+        let appearance = UITabBarAppearance()
+        appearance.configureWithDefaultBackground()
+        appearance.backgroundColor = UIColor.black.withAlphaComponent(0.85)
+        appearance.shadowColor = UIColor.white.withAlphaComponent(0.08)
 
-        do {
-            guard let data = try await item.loadTransferable(type: Data.self) else {
-                errorMessage = "无法读取该照片的数据。"
-                return
-            }
-            guard let img = UIImage(data: data) else {
-                errorMessage = "图片格式不被支持。"
-                return
-            }
-            loadedImage = img
-            metadata = ExifReader.read(from: data)
-            navigate = true
-        } catch {
-            errorMessage = error.localizedDescription
-        }
+        UITabBar.appearance().standardAppearance = appearance
+        UITabBar.appearance().scrollEdgeAppearance = appearance
     }
 }
 

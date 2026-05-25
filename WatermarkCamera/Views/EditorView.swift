@@ -1,7 +1,7 @@
 import SwiftUI
 import Photos
 
-/// 编辑页：预览 + 模板切换 + 保存/分享。
+// Watermark editor: preview + horizontal template strip + save/share.
 struct EditorView: View {
     let image: UIImage
 
@@ -15,32 +15,32 @@ struct EditorView: View {
 
     private let thumbnail: UIImage
 
-    init(image: UIImage, initialMetadata: PhotoMetadata) {
+    init(image: UIImage, initialMetadata: PhotoMetadata, initialTemplate: WatermarkTemplate? = nil) {
         self.image = image
         self._metadata = State(initialValue: initialMetadata)
-        self._template = State(initialValue: .recommended(for: initialMetadata))
+        let startTpl = initialTemplate ?? .recommended(for: initialMetadata)
+        self._template = State(initialValue: startTpl)
         self.thumbnail = image.resized(toWidth: 200) ?? image
     }
 
     var body: some View {
         VStack(spacing: 0) {
             previewArea
-
             TemplateStrip(selected: $template, thumbnail: thumbnail)
-
             actionBar
         }
-        .background(Color(white: 0.96).ignoresSafeArea())
-        .navigationTitle(metadata.cameraModel ?? "编辑")
+        .appBackground()
+        .navigationTitle(metadata.cameraModel ?? "Editor")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(AppTheme.Palette.background, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    showMetadataSheet = true
-                } label: {
+                Button { showMetadataSheet = true } label: {
                     Image(systemName: "slider.horizontal.3")
                 }
-                .accessibilityLabel("编辑参数")
+                .accessibilityLabel("Edit metadata")
+                .foregroundColor(AppTheme.Palette.textPrimary)
             }
         }
         .sheet(isPresented: $showMetadataSheet, onDismiss: renderPreview) {
@@ -68,14 +68,16 @@ struct EditorView: View {
                     Image(uiImage: previewImage)
                         .resizable()
                         .scaledToFit()
-                        .shadow(color: Color.black.opacity(0.08), radius: 12, y: 4)
+                        .shadow(color: Color.black.opacity(0.55), radius: 18, y: 8)
                 } else {
                     ProgressView()
+                        .tint(AppTheme.Palette.textPrimary)
                         .frame(maxWidth: .infinity, minHeight: 240)
                 }
             }
             .padding(20)
         }
+        .background(Color.black)
     }
 
     // MARK: - Action bar
@@ -85,7 +87,7 @@ struct EditorView: View {
             Button {
                 Task { await share() }
             } label: {
-                actionLabel(title: "分享", system: "square.and.arrow.up", filled: false)
+                actionLabel(title: "Share", system: "square.and.arrow.up", filled: false)
             }
             .disabled(isExporting)
 
@@ -93,7 +95,7 @@ struct EditorView: View {
                 Task { await save() }
             } label: {
                 actionLabel(
-                    title: isExporting ? "处理中…" : "保存到相册",
+                    title: isExporting ? "Working..." : "Save to Photos",
                     system: "square.and.arrow.down",
                     filled: true
                 )
@@ -103,7 +105,7 @@ struct EditorView: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
         .padding(.bottom, 8)
-        .background(.thinMaterial)
+        .background(.ultraThinMaterial)
     }
 
     @ViewBuilder
@@ -114,10 +116,10 @@ struct EditorView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 14)
-        .background(filled ? Color.black : Color.clear)
-        .foregroundColor(filled ? .white : .black)
+        .background(filled ? Color.white : Color.clear)
+        .foregroundColor(filled ? .black : .white)
         .overlay(
-            Capsule().stroke(Color.black.opacity(filled ? 0 : 0.25), lineWidth: 1)
+            Capsule().stroke(Color.white.opacity(filled ? 0 : 0.25), lineWidth: 1)
         )
         .clipShape(Capsule())
     }
@@ -145,12 +147,12 @@ struct EditorView: View {
         defer { isExporting = false }
 
         guard let full = await renderFull() else {
-            showToast("渲染失败")
+            showToast("Render failed")
             return
         }
         do {
             try await PhotoSaver.save(full)
-            showToast("已保存到相册")
+            showToast("Saved to Photos")
         } catch {
             showToast(error.localizedDescription)
         }
@@ -160,7 +162,7 @@ struct EditorView: View {
         isExporting = true
         defer { isExporting = false }
         guard let full = await renderFull() else {
-            showToast("渲染失败")
+            showToast("Render failed")
             return
         }
         presentShareSheet(image: full)
@@ -176,7 +178,7 @@ struct EditorView: View {
         )
     }
 
-    /// 直接弹系统分享面板（UIActivityViewController），免 iOS 16 上 ShareLink 对 UIImage 类型的限制。
+    // Present system share sheet directly (avoids iOS 16 ShareLink quirks for UIImage).
     private func presentShareSheet(image: UIImage) {
         let windows = UIApplication.shared.connectedScenes
             .compactMap { $0 as? UIWindowScene }
@@ -184,7 +186,6 @@ struct EditorView: View {
         guard let root = (windows.first(where: \.isKeyWindow) ?? windows.first)?.rootViewController
         else { return }
         let vc = UIActivityViewController(activityItems: [image], applicationActivities: nil)
-        // 找到最上层 controller 来 present，避免被 NavigationStack 拦截。
         var top = root
         while let presented = top.presentedViewController { top = presented }
         top.present(vc, animated: true)
@@ -217,4 +218,3 @@ private struct ToastView: View {
             .background(Capsule().fill(Color.black.opacity(0.85)))
     }
 }
-

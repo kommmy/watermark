@@ -1,33 +1,74 @@
 /* =============================================================
+   Design tokens (与 iOS WatermarkCamera/Theme/AppTheme.swift 对应)
+============================================================= */
+:root {
+  /* Palette */
+  --bg:           #0E0E10;
+  --card:         #1A1A1D;
+  --surface:      #2A2A2E;
+  --elevated:     #3A3A3F;
+  --text:         #FFFFFF;
+  --text-2:       rgba(255, 255, 255, 0.6);
+  --text-3:       rgba(255, 255, 255, 0.35);
+  --pro:          #FF8A3D;
+  --accent-blue:  #0A84FF;
+  --danger:       #FF453A;
+  --separator:    rgba(255, 255, 255, 0.08);
+
+  /* Radius */
+  --r-s:    8px;
+  --r-m:    12px;
+  --r-card: 18px;
+  --r-l:    24px;
+  --r-pill: 999px;
+
+  /* Spacing */
+  --sp-xs:  4px;
+  --sp-s:   8px;
+  --sp-m:   12px;
+  --sp-l:   16px;
+  --sp-xl:  24px;
+  --sp-xxl: 32px;
+
+  /* iPhone mockup */
+  --iphone-w: 380px;
+  --iphone-h: 780px;
+  --iphone-radius: 56px;
+  --iphone-border: 12px;
+  --screen-radius: calc(var(--iphone-radius) - var(--iphone-border) + 1px);
+}
+
+@media (max-width: 500px) {
+  :root { --iphone-w: 330px; --iphone-h: 680px; --iphone-radius: 48px; }
+}
+
+/* =============================================================
    Reset & base
 ============================================================= */
 *, *::before, *::after { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei",
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Microsoft YaHei",
                "Helvetica Neue", Arial, sans-serif;
   font-size: 15px;
   line-height: 1.5;
   color: #1a1a1a;
   background:
-    radial-gradient(1100px 600px at 20% -10%, rgba(80, 80, 255, 0.06), transparent),
-    radial-gradient(900px 500px at 100% 10%, rgba(255, 80, 80, 0.05), transparent),
-    #f3f3f5;
+    radial-gradient(1100px 600px at 20% -10%, rgba(80, 80, 255, 0.05), transparent),
+    radial-gradient(900px 500px at 100% 10%, rgba(255, 80, 80, 0.04), transparent),
+    #f4f4f6;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 img { display: block; max-width: 100%; }
 a { color: inherit; }
-button { font-family: inherit; }
+button { font-family: inherit; cursor: pointer; }
 
 /* =============================================================
-   Hero
+   Hero (page header, outside the phone)
 ============================================================= */
-.hero {
-  padding: 56px 24px 28px;
-  text-align: center;
-}
+.hero { padding: 56px 24px 28px; text-align: center; }
 .hero-inner { max-width: 720px; margin: 0 auto; }
 .hero h1 {
   margin: 0 0 10px;
@@ -36,18 +77,9 @@ button { font-family: inherit; }
   letter-spacing: -0.02em;
   color: #111;
 }
-.subtitle {
-  margin: 0 0 16px;
-  font-size: clamp(14px, 1.6vw, 16px);
-  color: #666;
-}
+.subtitle { margin: 0 0 16px; font-size: clamp(14px, 1.6vw, 16px); color: #666; }
 .repo-link { margin: 0; font-size: 13px; color: #999; }
-.repo-link a {
-  text-decoration: none;
-  color: #333;
-  border-bottom: 1px dashed #bbb;
-  padding-bottom: 1px;
-}
+.repo-link a { text-decoration: none; color: #333; border-bottom: 1px dashed #bbb; padding-bottom: 1px; }
 .repo-link a:hover { color: #000; border-bottom-color: #000; }
 .repo-link span { margin: 0 8px; opacity: 0.5; }
 
@@ -66,40 +98,17 @@ button { font-family: inherit; }
 @media (max-width: 980px) {
   .layout { grid-template-columns: 1fr; gap: 28px; }
 }
-
 .device-stage {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: sticky;
-  top: 24px;
+  display: flex; flex-direction: column; align-items: center;
+  position: sticky; top: 24px;
 }
-@media (max-width: 980px) {
-  .device-stage { position: static; }
-}
-
-.device-hint {
-  margin: 16px 0 0;
-  font-size: 12px;
-  color: #aaa;
-}
+@media (max-width: 980px) { .device-stage { position: static; } }
+.device-hint { margin: 16px 0 0; font-size: 12px; color: #aaa; }
 
 /* =============================================================
-   iPhone mockup
+   iPhone mockup shell
 ============================================================= */
-:root {
-  --iphone-w: 380px;
-  --iphone-h: 780px;
-  --iphone-radius: 56px;
-  --iphone-border: 12px;
-  --screen-radius: calc(var(--iphone-radius) - var(--iphone-border) + 1px);
-}
-
-.iphone {
-  width: var(--iphone-w);
-  max-width: 100%;
-}
-
+.iphone { width: var(--iphone-w); max-width: 100%; }
 .iphone-frame {
   position: relative;
   width: 100%;
@@ -112,13 +121,7 @@ button { font-family: inherit; }
     0 10px 30px -8px rgba(0, 0, 0, 0.3),
     inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 }
-
-/* Side physical buttons */
-.side-btn {
-  position: absolute;
-  background: linear-gradient(90deg, #1a1a1d, #2b2b30);
-  border-radius: 1px 2px 2px 1px;
-}
+.side-btn { position: absolute; background: linear-gradient(90deg, #1a1a1d, #2b2b30); border-radius: 1px 2px 2px 1px; }
 .side-mute   { left: -2px; top: 110px; width: 3px; height: 28px; border-radius: 2px 0 0 2px; }
 .side-action { left: -2px; top: 150px; width: 3px; height: 34px; border-radius: 2px 0 0 2px; }
 .side-up     { left: -2px; top: 200px; width: 3px; height: 60px; border-radius: 2px 0 0 2px; }
@@ -127,623 +130,518 @@ button { font-family: inherit; }
 
 .iphone-screen {
   position: relative;
-  width: 100%;
-  height: 100%;
-  background: #ffffff;
+  width: 100%; height: 100%;
+  background: var(--bg);
+  color: var(--text);
   border-radius: var(--screen-radius);
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
+  display: flex; flex-direction: column;
 }
 
 /* ---- Status bar + dynamic island ---- */
 .status-bar {
-  position: relative;
-  flex: 0 0 auto;
-  height: 54px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  position: relative; flex: 0 0 auto; height: 54px;
+  display: flex; align-items: center; justify-content: space-between;
   padding: 0 22px;
   font-family: -apple-system, "SF Pro Text", BlinkMacSystemFont, sans-serif;
-  font-size: 15px;
-  font-weight: 600;
-  color: #111;
+  font-size: 15px; font-weight: 600; color: var(--text);
 }
 .status-bar .time { padding-top: 12px; }
-.status-bar .indicators {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding-top: 12px;
-  color: #111;
-}
+.status-bar .indicators { display: flex; align-items: center; gap: 5px; padding-top: 12px; color: var(--text); }
 .status-bar .ind-signal,
-.status-bar .ind-wifi {
-  width: 17px;
-  height: 11px;
-  fill: currentColor;
-}
-.status-bar .ind-battery {
-  display: inline-flex;
-  align-items: center;
-  gap: 1px;
-}
-.status-bar .battery-shell {
-  width: 24px;
-  height: 11px;
-  border: 1px solid currentColor;
-  border-radius: 3px;
-  padding: 1px;
-  display: block;
-  position: relative;
-}
-.status-bar .battery-fill {
-  display: block;
-  width: 100%;
-  height: 100%;
-  background: currentColor;
-  border-radius: 1px;
-}
-.status-bar .battery-tip {
-  width: 1.5px;
-  height: 4px;
-  background: currentColor;
-  opacity: 0.55;
-  border-radius: 0 1px 1px 0;
-}
-
-/* Dynamic island */
+.status-bar .ind-wifi { width: 17px; height: 11px; fill: currentColor; }
+.status-bar .ind-battery { display: inline-flex; align-items: center; gap: 1px; }
+.status-bar .battery-shell { width: 24px; height: 11px; border: 1px solid currentColor; border-radius: 3px; padding: 1px; display: block; position: relative; }
+.status-bar .battery-fill { display: block; width: 100%; height: 100%; background: currentColor; border-radius: 1px; }
+.status-bar .battery-tip { width: 1.5px; height: 4px; background: currentColor; opacity: 0.55; border-radius: 0 1px 1px 0; }
 .island {
-  position: absolute;
-  top: 11px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 120px;
-  height: 32px;
-  background: #000;
-  border-radius: 999px;
-  pointer-events: none;
-}
-
-/* ---- Nav bar ---- */
-.nav-bar {
-  flex: 0 0 auto;
-  height: 44px;
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  padding: 0 12px;
-  border-bottom: 0.5px solid rgba(60, 60, 67, 0.18);
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(20px);
-  color: #111;
-}
-.nav-bar .nav-back {
-  justify-self: start;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  background: transparent;
-  border: 0;
-  color: #1a1a1a;
-  font-size: 17px;
-  padding: 4px 6px;
-  cursor: default;
-}
-.nav-bar .nav-back svg { width: 9px; height: 16px; }
-.nav-bar .nav-title {
-  font-size: 17px;
-  font-weight: 600;
-  color: #111;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 200px;
-}
-.nav-bar .nav-action {
-  justify-self: end;
-  background: transparent;
-  border: 0;
-  padding: 4px 8px;
-  color: #1a1a1a;
-  cursor: default;
-}
-.nav-bar .nav-action svg { width: 22px; height: 22px; }
-
-/* ---- App body ---- */
-.app-body {
-  flex: 1 1 auto;
-  display: flex;
-  flex-direction: column;
-  background: #f4f4f5;
-  position: relative;
-}
-
-.preview-scroll {
-  flex: 1 1 auto;
-  overflow-y: auto;
-  padding: 16px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-}
-.preview-frame {
-  width: 100%;
-  border-radius: 4px;
-  overflow: hidden;
-  box-shadow: 0 6px 22px -8px rgba(0, 0, 0, 0.18);
-}
-
-/* Template strip */
-.template-strip {
-  flex: 0 0 auto;
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  padding: 12px 16px;
-  background: rgba(245, 245, 247, 0.85);
-  backdrop-filter: blur(20px);
-  border-top: 0.5px solid rgba(60, 60, 67, 0.1);
-  scrollbar-width: none;
-}
-.template-strip::-webkit-scrollbar { display: none; }
-.tpl-thumb {
-  flex: 0 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  background: transparent;
-  border: 0;
-  padding: 0;
-  cursor: pointer;
-}
-.tpl-thumb-img {
-  width: 54px;
-  height: 54px;
-  border-radius: 9px;
-  background: linear-gradient(135deg, #d8dde6, #ecf0f6);
-  position: relative;
-  overflow: hidden;
-  border: 2px solid transparent;
-  transition: border-color 0.15s ease, transform 0.15s ease;
-}
-.tpl-thumb-img::after {
-  /* 模板特征条 */
-  content: "";
-  position: absolute;
-  left: 0; right: 0; bottom: 0;
-  height: 10px;
-  background: var(--tpl-accent, #fff);
-}
-.tpl-thumb.active .tpl-thumb-img {
-  border-color: #111;
-  transform: translateY(-1px);
-}
-.tpl-thumb .tpl-thumb-label {
-  font-size: 10.5px;
-  color: #888;
-  font-weight: 500;
-}
-.tpl-thumb.active .tpl-thumb-label { color: #111; font-weight: 600; }
-
-/* Action bar (bottom buttons) */
-.action-bar {
-  flex: 0 0 auto;
-  display: flex;
-  gap: 10px;
-  padding: 10px 14px 4px;
-  background: rgba(245, 245, 247, 0.85);
-  backdrop-filter: blur(20px);
-  border-top: 0.5px solid rgba(60, 60, 67, 0.1);
-}
-.action-bar button {
-  flex: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 12px 10px;
-  border-radius: 999px;
-  font-size: 15px;
-  font-weight: 600;
-  font-family: inherit;
-  cursor: default;
-  transition: opacity 0.15s ease;
-}
-.action-bar button:active { opacity: 0.7; }
-.action-bar button svg { width: 16px; height: 16px; }
-.btn-ghost {
-  background: transparent;
-  border: 1px solid rgba(0, 0, 0, 0.18);
-  color: #111;
-}
-.btn-primary {
-  background: #111;
-  border: 0;
-  color: #fff;
-}
-
-.home-indicator {
-  flex: 0 0 auto;
-  width: 134px;
-  height: 5px;
-  background: #111;
-  border-radius: 3px;
-  margin: 6px auto 8px;
-  opacity: 0.85;
+  position: absolute; top: 11px; left: 50%; transform: translateX(-50%);
+  width: 120px; height: 32px; background: #000; border-radius: 999px; pointer-events: none;
 }
 
 /* =============================================================
-   Controls (right column)
+   App root (everything below the status bar)
+============================================================= */
+.app-root { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; }
+
+/* App top bar (PRO + title + settings) */
+.app-top {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 18px 6px;
+}
+.pill {
+  display: inline-flex; align-items: center; gap: 4px;
+  border: 0; border-radius: var(--r-pill);
+  background: var(--surface); color: var(--text);
+  font-size: 12px; font-weight: 600; padding: 6px 12px;
+}
+.pill-pro { color: var(--pro); }
+.pill-pro::before { content: "★"; font-size: 11px; }
+.app-title { margin: 0; font-size: 17px; font-weight: 600; color: var(--text); }
+.icon-btn {
+  width: 32px; height: 32px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 0; border-radius: 50%; background: var(--surface); color: var(--text);
+}
+.icon-btn svg { width: 16px; height: 16px; }
+
+/* Category chips (horizontal pills under top bar) */
+.cat-chips {
+  display: flex; gap: 8px; overflow-x: auto;
+  padding: 4px 18px 12px;
+  scrollbar-width: none;
+}
+.cat-chips::-webkit-scrollbar { display: none; }
+.chip {
+  flex: 0 0 auto;
+  display: inline-flex; align-items: center; gap: 6px;
+  border: 0; border-radius: var(--r-pill);
+  background: var(--surface); color: var(--text);
+  font-size: 13px; font-weight: 500; padding: 7px 14px;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s;
+}
+.chip svg { width: 13px; height: 13px; }
+.chip.active { background: var(--text); color: #000; }
+
+/* Tab content scroll */
+.tab-content {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.tab-content::-webkit-scrollbar { display: none; }
+
+/* Bottom tab bar */
+.tab-bar {
+  flex: 0 0 auto;
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  border-top: 0.5px solid var(--separator);
+  background: rgba(14, 14, 16, 0.86);
+  backdrop-filter: blur(20px);
+  padding: 4px 0 18px;
+}
+.tab-bar button {
+  background: transparent; border: 0;
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  color: var(--text-2); font-size: 10px; padding: 6px 0;
+}
+.tab-bar button.active { color: var(--text); }
+.tab-bar button svg { width: 22px; height: 22px; }
+
+/* =============================================================
+   Discover Tab content
+============================================================= */
+.discover { padding: 0 0 12px; }
+
+.banner {
+  margin: 4px 18px 8px;
+  border-radius: var(--r-card);
+  background: linear-gradient(135deg, #45342a 0%, #2b2622 100%);
+  color: var(--text);
+  padding: 18px 20px;
+  display: flex; align-items: center; gap: 14px;
+  position: relative; overflow: hidden;
+}
+.banner::before {
+  content: ""; position: absolute; right: -40px; top: -20px;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(255, 138, 61, 0.25), transparent 60%);
+}
+.banner-text { flex: 1; min-width: 0; }
+.banner-title { font-size: 16px; font-weight: 700; margin: 0; }
+.banner-sub { font-size: 11.5px; color: var(--text-2); margin-top: 2px; }
+.banner-cta {
+  background: var(--text); color: #000;
+  border: 0; border-radius: var(--r-pill);
+  padding: 8px 14px; font-size: 12px; font-weight: 600;
+}
+
+.section { margin-top: 18px; }
+.section-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding: 0 18px 10px;
+}
+.section-title { font-size: 15px; font-weight: 700; color: var(--text); margin: 0; }
+.section-more { font-size: 12px; color: var(--text-2); background: transparent; border: 0; padding: 0; }
+
+.h-scroll {
+  display: flex; gap: 10px; overflow-x: auto;
+  padding: 0 18px 4px;
+  scrollbar-width: none;
+}
+.h-scroll::-webkit-scrollbar { display: none; }
+
+/* =============================================================
+   Cards (template / layout cover cards)
+============================================================= */
+.cover-card {
+  flex: 0 0 auto;
+  width: 130px;
+  border: 0; padding: 0; text-align: left;
+  background: var(--card);
+  border-radius: var(--r-card);
+  overflow: hidden;
+  display: flex; flex-direction: column;
+}
+.cover-card .cover {
+  width: 100%; height: 160px;
+  background: var(--surface);
+  position: relative;
+  overflow: hidden;
+}
+.cover-card .cover img { width: 100%; height: 100%; object-fit: cover; }
+.cover-card .meta { padding: 8px 10px 10px; }
+.cover-card .meta .name { font-size: 12.5px; font-weight: 600; color: var(--text); margin: 0; }
+.cover-card .meta .desc { font-size: 10.5px; color: var(--text-2); margin: 2px 0 0; }
+
+.grid-2 {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 10px; padding: 0 18px;
+}
+.grid-2 .cover-card { width: 100%; }
+.grid-2 .cover-card .cover { height: 170px; }
+
+/* =============================================================
+   Watermark editor (inside the phone)
+============================================================= */
+.editor {
+  display: flex; flex-direction: column; height: 100%;
+}
+.editor-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 14px;
+  border-bottom: 0.5px solid var(--separator);
+}
+.editor-nav .nav-back {
+  display: inline-flex; align-items: center; gap: 4px;
+  background: var(--surface); color: var(--text);
+  border: 0; border-radius: 50%; width: 32px; height: 32px;
+  justify-content: center;
+}
+.editor-nav .nav-back svg { width: 14px; height: 14px; }
+.editor-nav .nav-title { font-size: 15px; font-weight: 600; color: var(--text); }
+.editor-nav .nav-actions { display: flex; gap: 8px; }
+.editor-preview {
+  flex: 1 1 auto; overflow-y: auto;
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px;
+  background: #000;
+}
+.editor-preview-frame {
+  width: 100%;
+  border-radius: var(--r-s);
+  overflow: hidden;
+  box-shadow: 0 10px 30px -10px rgba(0,0,0,0.6);
+}
+.editor-strip {
+  display: flex; gap: 10px; overflow-x: auto;
+  padding: 10px 14px;
+  background: rgba(14,14,16,0.86);
+  backdrop-filter: blur(20px);
+  border-top: 0.5px solid var(--separator);
+  scrollbar-width: none;
+}
+.editor-strip::-webkit-scrollbar { display: none; }
+.tpl-thumb {
+  flex: 0 0 auto; background: transparent; border: 0; padding: 0;
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+}
+.tpl-thumb .thumb-img {
+  width: 50px; height: 50px;
+  border-radius: 9px; overflow: hidden;
+  border: 2px solid transparent;
+  background: var(--surface);
+}
+.tpl-thumb .thumb-img img { width: 100%; height: 100%; object-fit: cover; }
+.tpl-thumb.active .thumb-img { border-color: var(--text); }
+.tpl-thumb .thumb-label { font-size: 9.5px; color: var(--text-2); }
+.tpl-thumb.active .thumb-label { color: var(--text); font-weight: 600; }
+.editor-actions {
+  display: flex; gap: 10px;
+  padding: 8px 14px 12px;
+  background: rgba(14,14,16,0.86);
+  backdrop-filter: blur(20px);
+  border-top: 0.5px solid var(--separator);
+}
+.btn-pill {
+  flex: 1;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 12px 10px; border-radius: var(--r-pill); border: 0;
+  font-size: 14px; font-weight: 600;
+  transition: opacity 0.15s;
+}
+.btn-pill:active { opacity: 0.7; }
+.btn-pill svg { width: 16px; height: 16px; }
+.btn-ghost { background: var(--surface); color: var(--text); }
+.btn-primary { background: var(--text); color: #000; }
+
+.home-indicator {
+  flex: 0 0 auto; width: 134px; height: 5px;
+  background: var(--text); opacity: 0.85;
+  border-radius: 3px; margin: 6px auto 8px;
+}
+
+/* =============================================================
+   Puzzle editor inside the phone
+============================================================= */
+.puzzle-canvas {
+  background: #fff; max-width: 100%;
+  border-radius: var(--r-s);
+  overflow: hidden;
+}
+.puzzle-canvas.bg-black { background: #000; }
+.puzzle-canvas.bg-warm  { background: #f6efe3; }
+.puzzle-canvas.bg-grad  { background: linear-gradient(135deg, #fef3e1, #ffd4ad); }
+.puzzle-slot { background: var(--surface); overflow: hidden; }
+.puzzle-slot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.puzzle-caption {
+  text-align: center; font-size: 11px; font-weight: 500;
+  color: #444; padding: 8px 0;
+  font-family: -apple-system, "SF Pro Text", sans-serif;
+}
+.puzzle-canvas.bg-black .puzzle-caption { color: #efe9da; }
+
+.editor-toolbar {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  border-top: 0.5px solid var(--separator);
+  background: rgba(14,14,16,0.86);
+  backdrop-filter: blur(20px);
+  padding: 6px 0 14px;
+}
+.editor-toolbar button {
+  background: transparent; border: 0; color: var(--text-2);
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  font-size: 10px; padding: 6px 0;
+}
+.editor-toolbar button svg { width: 18px; height: 18px; }
+.editor-toolbar button.active { color: var(--text); }
+
+/* =============================================================
+   Controls panel (outside iPhone, right column)
 ============================================================= */
 .controls { display: flex; flex-direction: column; gap: 16px; }
-.card {
+.controls .card {
   background: #fff;
   border-radius: 14px;
   padding: 18px 18px 20px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
 }
-.card.subtle {
-  background: transparent;
-  box-shadow: none;
-  padding: 0 4px;
-  font-size: 12.5px;
-  color: #777;
+.controls .card h2 {
+  margin: 0 0 12px; font-size: 13px; font-weight: 600;
+  letter-spacing: 0.04em; color: #888; text-transform: uppercase;
 }
-.card.subtle code {
-  background: #e5e5e5;
-  padding: 1px 6px;
-  border-radius: 4px;
-  font-size: 12px;
+.controls .card.subtle {
+  background: transparent; box-shadow: none; padding: 0 4px;
+  font-size: 12.5px; color: #777;
 }
-.card h2 {
-  margin: 0 0 12px;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: #888;
-  text-transform: uppercase;
+.controls .card.subtle code {
+  background: #e5e5e5; padding: 1px 6px; border-radius: 4px; font-size: 12px;
 }
-
 .file-input {
-  display: block;
-  width: 100%;
-  border: 1.5px dashed #ccc;
-  border-radius: 10px;
-  padding: 14px;
-  text-align: center;
-  cursor: pointer;
-  color: #777;
-  font-size: 13px;
+  display: block; width: 100%;
+  border: 1.5px dashed #ccc; border-radius: 10px;
+  padding: 14px; text-align: center; cursor: pointer;
+  color: #777; font-size: 13px;
   transition: all 0.15s ease;
 }
 .file-input:hover { border-color: #1a1a1a; color: #1a1a1a; }
 .file-input input { display: none; }
-
 .reset-btn {
-  margin-top: 8px;
-  width: 100%;
-  background: transparent;
-  border: 0;
-  color: #999;
-  font-size: 12px;
-  text-decoration: underline;
-  cursor: pointer;
-  padding: 4px;
+  margin-top: 8px; width: 100%;
+  background: transparent; border: 0; color: #999;
+  font-size: 12px; text-decoration: underline; padding: 4px;
 }
 .reset-btn:hover { color: #1a1a1a; }
 
 .field { display: flex; flex-direction: column; margin-bottom: 10px; }
 .field:last-child { margin-bottom: 0; }
-.field label {
-  font-size: 11.5px;
-  color: #888;
-  margin-bottom: 4px;
-  font-weight: 500;
-}
-.field input {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 7px 10px;
-  font-size: 13px;
-  font-family: inherit;
+.field label { font-size: 11.5px; color: #888; margin-bottom: 4px; font-weight: 500; }
+.field input, .field select {
+  border: 1px solid #ddd; border-radius: 8px;
+  padding: 7px 10px; font-size: 13px; font-family: inherit;
   background: #fafafa;
-  transition: border-color 0.15s ease, background 0.15s ease;
+  transition: border-color 0.15s, background 0.15s;
 }
-.field input:focus {
-  outline: none;
-  border-color: #1a1a1a;
-  background: #fff;
+.field input:focus, .field select:focus {
+  outline: none; border-color: #1a1a1a; background: #fff;
 }
 .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .row .field { margin-bottom: 10px; }
+
+.swatch-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.swatch {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 2px solid transparent; cursor: pointer;
+  transition: border-color 0.15s, transform 0.15s;
+}
+.swatch.active { border-color: #1a1a1a; transform: scale(1.05); }
+.swatch.w { background: #fff; box-shadow: inset 0 0 0 1px #e5e5e5; }
+.swatch.b { background: #000; }
+.swatch.warm { background: #f6efe3; }
+.swatch.grad { background: linear-gradient(135deg, #fef3e1, #ffd4ad); }
 
 /* =============================================================
    Footer
 ============================================================= */
 .footer {
   border-top: 1px solid #e5e5e5;
-  padding: 22px 24px;
-  text-align: center;
-  font-size: 12px;
-  color: #999;
-  background: #fff;
+  padding: 22px 24px; text-align: center;
+  font-size: 12px; color: #999; background: #fff;
 }
 .footer a { color: #1a1a1a; text-decoration: none; border-bottom: 1px dashed #ccc; }
 
 /* =============================================================
-   Canvas (the actual watermarked photo)
-   注意：这里所有字体/边距都基于自身宽度，避免在 iPhone 屏内被压扁。
+   Watermark canvas (the actual photo with overlay)
+   仅在尺寸 / 位置上调整，颜色/字号在各 .tpl-xxx 单独定义
 ============================================================= */
-.canvas {
-  width: 100%;
-  background: #fff;
-}
-.canvas .photo {
-  width: 100%;
-  display: block;
-}
+.canvas { width: 100%; background: #fff; }
+.canvas.dark { background: #0a0a0a; }
+.canvas .photo { width: 100%; display: block; }
 
-/* ============================================================
-   Template 1: Leica
-============================================================ */
-.tpl-leica .bar {
-  background: #ffffff;
-  display: flex;
-  align-items: center;
-  padding: 14px 14px;
-  gap: 10px;
-}
-.tpl-leica .brand {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  min-width: 0;
-}
+/* --- Leica White --- */
+.tpl-leica .bar { background:#fff; display:flex; align-items:center; padding:14px; gap:10px; }
+.tpl-leica .brand { display:flex; align-items:center; gap:8px; min-width:0; }
 .tpl-leica .logo {
-  background: #DB121F;
-  color: #fff;
-  font-weight: 900;
-  letter-spacing: 0.04em;
-  font-size: 13px;
-  padding: 3px 7px;
-  border-radius: 1px;
-  font-family: "Helvetica Neue", Arial, sans-serif;
-  flex: 0 0 auto;
+  background:#DB121F; color:#fff; font-weight:900; letter-spacing:.04em;
+  font-size:13px; padding:3px 7px; border-radius:1px;
+  font-family:"Helvetica Neue", Arial, sans-serif; flex:0 0 auto;
 }
-.tpl-leica .model { line-height: 1.2; min-width: 0; }
-.tpl-leica .model .name {
-  font-size: 12px;
-  font-weight: 600;
-  color: #111;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.tpl-leica .model .lens {
-  font-size: 8px;
-  color: #888;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-.tpl-leica .spacer { flex: 1; }
-.tpl-leica .divider {
-  width: 1px;
-  height: 26px;
-  background: #d8d8d8;
-  flex: 0 0 auto;
-}
-.tpl-leica .params {
-  text-align: right;
-  line-height: 1.25;
-  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  flex: 0 0 auto;
-}
-.tpl-leica .params .line {
-  font-size: 9.5px;
-  color: #111;
-  font-weight: 500;
-}
-.tpl-leica .params .date {
-  font-size: 7.5px;
-  color: #888;
-  margin-top: 2px;
-}
+.tpl-leica .model { line-height:1.2; min-width:0; }
+.tpl-leica .model .name { font-size:12px; font-weight:600; color:#111; }
+.tpl-leica .model .lens { font-size:8px; color:#888; }
+.tpl-leica .spacer { flex:1; }
+.tpl-leica .divider { width:1px; height:26px; background:#d8d8d8; flex:0 0 auto; }
+.tpl-leica .params { text-align:right; line-height:1.25; font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; }
+.tpl-leica .params .line { font-size:9.5px; color:#111; font-weight:500; }
+.tpl-leica .params .date { font-size:7.5px; color:#888; margin-top:2px; }
 
-/* ============================================================
-   Template 2: Fujifilm
-============================================================ */
-.tpl-fujifilm .bar {
-  background: #141414;
-  display: flex;
-  align-items: center;
-  padding: 14px;
-  gap: 14px;
-  color: #efe9da;
+/* --- Leica Mono (black bar) --- */
+.tpl-leica-mono .bar { background:#0a0a0a; display:flex; align-items:center; padding:14px; gap:10px; color:#fff; }
+.tpl-leica-mono .brand { display:flex; align-items:center; gap:8px; min-width:0; }
+.tpl-leica-mono .logo {
+  background:#DB121F; color:#fff; font-weight:900; letter-spacing:.04em;
+  font-size:13px; padding:3px 7px; border-radius:1px;
+  font-family:"Helvetica Neue", Arial, sans-serif; flex:0 0 auto;
 }
+.tpl-leica-mono .model .name { font-size:12px; font-weight:600; color:#fff; }
+.tpl-leica-mono .model .lens { font-size:8px; color:rgba(255,255,255,.55); }
+.tpl-leica-mono .spacer { flex:1; }
+.tpl-leica-mono .divider { width:1px; height:26px; background:rgba(255,255,255,.18); }
+.tpl-leica-mono .params { text-align:right; font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; }
+.tpl-leica-mono .params .line { font-size:9.5px; color:#fff; font-weight:500; }
+.tpl-leica-mono .params .date { font-size:7.5px; color:rgba(255,255,255,.55); margin-top:2px; }
+
+/* --- Fuji Dark --- */
+.tpl-fujifilm .bar { background:#141414; display:flex; align-items:center; padding:14px; gap:14px; color:#efe9da; }
 .tpl-fujifilm .brand .logo {
-  font-size: 13px;
-  font-weight: 900;
-  letter-spacing: 0.18em;
-  color: #efe9da;
-  font-family: "Helvetica Neue", Arial, sans-serif;
+  font-size:13px; font-weight:900; letter-spacing:.18em; color:#efe9da;
+  font-family:"Helvetica Neue", Arial, sans-serif;
 }
-.tpl-fujifilm .brand .name {
-  font-size: 8px;
-  color: rgba(239, 233, 218, 0.6);
-  margin-top: 2px;
-}
-.tpl-fujifilm .spacer { flex: 1; }
-.tpl-fujifilm .params {
-  text-align: right;
-  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-}
-.tpl-fujifilm .params .line {
-  font-size: 9.5px;
-  font-weight: 600;
-  color: #efe9da;
-}
-.tpl-fujifilm .params .date {
-  font-size: 7.5px;
-  color: rgba(239, 233, 218, 0.55);
-  margin-top: 2px;
-}
+.tpl-fujifilm .brand .name { font-size:8px; color:rgba(239,233,218,.6); margin-top:2px; }
+.tpl-fujifilm .spacer { flex:1; }
+.tpl-fujifilm .params { text-align:right; font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; }
+.tpl-fujifilm .params .line { font-size:9.5px; font-weight:600; color:#efe9da; }
+.tpl-fujifilm .params .date { font-size:7.5px; color:rgba(239,233,218,.55); margin-top:2px; }
 
-/* ============================================================
-   Template 3: Sony (floating overlay)
-============================================================ */
-.tpl-sony { position: relative; }
+/* --- Fuji Film Strip --- */
+.tpl-fuji-strip { background:#171717; padding:10px 0 0; }
+.tpl-fuji-strip .strip-top, .tpl-fuji-strip .strip-bottom {
+  height:14px; background:#171717;
+  background-image: repeating-linear-gradient(90deg, transparent 0 18px, rgba(255,255,255,.12) 18px 22px, transparent 22px 26px, rgba(255,255,255,.12) 26px 30px);
+}
+.tpl-fuji-strip .photo { display:block; width:100%; }
+.tpl-fuji-strip .bar { padding:12px 16px; color:#efe9da; display:flex; gap:14px; align-items:center; background:#171717; }
+.tpl-fuji-strip .bar .name { font-size:11px; font-weight:700; letter-spacing:.12em; }
+.tpl-fuji-strip .bar .spacer { flex:1; }
+.tpl-fuji-strip .bar .params { font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; font-size:9px; }
+
+/* --- Sony --- */
+.tpl-sony { position:relative; }
 .tpl-sony .overlay {
-  position: absolute;
-  bottom: 4%;
-  right: 3%;
-  background: rgba(10, 10, 10, 0.62);
-  backdrop-filter: blur(8px);
-  border: 0.5px solid rgba(255, 255, 255, 0.12);
-  border-radius: 8px;
-  padding: 9px 12px;
-  color: #fff;
-  min-width: 130px;
+  position:absolute; bottom:4%; right:3%;
+  background:rgba(10,10,10,.62); backdrop-filter:blur(8px);
+  border:.5px solid rgba(255,255,255,.12); border-radius:8px;
+  padding:9px 12px; color:#fff; min-width:130px;
 }
-.tpl-sony .overlay .brand {
-  font-size: 12px;
-  font-weight: 900;
-  letter-spacing: 0.18em;
-  font-family: "Helvetica Neue", Arial, sans-serif;
-}
-.tpl-sony .overlay .model {
-  font-size: 9px;
-  color: rgba(255, 255, 255, 0.85);
-  margin-top: 1px;
-  margin-bottom: 5px;
-}
-.tpl-sony .overlay .sep {
-  height: 1px;
-  background: rgba(255, 255, 255, 0.22);
-  margin: 4px 0;
-}
-.tpl-sony .overlay .line {
-  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  font-size: 9px;
-  font-weight: 600;
-  color: #fff;
-}
-.tpl-sony .overlay .date {
-  margin-top: 3px;
-  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  font-size: 7.5px;
-  color: rgba(255, 255, 255, 0.7);
-}
+.tpl-sony .overlay .brand { font-size:12px; font-weight:900; letter-spacing:.18em; font-family:"Helvetica Neue", Arial, sans-serif; }
+.tpl-sony .overlay .model { font-size:9px; color:rgba(255,255,255,.85); margin:1px 0 5px; }
+.tpl-sony .overlay .sep { height:1px; background:rgba(255,255,255,.22); margin:4px 0; }
+.tpl-sony .overlay .line { font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; font-size:9px; font-weight:600; color:#fff; }
+.tpl-sony .overlay .date { margin-top:3px; font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; font-size:7.5px; color:rgba(255,255,255,.7); }
 
-/* ============================================================
-   Template 4: Hasselblad (paper frame)
-============================================================ */
-.tpl-hasselblad {
-  background: #fff;
-  padding: 4% 4% 0;
-}
-.tpl-hasselblad .footer-bar {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  padding: 12px 4px 14px;
-  gap: 12px;
-}
-.tpl-hasselblad .brand { line-height: 1.25; }
-.tpl-hasselblad .brand .row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
+/* --- Hasselblad --- */
+.tpl-hasselblad { background:#fff; padding:4% 4% 0; }
+.tpl-hasselblad .footer-bar { display:flex; align-items:flex-end; justify-content:space-between; padding:12px 4px 14px; gap:12px; }
+.tpl-hasselblad .brand .row { display:flex; align-items:center; gap:6px; }
 .tpl-hasselblad .brand .h-dot {
-  background: #111;
-  color: #fff;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 900;
-  font-size: 10px;
-  font-family: "Helvetica Neue", Arial, sans-serif;
+  background:#111; color:#fff; width:16px; height:16px; border-radius:50%;
+  display:inline-flex; align-items:center; justify-content:center;
+  font-weight:900; font-size:10px;
 }
-.tpl-hasselblad .brand .name {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  color: #111;
+.tpl-hasselblad .brand .name { font-size:10px; font-weight:700; letter-spacing:.06em; color:#111; }
+.tpl-hasselblad .brand .model { font-size:7.5px; color:#888; margin-top:3px; }
+.tpl-hasselblad .params { text-align:right; line-height:1.3; font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; }
+.tpl-hasselblad .params .line { font-size:9px; font-weight:500; color:#111; }
+.tpl-hasselblad .params .date { font-size:7.5px; color:#888; margin-top:3px; }
+
+/* --- Ricoh GR --- */
+.tpl-ricoh-gr .bar { background:#0a0a0a; color:#fff; padding:12px 14px; display:flex; align-items:center; gap:10px; }
+.tpl-ricoh-gr .logo {
+  font-family:"Helvetica Neue", Arial, sans-serif;
+  font-size:13px; font-weight:900; letter-spacing:.12em;
+  border:1px solid #fff; padding:2px 6px; border-radius:1px;
 }
-.tpl-hasselblad .brand .model {
-  font-size: 7.5px;
-  color: #888;
-  margin-top: 3px;
+.tpl-ricoh-gr .brand .name { font-size:11px; font-weight:600; color:#fff; }
+.tpl-ricoh-gr .brand .sub { font-size:8px; color:rgba(255,255,255,.55); }
+.tpl-ricoh-gr .spacer { flex:1; }
+.tpl-ricoh-gr .params { text-align:right; font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; }
+.tpl-ricoh-gr .params .line { font-size:9px; font-weight:500; color:#fff; }
+.tpl-ricoh-gr .params .date { font-size:7.5px; color:rgba(255,255,255,.55); margin-top:2px; }
+
+/* --- iPhone Native --- */
+.tpl-iphone .bar { background:#fff; padding:14px; text-align:center; }
+.tpl-iphone .shot { font-size:12px; color:#111; font-weight:500; }
+.tpl-iphone .device { display:inline-block; font-weight:700; }
+
+/* --- Polaroid --- */
+.tpl-polaroid { background:#fff; padding:14px 14px 30px; }
+.tpl-polaroid .photo-wrap { background:#000; padding:0; }
+.tpl-polaroid .caption {
+  text-align:center; padding-top:20px;
+  font-family:"Caveat", "Comic Sans MS", cursive;
+  font-size:18px; color:#222;
 }
-.tpl-hasselblad .params {
-  text-align: right;
-  line-height: 1.3;
-  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-}
-.tpl-hasselblad .params .line {
-  font-size: 9px;
-  font-weight: 500;
-  color: #111;
-}
-.tpl-hasselblad .params .date {
-  font-size: 7.5px;
-  color: #888;
-  margin-top: 3px;
+.tpl-polaroid .params {
+  text-align:center; padding-top:4px;
+  font-size:9px; color:#777;
+  font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
 }
 
-/* ============================================================
-   Template 5: Minimal
-============================================================ */
-.tpl-minimal .bar {
-  background: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 9px 10px;
-}
-.tpl-minimal .bar .name {
-  font-size: 10px;
-  font-weight: 500;
-  color: #111;
-}
-.tpl-minimal .bar .divider {
-  width: 1px;
-  height: 10px;
-  background: #d8d8d8;
-}
+/* --- Minimal Light --- */
+.tpl-minimal .bar { background:#fff; display:flex; align-items:center; justify-content:center; gap:8px; padding:9px 10px; }
+.tpl-minimal .bar .name { font-size:10px; font-weight:500; color:#111; }
+.tpl-minimal .bar .divider { width:1px; height:10px; background:#d8d8d8; }
 .tpl-minimal .bar .line {
-  font-size: 9px;
-  font-weight: 300;
-  color: #555;
-  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  letter-spacing: 0.01em;
+  font-size:9px; font-weight:300; color:#555;
+  font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; letter-spacing:.01em;
 }
 
-/* ============================================================
-   Template thumbnail accents
-============================================================ */
-.tpl-thumb[data-template="leica"]      .tpl-thumb-img { --tpl-accent: #fff; }
-.tpl-thumb[data-template="leica"]      .tpl-thumb-img::before { content: ""; position: absolute; left: 8px; bottom: 0; width: 14px; height: 6px; background: #DB121F; z-index: 1; }
-.tpl-thumb[data-template="fujifilm"]   .tpl-thumb-img { --tpl-accent: #111; }
-.tpl-thumb[data-template="sony"]       .tpl-thumb-img::after { background: rgba(0,0,0,0.5); height: 14px; right: 6px; left: auto; width: 18px; border-radius: 2px; bottom: 6px; }
-.tpl-thumb[data-template="hasselblad"] .tpl-thumb-img { --tpl-accent: #fff; padding: 4px; background: #fff; }
-.tpl-thumb[data-template="hasselblad"] .tpl-thumb-img::after { background: #fff; height: 14px; }
-.tpl-thumb[data-template="minimal"]    .tpl-thumb-img { --tpl-accent: #fff; }
-.tpl-thumb[data-template="minimal"]    .tpl-thumb-img::after { height: 6px; }
+/* --- Minimal Dark --- */
+.tpl-minimal-dark .bar { background:#0a0a0a; display:flex; align-items:center; justify-content:center; gap:8px; padding:9px 10px; }
+.tpl-minimal-dark .bar .name { font-size:10px; font-weight:500; color:#fff; }
+.tpl-minimal-dark .bar .divider { width:1px; height:10px; background:rgba(255,255,255,.2); }
+.tpl-minimal-dark .bar .line {
+  font-size:9px; font-weight:300; color:rgba(255,255,255,.7);
+  font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
 
-/* iPhone responsive scale */
-@media (max-width: 500px) {
-  :root {
-    --iphone-w: 320px;
-    --iphone-h: 660px;
-    --iphone-radius: 48px;
-  }
+/* --- Date Stamp (Kodak style) --- */
+.tpl-date-stamp { position:relative; }
+.tpl-date-stamp .stamp {
+  position:absolute; bottom:5%; right:5%;
+  color:#FFB535; font-family:"Courier New", monospace;
+  font-size:14px; font-weight:700;
+  text-shadow: 0 0 6px rgba(0,0,0,.6);
+  letter-spacing: .04em;
 }

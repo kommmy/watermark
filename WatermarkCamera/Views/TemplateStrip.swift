@@ -1,7 +1,8 @@
 import SwiftUI
 
-/// 编辑页底部横向滚动的模板选择条。
-/// 缩略图直接用原图小图 + 模板特征条，无需为每个模板单独画 thumbnail。
+// Bottom horizontal template selector inside EditorView.
+// Each thumbnail = a small crop of the user's photo plus a tiny accent bar that
+// hints at the template look (red Leica block, FUJIFILM stripe, etc.).
 struct TemplateStrip: View {
     @Binding var selected: WatermarkTemplate
     let thumbnail: UIImage
@@ -28,14 +29,15 @@ struct TemplateStrip: View {
                             .overlay(
                                 RoundedRectangle(cornerRadius: 10, style: .continuous)
                                     .stroke(
-                                        selected == tpl ? Color.black : Color.clear,
+                                        selected == tpl ? Color.white : Color.clear,
                                         lineWidth: 2
                                     )
                             )
 
                             Text(tpl.displayName)
                                 .font(.caption2.weight(selected == tpl ? .semibold : .regular))
-                                .foregroundColor(selected == tpl ? .black : .secondary)
+                                .foregroundColor(selected == tpl ? AppTheme.Palette.textPrimary : AppTheme.Palette.textSecondary)
+                                .lineLimit(1)
                         }
                     }
                     .buttonStyle(.plain)
@@ -44,25 +46,59 @@ struct TemplateStrip: View {
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
         }
-        .background(.thinMaterial)
+        .background(.ultraThinMaterial)
     }
 
     @ViewBuilder
     private func accentStrip(for tpl: WatermarkTemplate) -> some View {
         switch tpl {
         case .leica:
-            Rectangle().fill(Color.white).frame(height: 12).overlay(
-                Rectangle().fill(Color.red).frame(width: 16, height: 6),
-                alignment: .leading
-            )
+            HStack(spacing: 0) {
+                Rectangle().fill(Color(red: 0.86, green: 0.07, blue: 0.13)).frame(width: 12)
+                Rectangle().fill(Color.white)
+            }
+            .frame(height: 12)
+
+        case .leica_mono:
+            HStack(spacing: 0) {
+                Rectangle().fill(Color(red: 0.86, green: 0.07, blue: 0.13)).frame(width: 12)
+                Rectangle().fill(Color.black)
+            }
+            .frame(height: 12)
+
         case .fujifilm:
             Rectangle().fill(Color.black).frame(height: 12)
+
+        case .fuji_strip:
+            VStack(spacing: 1) {
+                Rectangle().fill(Color.black.opacity(0.85)).frame(height: 3)
+                Rectangle().fill(Color.black).frame(height: 7)
+            }
+            .frame(height: 12)
+
         case .sony:
             EmptyView()
+
         case .hasselblad:
             Rectangle().fill(Color.white).frame(height: 14)
+
+        case .ricoh_gr:
+            Rectangle().fill(Color.black).frame(height: 12)
+
+        case .iphone:
+            Rectangle().fill(Color.white).frame(height: 12)
+
+        case .polaroid:
+            Rectangle().fill(Color.white).frame(height: 18)
+
         case .minimal:
             Rectangle().fill(Color.white).frame(height: 8)
+
+        case .minimal_dark:
+            Rectangle().fill(Color.black).frame(height: 8)
+
+        case .date_stamp:
+            EmptyView()
         }
     }
 }

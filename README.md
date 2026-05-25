@@ -1,13 +1,23 @@
 # WatermarkCamera
 
-> iOS 相机风格水印 App，纯本地，无后端。
-> 选图后自动读取 EXIF（机型/镜头/光圈/快门/ISO/日期/GPS），套用徕卡、富士、索尼、哈苏、极简等模板，一键保存到相册或分享。
+> iOS 相机风格水印 + 拼图 App，纯本地，无后端。
+> 选图后自动读取 EXIF（机型/镜头/光圈/快门/ISO/日期/GPS），套用徕卡、富士、索尼、哈苏、理光、iPhone 等 **12 套水印模板**；或挑 **4 种拼图布局** 拼多张图，一键保存到相册或分享。
 
 [![iOS Build](https://github.com/kommmy/watermark/actions/workflows/ios-build.yml/badge.svg)](https://github.com/kommmy/watermark/actions/workflows/ios-build.yml)
 [![Deploy Pages](https://github.com/kommmy/watermark/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/kommmy/watermark/actions/workflows/deploy-pages.yml)
 
-> **在线预览** 5 套模板效果： [kommmy.github.io/watermark](https://kommmy.github.io/watermark/)
-> （HTML+CSS 复刻版，可上传自己的照片即时套用，最终 iOS App 设计同款）
+> **在线预览** （iPhone 模拟外壳 + 实时编辑）：[kommmy.github.io/watermark](https://kommmy.github.io/watermark/)
+> 浏览器中即可体验 12 套水印模板 + 4 种拼图布局，最终 iOS App 与 Web 设计语言一致。
+
+## 功能总览
+
+- **水印模块（12 套模板）**
+  Leica White / Leica Mono / Fuji Dark / Fuji Film Strip / Sony Alpha / Hasselblad / Ricoh GR / iPhone Shot / Polaroid / Minimal Light / Minimal Dark / Date Stamp。
+- **拼图模块（4 种布局）**
+  Stacked（上下二格）/ Side by Side（左右二格）/ Grid 2x2（田字四格）/ Camera + Shot（相机产品图 + 实拍，PixFrame 招牌玩法）。
+  每种布局支持 4 种比例（3:4 / 1:1 / 4:5 / 9:16）+ 4 种背景（白 / 黑 / 米 / 渐变）+ 自定义文字。
+- **首页 4 个 Tab**：Discover（推荐）/ Watermarks（水印）/ Puzzles（拼图）/ Me（我的），深色 PixFrame 风格。
+- 全程本地处理，无任何网络请求。
 
 ## 环境要求
 
@@ -19,7 +29,7 @@
 
 ### 方式一：用 XcodeGen 生成工程（推荐）
 
-仓库里没有 `.xcodeproj`，用 [XcodeGen](https://github.com/yonaskolb/XcodeGen) 一键生成，避免任何手工拖文件的繁琐。
+仓库里没有 `.xcodeproj`，用 [XcodeGen](https://github.com/yonaskolb/XcodeGen) 一键生成：
 
 ```bash
 brew install xcodegen
@@ -32,12 +42,10 @@ open WatermarkCamera.xcodeproj
 
 ### 方式二：手动新建 Xcode 工程
 
-如果不想用 XcodeGen，也可以手动建：
-
 1. Xcode > File > New > Project > iOS > App
 2. Product Name 填 `WatermarkCamera`，Interface 选 SwiftUI，Language 选 Swift，Minimum Deployments 选 iOS 16.0
 3. 删除自动生成的 `ContentView.swift` 和 `<ProjectName>App.swift`
-4. 把本仓库 `WatermarkCamera/` 目录下的所有 `.swift` 文件、`Info.plist`、`Resources/Assets.xcassets` 全部拖入 Xcode 工程（选 Copy items if needed，加入 target）
+4. 把本仓库 `WatermarkCamera/` 目录下的所有 `.swift` 文件、`Info.plist`、`Resources/Assets.xcassets` 全部拖入工程（选 Copy items if needed，加入 target）
 5. Project Settings > Info > 把 `Info.plist` 指向拖入的那份
 6. Cmd+R
 
@@ -47,68 +55,102 @@ open WatermarkCamera.xcodeproj
 WatermarkCamera/
 ├── App/
 │   └── WatermarkCameraApp.swift     # @main 入口
+├── Theme/
+│   ├── AppTheme.swift               # 深色 token：色板/字号/圆角/阴影
+│   └── ViewModifiers.swift          # .cardStyle() / .appBackground()
 ├── Models/
 │   ├── PhotoMetadata.swift          # EXIF 摘要 + 品牌识别
-│   └── WatermarkTemplate.swift      # 模板枚举 + 工厂
+│   ├── WatermarkTemplate.swift      # 12 套水印枚举 + 工厂
+│   └── PuzzleLayout.swift           # 4 种拼图枚举 + PuzzleOptions
 ├── Services/
 │   ├── ExifReader.swift             # ImageIO 解析 TIFF/EXIF/GPS
-│   ├── ImageComposer.swift          # ImageRenderer 渲染合成
+│   ├── ImageComposer.swift          # 水印 ImageRenderer
+│   ├── PuzzleComposer.swift         # 拼图 ImageRenderer
 │   ├── PhotoSaver.swift             # 写入相册（addOnly）
 │   └── PlaceLookup.swift            # 可选：GPS 反查城市名
-├── Templates/
-│   ├── LeicaTemplate.swift
-│   ├── FujiTemplate.swift
-│   ├── SonyTemplate.swift
-│   ├── HasselbladTemplate.swift
-│   └── MinimalTemplate.swift
+├── Templates/                       # 12 套水印 SwiftUI View
+│   ├── LeicaTemplate.swift / LeicaMonoTemplate.swift
+│   ├── FujiTemplate.swift / FujiFilmStripTemplate.swift
+│   ├── SonyTemplate.swift / HasselbladTemplate.swift
+│   ├── RicohGRTemplate.swift / iPhoneNativeTemplate.swift
+│   ├── PolaroidTemplate.swift
+│   ├── MinimalTemplate.swift / MinimalDarkTemplate.swift
+│   └── DateStampTemplate.swift
+├── PuzzleLayouts/                   # 4 种拼图布局 View
+│   ├── Vertical2Layout.swift / Horizontal2Layout.swift
+│   ├── Grid4Layout.swift / CameraDetailLayout.swift
 ├── Views/
-│   ├── HomeView.swift               # 首页 + PhotosPicker
-│   ├── EditorView.swift             # 预览 + 模板切换 + 导出
-│   ├── TemplateStrip.swift          # 横向模板选择条
+│   ├── HomeView.swift               # TabView 根
+│   ├── Tabs/
+│   │   ├── DiscoverTab.swift        # 推荐：banner + 横滑卡片
+│   │   ├── WatermarkTab.swift       # 12 套水印瀑布流
+│   │   ├── PuzzleTab.swift          # 4 种拼图瀑布流
+│   │   └── MeTab.swift              # 我的
+│   ├── Cards/
+│   │   ├── TemplateCard.swift       # 水印封面卡片
+│   │   └── PuzzleLayoutCard.swift   # 拼图封面卡片
+│   ├── EditorView.swift             # 水印编辑器
+│   ├── PuzzleEditorView.swift       # 拼图编辑器
+│   ├── TemplateStrip.swift          # 横向 12 套模板选择条
 │   └── MetadataEditorSheet.swift    # 手动覆盖 EXIF
 ├── Resources/
-│   └── Assets.xcassets              # AppIcon / AccentColor，将来放品牌 logo
+│   └── Assets.xcassets              # AppIcon / AccentColor / 品牌 logo 占位
 └── Info.plist
 ```
 
 ## 数据流
 
 ```
+[ Watermark ]
 PhotosPicker → Data → ExifReader → PhotoMetadata
-                              ↘                ↘
+                              ↘
                               UIImage → WatermarkTemplate.makeView(...)
-                                        → ImageRenderer → UIImage
+                                        → ImageComposer.render (ImageRenderer)
+                                        → PhotoSaver / UIActivityViewController
+
+[ Puzzle ]
+PhotosPicker × N → [UIImage] → PuzzleLayout.makeView(images:, options:)
+                                        → PuzzleComposer.render (ImageRenderer)
                                         → PhotoSaver / UIActivityViewController
 ```
 
-## 添加新模板
+## 添加新水印模板
 
-1. 在 `Templates/` 下新建 `<Name>Template.swift`，实现一个 `View`，初始化签名是 `(image: UIImage, meta: PhotoMetadata)`。
-2. 在 `Models/WatermarkTemplate.swift` 的 `enum WatermarkTemplate` 里加一个新的 `case`。
-3. 在 `displayName` 和 `makeView(image:meta:)` 的 `switch` 里补对应分支。
-4. 可选：在 `Views/TemplateStrip.swift` 的 `accentStrip(for:)` 里画一个缩略图标识条。
+1. 在 `Templates/` 下新建 `<Name>Template.swift`，实现一个 `View`，签名是 `(image: UIImage, meta: PhotoMetadata)`。
+2. 在 `Models/WatermarkTemplate.swift` 的 `enum WatermarkTemplate` 里加一个 `case`。
+3. 在 `displayName` / `brandLabel` / `makeView(image:meta:)` 的 `switch` 里补对应分支。
+4. 在 `Views/Cards/TemplateCard.swift` 的 `gradient` 与 `accentBar` 里补当前 case，让封面卡片有特色。
+5. 在 `Views/TemplateStrip.swift` 的 `accentStrip(for:)` 里画一条小色带。
+6. 在 `docs/script.js` 的 `TEMPLATES` + `RENDERERS` 里加同名 id 的 Web 版本，保持双端一致。
 
-模板内部坐标系约定：以 `image.size.width` 作为 1 个像素单位（合成器会把 View 宽度强制等于原图像素宽度，再以 scale=1 渲染输出）。所有字号/留白用 `image.size.height * 0.xx` 表达即可，自动适配横竖图与各种像素分辨率。
+模板内部坐标系约定：以 `image.size.width` 作为 1 像素单位（合成器把 View 宽度强制等于原图像素宽度，scale=1 渲染输出）。所有字号 / 留白用 `image.size.height * 0.xx` 表达，自动适配横竖图与不同像素分辨率。
+
+## 添加新拼图布局
+
+1. 在 `PuzzleLayouts/` 下新建 `<Name>Layout.swift`，签名 `(images: [UIImage], options: PuzzleOptions)`。
+2. 在 `Models/PuzzleLayout.swift` 的 `enum` 与 `makeView` 里加一个 case。
+3. 在 `Views/Cards/PuzzleLayoutCard.swift` 的 `cover` switch 里加封面 placeholder。
+4. 在 `docs/script.js` 的 `LAYOUTS` + `LAYOUT_RENDERERS` 里加同名 id 的 Web 版本。
 
 ## 替换品牌 logo（用真矢量图）
 
-第一版为了不踩品牌商标问题，模板里都用了 `Text("LEICA")` 之类的纯文字 logo。若需更接近真机印刷字样：
+第一版为了不踩品牌商标问题，模板里都用了 `Text("LEICA")` 这样的纯文字 logo。如需更贴近真机印刷字样：
 
-1. 把品牌矢量 logo（建议从 SVG 转 PDF）拖入 `Resources/Assets.xcassets`，命名 `brand_leica`、`brand_fujifilm`、`brand_sony`、`brand_hasselblad`。
-2. 在 Asset 设置里勾选 **Preserve Vector Data**、Render As 选 **Template Image**（这样可以跟着 `.foregroundColor` 上色）。
-3. 在对应模板里把 `Text("LEICA")` 换成 `Image("brand_leica").resizable().aspectRatio(contentMode: .fit).frame(height: barHeight * 0.5)`。
+1. 把品牌矢量 logo（建议 SVG 转 PDF）拖入 `Resources/Assets.xcassets`，命名 `brand_leica` / `brand_fujifilm` / `brand_sony` / `brand_hasselblad` 等。
+2. 在 Asset 设置里勾选 **Preserve Vector Data**、Render As 选 **Template Image**。
+3. 把对应模板里的 `Text("LEICA")` 换成 `Image("brand_leica").resizable().aspectRatio(contentMode: .fit).frame(height: barHeight * 0.5)`。
 
-> 注意：品牌 logo 受商标法保护，自用 OK，公开发布或上架请确保已获得授权或使用替代设计。
+> 品牌 logo 受商标法保护，自用 OK，公开发布或上架请确保已获得授权或使用替代设计。
 
 ## 已知限制
 
-- **超大图内存**：`ImageRenderer` 在 5000 万像素图上会吃 300MB+ 内存；当前默认长边裁到 4096 像素再渲染（`ImageComposer.render(maxLongEdge:)` 可调）。
-- **RAW 兼容**：CGImageSource 支持 HEIC、DNG，但 Sony ARW / Canon CR3 等可能缺 `LensModel`，模板里已做 nil 兜底显示空字符串。
-- **设备方向**：第一版只锁竖屏；如需横屏，把 `Info.plist` 的 `UISupportedInterfaceOrientations` 加上 `Landscape*` 即可。
-- **iPad 适配**：当前 `TARGETED_DEVICE_FAMILY = "1"` 只给 iPhone，iPad 想用可改成 `"1,2"` 并自行处理大屏布局。
+- **超大图内存**：`ImageRenderer` 在 5000 万像素图上会吃 300MB+ 内存；当前默认长边裁到 4096 像素再渲染（`ImageComposer.render(maxLongEdge:)` / `PuzzleComposer.render(maxLongEdge:)` 可调）。
+- **RAW 兼容**：CGImageSource 支持 HEIC、DNG，但 Sony ARW / Canon CR3 等可能缺 `LensModel`，模板里已做 nil 兜底。
+- **设备方向**：第一版只锁竖屏；如需横屏，把 `Info.plist` 的 `UISupportedInterfaceOrientations` 加上 `Landscape*`。
+- **iPad 适配**：当前 `TARGETED_DEVICE_FAMILY = "1"` 只给 iPhone。
 
 ## 隐私
 
 - 仅声明 `NSPhotoLibraryAddUsageDescription` 与 `NSPhotoLibraryUsageDescription`，没有任何网络请求。
-- EXIF 中的 GPS 坐标无需定位权限即可读取；如担心隐私，编辑页右上角参数按钮里有"清除 GPS"。
+- EXIF 中的 GPS 坐标无需定位权限即可读取；如担心隐私，编辑页右上角参数按钮里可清除 GPS。
 - `PlaceLookup`（可选）会用 `CLGeocoder` 走 Apple 网络服务反查城市名，调用时才发起请求。

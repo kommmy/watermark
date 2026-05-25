@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" width="600" height="800" role="img" aria-label="ºÏ:">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3a3247"/>
+      <stop offset="1" stop-color="#1c1a26"/>
+    </linearGradient>
+    <radialGradient id="rim" cx="0.65" cy="0.4" r="0.6">
+      <stop offset="0" stop-color="#ffd4a8" stop-opacity="0.45"/>
+      <stop offset="1" stop-color="#ffd4a8" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="face" cx="0.5" cy="0.45" r="0.45">
+      <stop offset="0" stop-color="#c9a98a"/>
+      <stop offset="0.7" stop-color="#8b7256"/>
+      <stop offset="1" stop-color="#3a2e22"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="600" height="800" fill="url(#bgGrad)"/>
+  <rect width="600" height="800" fill="url(#rim)"/>
+
+  <!-- shoulders -->
+  <path d="M120 760 Q120 580 300 540 Q480 580 480 760 L480 800 L120 800 Z" fill="#1e1924"/>
+
+  <!-- neck -->
+  <rect x="265" y="440" width="70" height="120" rx="20" fill="#8b6f54"/>
+
+  <!-- head -->
+  <ellipse cx="300" cy="360" rx="120" ry="150" fill="url(#face)"/>
+
+  <!-- hair -->
+  <path d="M180 320 Q200 200 300 200 Q400 200 420 320 Q420 260 300 240 Q180 260 180 320 Z" fill="#1a120a"/>
+
+  <!-- subtle catch-light eye area -->
+  <ellipse cx="265" cy="360" rx="8" ry="4" fill="rgba(255,255,255,0.35)"/>
+  <ellipse cx="335" cy="360" rx="8" ry="4" fill="rgba(255,255,255,0.35)"/>
+</svg>

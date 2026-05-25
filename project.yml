@@ -21,9 +21,11 @@ targets:
     deploymentTarget: "16.0"
     sources:
       - path: WatermarkCamera/App
+      - path: WatermarkCamera/Theme
       - path: WatermarkCamera/Models
       - path: WatermarkCamera/Services
       - path: WatermarkCamera/Templates
+      - path: WatermarkCamera/PuzzleLayouts
       - path: WatermarkCamera/Views
       - path: WatermarkCamera/Resources
     settings:
