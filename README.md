@@ -16,6 +16,8 @@
 - **拼图模块（4 种布局）**
   Stacked（上下二格）/ Side by Side（左右二格）/ Grid 2x2（田字四格）/ Camera + Shot（相机产品图 + 实拍）。
   每种布局支持 4 种比例（3:4 / 1:1 / 4:5 / 9:16）+ 4 种背景（白 / 黑 / 米 / 渐变）+ 自定义文字。
+- **浏览与推荐**：Discover / Watermarks / Puzzles 按主题横向分组展示，包含 Watermarks、Camera vs Photo、Minimal Frames、Film Vintage、Color Walk、Free Collage 等入口。
+- **友好交互**：浮动 `+` 快速创建、模板卡片直接拉起相册、拼图槽位逐张替换、选图 loading 反馈、底部内容避让浮动按钮。
 - **首页 4 个 Tab**：Discover（推荐）/ Watermarks（水印）/ Puzzles（拼图）/ Me（我的），深色卡片风格。
 - 全程本地处理，无任何网络请求。
 
@@ -57,11 +59,12 @@ WatermarkCamera/
 │   └── WatermarkCameraApp.swift     # @main 入口
 ├── Theme/
 │   ├── AppTheme.swift               # 深色 token：色板/字号/圆角/阴影
-│   └── ViewModifiers.swift          # .cardStyle() / .appBackground()
+│   └── ViewModifiers.swift          # .cardStyle() / .appBackground() / LoadingOverlay / 浮动创建按钮
 ├── Models/
 │   ├── PhotoMetadata.swift          # EXIF 摘要 + 品牌识别
 │   ├── WatermarkTemplate.swift      # 16 套水印枚举 + 工厂
-│   └── PuzzleLayout.swift           # 4 种拼图枚举 + PuzzleOptions
+│   ├── PuzzleLayout.swift           # 4 种拼图枚举 + PuzzleOptions
+│   └── BrowseCatalog.swift          # Discover / 水印 / 拼图的主题分组配置
 ├── Services/
 │   ├── ExifReader.swift             # ImageIO 解析 TIFF/EXIF/GPS
 │   ├── ImageComposer.swift          # 水印 ImageRenderer
@@ -75,16 +78,17 @@ WatermarkCamera/
 │   ├── RicohGRTemplate.swift / iPhoneNativeTemplate.swift
 │   ├── PolaroidTemplate.swift
 │   ├── MinimalTemplate.swift / MinimalDarkTemplate.swift
-│   └── DateStampTemplate.swift
+│   ├── DateStampTemplate.swift
+│   └── SoftJournalTemplate.swift / CleanInstagramTemplate.swift / MagazineCoverTemplate.swift / ReceiptMemoTemplate.swift
 ├── PuzzleLayouts/                   # 4 种拼图布局 View
 │   ├── Vertical2Layout.swift / Horizontal2Layout.swift
 │   ├── Grid4Layout.swift / CameraDetailLayout.swift
 ├── Views/
 │   ├── HomeView.swift               # TabView 根
 │   ├── Tabs/
-│   │   ├── DiscoverTab.swift        # 推荐：banner + 横滑卡片
-│   │   ├── WatermarkTab.swift       # 16 套水印瀑布流
-│   │   ├── PuzzleTab.swift          # 4 种拼图瀑布流
+│   │   ├── DiscoverTab.swift        # 推荐：banner + 主题横滑分组 + 快速创建
+│   │   ├── WatermarkTab.swift       # 16 套水印按主题横滑分组
+│   │   ├── PuzzleTab.swift          # 4 种拼图按场景横滑分组
 │   │   └── MeTab.swift              # 我的
 │   ├── Cards/
 │   │   ├── TemplateCard.swift       # 水印封面卡片
@@ -121,7 +125,8 @@ PhotosPicker × N → [UIImage] → PuzzleLayout.makeView(images:, options:)
 3. 在 `displayName` / `brandLabel` / `makeView(image:meta:)` 的 `switch` 里补对应分支。
 4. 在 `Views/Cards/TemplateCard.swift` 的 `gradient` 与 `accentBar` 里补当前 case，让封面卡片有特色。
 5. 在 `Views/TemplateStrip.swift` 的 `accentStrip(for:)` 里画一条小色带。
-6. 在 `docs/script.js` 的 `TEMPLATES` + `RENDERERS` 里加同名 id 的 Web 版本，保持双端一致。
+6. 在 `Models/BrowseCatalog.swift` 里把新模板加入合适的浏览分组。
+7. 在 `docs/script.js` 的 `TEMPLATES` + `RENDERERS` 里加同名 id 的 Web 版本，保持双端一致。
 
 模板内部坐标系约定：以 `image.size.width` 作为 1 像素单位（合成器把 View 宽度强制等于原图像素宽度，scale=1 渲染输出）。所有字号 / 留白用 `image.size.height * 0.xx` 表达，自动适配横竖图与不同像素分辨率。
 
@@ -130,7 +135,8 @@ PhotosPicker × N → [UIImage] → PuzzleLayout.makeView(images:, options:)
 1. 在 `PuzzleLayouts/` 下新建 `<Name>Layout.swift`，签名 `(images: [UIImage], options: PuzzleOptions)`。
 2. 在 `Models/PuzzleLayout.swift` 的 `enum` 与 `makeView` 里加一个 case。
 3. 在 `Views/Cards/PuzzleLayoutCard.swift` 的 `cover` switch 里加封面 placeholder。
-4. 在 `docs/script.js` 的 `LAYOUTS` + `LAYOUT_RENDERERS` 里加同名 id 的 Web 版本。
+4. 在 `Models/BrowseCatalog.swift` 里把新布局加入合适的拼图/推荐分组。
+5. 在 `docs/script.js` 的 `LAYOUTS` + `LAYOUT_RENDERERS` 里加同名 id 的 Web 版本。
 
 ## 品牌 logo
 
