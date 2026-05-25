@@ -101,6 +101,25 @@ struct SectionHeader: View {
     }
 }
 
+// MARK: - Floating create button
+
+struct FloatingCreateButton: View {
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: "plus")
+                .font(.system(size: 24, weight: .semibold))
+                .foregroundColor(.black)
+                .frame(width: 62, height: 62)
+                .background(Circle().fill(.white))
+                .shadow(color: Color.black.opacity(0.32), radius: 18, x: 0, y: 10)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Quick create")
+    }
+}
+
 // MARK: - View extensions
 
 extension View {

@@ -73,15 +73,84 @@ const TEMPLATES = [
   { id: "receipt_memo",   name: "Receipt Memo", group: "cafe",       brand: "Cafe" },
 ];
 
-const FEATURED_TEMPLATE_IDS = [
-  "soft_journal",
-  "clean_instagram",
-  "magazine_cover",
-  "receipt_memo",
-  "leica",
-  "fujifilm",
-  "ricoh_gr",
-  "polaroid",
+const BROWSE_SECTIONS = [
+  {
+    title: "水印",
+    subtitle: "真实品牌 logo 和相机参数卡",
+    more: "watermark",
+    items: ["template:soft_journal", "template:clean_instagram", "template:magazine_cover", "template:leica", "template:fujifilm"],
+  },
+  {
+    title: "相机 VS 照片",
+    subtitle: "把器材和成片放在同一张作品里",
+    more: "puzzle",
+    items: ["layout:camera_detail", "layout:horizontal2", "template:ricoh_gr", "template:iphone"],
+  },
+  {
+    title: "极简边框",
+    subtitle: "留白、暗框和干净社交边框",
+    more: "watermark",
+    items: ["template:minimal", "template:minimal_dark", "template:polaroid", "template:clean_instagram"],
+  },
+  {
+    title: "胶片复古",
+    subtitle: "胶片条、日期戳和拍立得质感",
+    more: "watermark",
+    items: ["template:fuji_strip", "template:date_stamp", "template:polaroid", "template:leica_mono"],
+  },
+  {
+    title: "Color Walk",
+    subtitle: "适合小红书的暖色生活方式模板",
+    more: "watermark",
+    items: ["template:soft_journal", "template:receipt_memo", "template:magazine_cover", "template:hasselblad"],
+  },
+  {
+    title: "自由拼图",
+    subtitle: "Before/After、系列和细节拼接",
+    more: "puzzle",
+    items: ["layout:vertical2", "layout:horizontal2", "layout:grid4", "layout:camera_detail"],
+  },
+];
+
+const WATERMARK_SECTIONS = [
+  {
+    title: "文艺 / Ins 风",
+    subtitle: "Soft Journal、Magazine、Receipt 等发帖友好模板",
+    items: ["template:soft_journal", "template:clean_instagram", "template:magazine_cover", "template:receipt_memo"],
+  },
+  {
+    title: "相机品牌",
+    subtitle: "Leica、Fuji、Sony、Ricoh、Hasselblad",
+    items: ["template:leica", "template:leica_mono", "template:fujifilm", "template:sony", "template:hasselblad", "template:ricoh_gr", "template:iphone"],
+  },
+  {
+    title: "边框",
+    subtitle: "极简留白、深色边框和拍立得",
+    items: ["template:minimal", "template:minimal_dark", "template:polaroid", "template:clean_instagram"],
+  },
+  {
+    title: "胶片复古",
+    subtitle: "Film strip 和日期戳",
+    items: ["template:fuji_strip", "template:date_stamp", "template:polaroid"],
+  },
+];
+
+const PUZZLE_SECTIONS = [
+  {
+    title: "Before After",
+    subtitle: "适合修图对比和前后变化",
+    items: ["layout:horizontal2", "layout:vertical2"],
+  },
+  {
+    title: "Camera vs Photo",
+    subtitle: "相机细节 + 成片展示",
+    items: ["layout:camera_detail", "layout:vertical2"],
+  },
+  {
+    title: "Photo Series",
+    subtitle: "多图故事、系列作品和自由拼图",
+    items: ["layout:grid4", "layout:vertical2", "layout:horizontal2"],
+  },
 ];
 
 // -------------------------------------------------------------
@@ -526,6 +595,7 @@ function renderHome() {
         ${renderTabBarBtn("me",       ICON.user,  "我的")}
       </nav>
 
+      <button class="quick-fab" data-quick-create aria-label="快速创建">${ICON.add}</button>
       <div class="home-indicator"></div>
     </div>
   `;
@@ -553,6 +623,27 @@ function renderHome() {
       renderApp();
     });
   });
+  const quick = root.querySelector("[data-quick-create]");
+  if (quick) {
+    quick.addEventListener("click", () => {
+      if (state.tab === "puzzle") {
+        state.puzzle.layoutId = "vertical2";
+        state.page = "editor-puzzle";
+      } else {
+        state.watermark.templateId = "soft_journal";
+        applyTemplatePreset("soft_journal");
+        state.page = "editor-watermark";
+      }
+      renderApp();
+    });
+  }
+  const bannerCta = root.querySelector("[data-banner-create]");
+  if (bannerCta) {
+    bannerCta.addEventListener("click", () => {
+      state.tab = "watermark";
+      renderHome();
+    });
+  }
 }
 
 function renderChip(id, icon, label) {
@@ -581,81 +672,74 @@ function renderDiscover() {
           <p class="banner-title">把照片变成一张作品卡</p>
           <p class="banner-sub">真实品牌 logo、水印签名和拼图布局都在本地完成</p>
         </div>
-        <button class="banner-cta">开始创作</button>
+        <button class="banner-cta" data-banner-create>开始创作</button>
       </div>
-
-      <div class="section">
-        <div class="section-head">
-          <h3 class="section-title">水印</h3>
-          <button class="section-more" data-tab="watermark">更多 ›</button>
-        </div>
-        <div class="h-scroll">
-          ${featuredTemplates().map(t => `
-            <button class="cover-card" data-template-id="${t.id}">
-              ${renderTemplateCover(t)}
-              <div class="meta">
-                <p class="name">${escapeHtml(t.name)}</p>
-                <p class="desc">${escapeHtml(t.brand)}</p>
-              </div>
-            </button>
-          `).join("")}
-        </div>
-      </div>
-
-      <div class="section">
-        <div class="section-head">
-          <h3 class="section-title">拼图</h3>
-          <button class="section-more" data-tab="puzzle">更多 ›</button>
-        </div>
-        <div class="h-scroll">
-          ${LAYOUTS.map(l => `
-            <button class="cover-card" data-layout-id="${l.id}">
-              <div class="cover">${puzzleCoverSvg(l.id)}</div>
-              <div class="meta">
-                <p class="name">${escapeHtml(l.name)}</p>
-                <p class="desc">${escapeHtml(l.hint)}</p>
-              </div>
-            </button>
-          `).join("")}
-        </div>
-      </div>
+      ${BROWSE_SECTIONS.map(renderBrowseSection).join("")}
     </div>`;
 }
 
 function renderWatermarkList() {
   return `
-    <div class="grid-2" style="padding-top: 8px; padding-bottom: 16px;">
-      ${TEMPLATES.map(t => `
-        <button class="cover-card" data-template-id="${t.id}">
-          ${renderTemplateCover(t)}
-          <div class="meta">
-            <p class="name">${escapeHtml(t.name)}</p>
-            <p class="desc">${escapeHtml(t.brand)}</p>
-          </div>
-        </button>
-      `).join("")}
+    <div class="discover">
+      <div class="browse-intro">
+        <h2>选择一种水印风格</h2>
+        <p>先选模板，再换照片；参数和文字可以在编辑器里继续调整。</p>
+      </div>
+      ${WATERMARK_SECTIONS.map(renderBrowseSection).join("")}
     </div>`;
-}
-
-function featuredTemplates() {
-  return FEATURED_TEMPLATE_IDS
-    .map(id => TEMPLATES.find(t => t.id === id))
-    .filter(Boolean);
 }
 
 function renderPuzzleList() {
   return `
-    <div class="grid-2" style="padding-top: 8px; padding-bottom: 16px;">
-      ${LAYOUTS.map(l => `
-        <button class="cover-card" data-layout-id="${l.id}">
-          <div class="cover">${puzzleCoverSvg(l.id)}</div>
-          <div class="meta">
-            <p class="name">${escapeHtml(l.name)}</p>
-            <p class="desc">${escapeHtml(l.hint)}（${l.slots} 张图）</p>
-          </div>
-        </button>
-      `).join("")}
+    <div class="discover">
+      <div class="browse-intro">
+        <h2>选择拼图方式</h2>
+        <p>每个布局都有清晰槽位，进入后逐张替换即可。</p>
+      </div>
+      ${PUZZLE_SECTIONS.map(renderBrowseSection).join("")}
     </div>`;
+}
+
+function renderBrowseSection(section) {
+  return `
+    <div class="section">
+      <div class="section-head">
+        <div>
+          <h3 class="section-title">${escapeHtml(section.title)}</h3>
+          ${section.subtitle ? `<p class="section-subtitle">${escapeHtml(section.subtitle)}</p>` : ""}
+        </div>
+        ${section.more ? `<button class="section-more" data-tab="${section.more}">更多 ›</button>` : ""}
+      </div>
+      <div class="h-scroll">
+        ${section.items.map(renderBrowseItem).join("")}
+      </div>
+    </div>`;
+}
+
+function renderBrowseItem(ref) {
+  const [type, id] = ref.split(":");
+  if (type === "layout") {
+    const l = LAYOUTS.find(item => item.id === id);
+    if (!l) return "";
+    return `
+      <button class="cover-card" data-layout-id="${l.id}">
+        <div class="cover">${puzzleCoverSvg(l.id)}</div>
+        <div class="meta">
+          <p class="name">${escapeHtml(l.name)}</p>
+          <p class="desc">${escapeHtml(l.hint)}（${l.slots} 张图）</p>
+        </div>
+      </button>`;
+  }
+  const t = TEMPLATES.find(item => item.id === id);
+  if (!t) return "";
+  return `
+    <button class="cover-card" data-template-id="${t.id}">
+      ${renderTemplateCover(t)}
+      <div class="meta">
+        <p class="name">${escapeHtml(t.name)}</p>
+        <p class="desc">${escapeHtml(t.brand)}</p>
+      </div>
+    </button>`;
 }
 
 function renderMe() {

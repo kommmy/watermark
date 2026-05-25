@@ -162,7 +162,7 @@ button { font-family: inherit; cursor: pointer; }
 /* =============================================================
    App root (everything below the status bar)
 ============================================================= */
-.app-root { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; }
+.app-root { flex: 1 1 auto; display: flex; flex-direction: column; min-height: 0; position: relative; }
 
 /* App top bar (PRO + title + settings) */
 .app-top {
@@ -214,6 +214,7 @@ button { font-family: inherit; cursor: pointer; }
 .tab-content {
   flex: 1 1 auto;
   overflow-y: auto;
+  padding-bottom: 78px;
   scrollbar-width: none;
 }
 .tab-content::-webkit-scrollbar { display: none; }
@@ -276,9 +277,26 @@ button { font-family: inherit; cursor: pointer; }
 .section-head {
   display: flex; align-items: baseline; justify-content: space-between;
   padding: 0 18px 10px;
+  gap: 12px;
 }
 .section-title { font-size: 15px; font-weight: 700; color: var(--text); margin: 0; }
+.section-subtitle { font-size: 10.5px; color: var(--text-2); margin: 2px 0 0; max-width: 230px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .section-more { font-size: 12px; color: var(--text-2); background: transparent; border: 0; padding: 0; }
+
+.browse-intro { padding: 10px 18px 2px; }
+.browse-intro h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: 20px;
+  line-height: 1.15;
+  letter-spacing: -.03em;
+}
+.browse-intro p {
+  margin: 5px 0 0;
+  color: var(--text-2);
+  font-size: 12px;
+  line-height: 1.45;
+}
 
 .h-scroll {
   display: flex; gap: 10px; overflow-x: auto;
@@ -467,6 +485,25 @@ button { font-family: inherit; cursor: pointer; }
   background: var(--text); opacity: 0.85;
   border-radius: 3px; margin: 6px auto 8px;
 }
+
+.quick-fab {
+  position: absolute;
+  left: 50%;
+  bottom: 54px;
+  transform: translateX(-50%);
+  width: 62px;
+  height: 62px;
+  border: 0;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: #111;
+  box-shadow: 0 18px 34px rgba(0,0,0,.34), inset 0 0 0 1px rgba(0,0,0,.05);
+  z-index: 5;
+}
+.quick-fab svg { width: 25px; height: 25px; }
 
 /* =============================================================
    Puzzle editor inside the phone
