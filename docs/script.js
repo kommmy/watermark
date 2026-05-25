@@ -45,10 +45,14 @@ const TEMPLATE_PRESETS = {
   minimal:      { cameraModel: "Canon R6 Mark II", lensModel: "RF 50mm F1.2", focal: 50, aperture: 1.2, shutter: "1/1000s", iso: 100 },
   minimal_dark: { cameraModel: "Nikon Zf", lensModel: "NIKKOR 40mm F2", focal: 40, aperture: 2, shutter: "1/250s", iso: 800 },
   date_stamp:   { cameraModel: "Kodak Gold 200", lensModel: "35mm Film", focal: 35, aperture: 5.6, shutter: "1/125s", iso: 200 },
+  soft_journal: { cameraModel: "Daily Notes", lensModel: "Soft Light", focal: 35, aperture: 2.8, shutter: "1/250s", iso: 200 },
+  clean_instagram: { cameraModel: "@lumaframe", lensModel: "Clean Feed", focal: 50, aperture: 2, shutter: "1/500s", iso: 100 },
+  magazine_cover: { cameraModel: "LUMA JOURNAL", lensModel: "Weekend Notes", focal: 28, aperture: 4, shutter: "1/320s", iso: 200 },
+  receipt_memo: { cameraModel: "LUMA CAFE", lensModel: "Receipt Memo", focal: 35, aperture: 2.8, shutter: "1/125s", iso: 400 },
 };
 
 // -------------------------------------------------------------
-// 12 watermark templates
+// Watermark templates
 // -------------------------------------------------------------
 const TEMPLATES = [
   { id: "leica",          name: "Leica White",  group: "leica",      brand: "LEICA" },
@@ -63,6 +67,21 @@ const TEMPLATES = [
   { id: "minimal",        name: "Minimal Light",group: "minimal",    brand: "Minimal" },
   { id: "minimal_dark",   name: "Minimal Dark", group: "minimal",    brand: "Minimal" },
   { id: "date_stamp",     name: "Date Stamp",   group: "stamp",      brand: "Kodak" },
+  { id: "soft_journal",   name: "Soft Journal", group: "lifestyle",  brand: "Journal" },
+  { id: "clean_instagram",name: "Clean Instagram", group: "lifestyle", brand: "Lifestyle" },
+  { id: "magazine_cover", name: "Magazine Cover", group: "editorial", brand: "Magazine" },
+  { id: "receipt_memo",   name: "Receipt Memo", group: "cafe",       brand: "Cafe" },
+];
+
+const FEATURED_TEMPLATE_IDS = [
+  "soft_journal",
+  "clean_instagram",
+  "magazine_cover",
+  "receipt_memo",
+  "leica",
+  "fujifilm",
+  "ricoh_gr",
+  "polaroid",
 ];
 
 // -------------------------------------------------------------
@@ -328,6 +347,59 @@ const RENDERERS = {
         <div class="stamp">${escapeHtml(d.date || "2026 05 25")}</div>
       </div>`;
   },
+
+  soft_journal(d) {
+    return `
+      <div class="canvas tpl-soft-journal">
+        <img src="${escapeHtml(d.image)}" class="photo" alt="" />
+        <div class="journal-copy">
+          <div class="journal-title">a quiet little moment</div>
+          <div class="journal-meta">${escapeHtml([d.date, "Shanghai", d.focal ? `${d.focal}mm` : null].filter(Boolean).join(" / "))}</div>
+        </div>
+      </div>`;
+  },
+
+  clean_instagram(d) {
+    return `
+      <div class="canvas tpl-clean-instagram">
+        <img src="${escapeHtml(d.image)}" class="photo" alt="" />
+        <div class="insta-caption">
+          <span>@lumaframe</span>
+          <span>${escapeHtml(d.date || "25 MAY 2026")}</span>
+        </div>
+      </div>`;
+  },
+
+  magazine_cover(d) {
+    return `
+      <div class="canvas tpl-magazine-cover">
+        <img src="${escapeHtml(d.image)}" class="photo" alt="" />
+        <div class="mag-top">
+          <div class="mag-title">LUMA JOURNAL</div>
+          <div class="mag-sub">WEEKEND NOTES</div>
+        </div>
+        <div class="mag-bottom">
+          <div><b>No. 025</b><span>Shanghai</span></div>
+          <em>${escapeHtml(paramsLine(d))}</em>
+        </div>
+      </div>`;
+  },
+
+  receipt_memo(d) {
+    return `
+      <div class="canvas tpl-receipt-memo">
+        <img src="${escapeHtml(d.image)}" class="photo" alt="" />
+        <div class="receipt">
+          <div class="receipt-title">LUMA CAFE</div>
+          <div class="receipt-line"></div>
+          <div class="receipt-row"><span>DATE</span><b>${escapeHtml(d.date || "2026.05.25")}</b></div>
+          <div class="receipt-row"><span>MOOD</span><b>SUNNY</b></div>
+          <div class="receipt-row"><span>SHOT</span><b>${escapeHtml(paramsLine(d) || "35MM / FILM")}</b></div>
+          <div class="receipt-line"></div>
+          <div class="receipt-foot">THANK YOU FOR THE MEMORY</div>
+        </div>
+      </div>`;
+  },
 };
 
 // =============================================================
@@ -518,7 +590,7 @@ function renderDiscover() {
           <button class="section-more" data-tab="watermark">更多 ›</button>
         </div>
         <div class="h-scroll">
-          ${TEMPLATES.slice(0, 8).map(t => `
+          ${featuredTemplates().map(t => `
             <button class="cover-card" data-template-id="${t.id}">
               ${renderTemplateCover(t)}
               <div class="meta">
@@ -563,6 +635,12 @@ function renderWatermarkList() {
         </button>
       `).join("")}
     </div>`;
+}
+
+function featuredTemplates() {
+  return FEATURED_TEMPLATE_IDS
+    .map(id => TEMPLATES.find(t => t.id === id))
+    .filter(Boolean);
 }
 
 function renderPuzzleList() {

@@ -5,7 +5,7 @@ import SwiftUI
 ///   2. 在下面的 enum 里加一个 case
 ///   3. 在 `displayName` 和 `makeView(image:meta:)` switch 里补对应分支
 ///
-/// 12 套模板的 id 与 docs/script.js TEMPLATES 一一对应，确保 Web 与 iOS 设计完全对齐。
+/// Template ids are aligned with docs/script.js TEMPLATES so Web and iOS stay in lockstep.
 enum WatermarkTemplate: String, CaseIterable, Identifiable, Hashable {
     case leica
     case leica_mono       // swiftlint:disable:this identifier_name
@@ -19,6 +19,10 @@ enum WatermarkTemplate: String, CaseIterable, Identifiable, Hashable {
     case minimal
     case minimal_dark     // swiftlint:disable:this identifier_name
     case date_stamp       // swiftlint:disable:this identifier_name
+    case soft_journal     // swiftlint:disable:this identifier_name
+    case clean_instagram  // swiftlint:disable:this identifier_name
+    case magazine_cover   // swiftlint:disable:this identifier_name
+    case receipt_memo     // swiftlint:disable:this identifier_name
 
     var id: String { rawValue }
 
@@ -36,6 +40,10 @@ enum WatermarkTemplate: String, CaseIterable, Identifiable, Hashable {
         case .minimal:      return "Minimal Light"
         case .minimal_dark: return "Minimal Dark"
         case .date_stamp:   return "Date Stamp"
+        case .soft_journal: return "Soft Journal"
+        case .clean_instagram: return "Clean Instagram"
+        case .magazine_cover: return "Magazine Cover"
+        case .receipt_memo: return "Receipt Memo"
         }
     }
 
@@ -50,6 +58,10 @@ enum WatermarkTemplate: String, CaseIterable, Identifiable, Hashable {
         case .polaroid:             return "Polaroid"
         case .minimal, .minimal_dark: return "Minimal"
         case .date_stamp:           return "Kodak"
+        case .soft_journal:         return "Journal"
+        case .clean_instagram:      return "Lifestyle"
+        case .magazine_cover:       return "Magazine"
+        case .receipt_memo:         return "Cafe"
         }
     }
 
@@ -68,6 +80,10 @@ enum WatermarkTemplate: String, CaseIterable, Identifiable, Hashable {
         case .minimal:      MinimalTemplate(image: image, meta: meta)
         case .minimal_dark: MinimalDarkTemplate(image: image, meta: meta)
         case .date_stamp:   DateStampTemplate(image: image, meta: meta)
+        case .soft_journal: SoftJournalTemplate(image: image, meta: meta)
+        case .clean_instagram: CleanInstagramTemplate(image: image, meta: meta)
+        case .magazine_cover: MagazineCoverTemplate(image: image, meta: meta)
+        case .receipt_memo: ReceiptMemoTemplate(image: image, meta: meta)
         }
     }
 

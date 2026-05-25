@@ -3,6 +3,16 @@ import SwiftUI
 // "For You" tab: banner + horizontally scrolling cards (Watermarks + Layouts).
 struct DiscoverTab: View {
     var switchTo: (HomeView.Tab) -> Void
+    private let featuredTemplates: [WatermarkTemplate] = [
+        .soft_journal,
+        .clean_instagram,
+        .magazine_cover,
+        .receipt_memo,
+        .leica,
+        .fujifilm,
+        .ricoh_gr,
+        .polaroid
+    ]
 
     var body: some View {
         NavigationStack {
@@ -14,7 +24,7 @@ struct DiscoverTab: View {
                     section(title: "Watermarks", more: "More >") { switchTo(.watermark) } content: {
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: AppTheme.Spacing.m) {
-                                ForEach(WatermarkTemplate.allCases.prefix(8)) { tpl in
+                                ForEach(featuredTemplates) { tpl in
                                     NavigationLink {
                                         TemplatePickPlaceholder(template: tpl)
                                     } label: {

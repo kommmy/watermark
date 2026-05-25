@@ -60,6 +60,10 @@ struct TemplateCard: View {
         case .minimal:      return [Color(white: 0.96), Color(white: 0.85)]
         case .minimal_dark: return [Color(white: 0.15), Color(white: 0.04)]
         case .date_stamp:   return [Color(red: 0.32, green: 0.16, blue: 0.06), Color(red: 0.12, green: 0.07, blue: 0.04)]
+        case .soft_journal: return [Color(red: 0.98, green: 0.94, blue: 0.86), Color(red: 0.73, green: 0.63, blue: 0.52)]
+        case .clean_instagram: return [Color.white, Color(white: 0.86)]
+        case .magazine_cover: return [Color(red: 0.20, green: 0.24, blue: 0.33), Color(red: 0.05, green: 0.06, blue: 0.09)]
+        case .receipt_memo: return [Color(red: 0.98, green: 0.95, blue: 0.88), Color(red: 0.78, green: 0.70, blue: 0.58)]
         }
     }
 
@@ -153,6 +157,45 @@ struct TemplateCard: View {
                     .padding(.trailing, 8)
                     .padding(.bottom, 6)
             }
+
+        case .soft_journal:
+            HStack {
+                Text("a quiet moment")
+                    .font(.system(size: 8, weight: .semibold, design: .serif))
+                    .foregroundColor(Color(red: 0.24, green: 0.18, blue: 0.13))
+                Spacer()
+            }
+            .padding(.horizontal, 8).frame(height: 22).background(Color(red: 0.96, green: 0.91, blue: 0.82))
+
+        case .clean_instagram:
+            HStack {
+                Text("@lumaframe")
+                    .font(.system(size: 8, weight: .semibold, design: .rounded))
+                    .foregroundColor(.black)
+                Spacer()
+                Circle().fill(Color.black).frame(width: 3, height: 3)
+            }
+            .padding(.horizontal, 8).frame(height: 20).background(Color.white)
+
+        case .magazine_cover:
+            VStack(alignment: .leading, spacing: 1) {
+                Text("LUMA JOURNAL")
+                    .font(.system(size: 8, weight: .black, design: .serif))
+                    .foregroundColor(.white)
+                Text("WEEKEND NOTES")
+                    .font(.system(size: 5, weight: .medium, design: .monospaced))
+                    .foregroundColor(.white.opacity(0.72))
+            }
+            .padding(.horizontal, 8).frame(maxWidth: .infinity, alignment: .leading).frame(height: 28)
+
+        case .receipt_memo:
+            VStack(spacing: 2) {
+                Text("LUMA CAFE")
+                    .font(.system(size: 8, weight: .bold, design: .monospaced))
+                    .foregroundColor(.black)
+                Rectangle().fill(Color.black.opacity(0.25)).frame(height: 1)
+            }
+            .padding(.horizontal, 8).frame(height: 28).background(Color(red: 0.98, green: 0.95, blue: 0.88))
         }
     }
 }

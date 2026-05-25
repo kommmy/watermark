@@ -2,7 +2,7 @@
 
 iPhone 模拟外壳 + 实时编辑器，演示 iOS App 的设计与功能：
 
-- **水印** 12 套：Leica / Leica Mono / Fuji Dark / Fuji Film Strip / Sony / Hasselblad / Ricoh GR / iPhone / Polaroid / Minimal Light / Minimal Dark / Date Stamp
+- **水印** 16 套：Leica / Leica Mono / Fuji Dark / Fuji Film Strip / Sony / Hasselblad / Ricoh GR / iPhone / Polaroid / Minimal Light / Minimal Dark / Date Stamp / Soft Journal / Clean Instagram / Magazine Cover / Receipt Memo
 - **拼图** 4 种：上下二格 / 左右二格 / 田字四格 / 相机 + 实拍
 - 深色卡片风格：顶部 chips、底部 tabbar、横滑卡片、毛玻璃
 
@@ -18,7 +18,7 @@ iPhone 模拟外壳 + 实时编辑器，演示 iOS App 的设计与功能：
 docs/
 ├── index.html               # 页面壳 + iPhone 外壳骨架
 ├── style.css                # 深色 token + 所有模板/拼图 CSS
-├── script.js                # SPA：路由 / 状态 / 12 套水印渲染 / 4 种拼图渲染
+├── script.js                # SPA：路由 / 状态 / 16 套水印渲染 / 4 种拼图渲染
 ├── sample.svg               # 默认风景示例图
 ├── sample-camera.svg        # 默认相机产品示例图（用于 camera_detail 拼图）
 └── sample-portrait.svg      # 默认人像示例图

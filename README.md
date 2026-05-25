@@ -1,18 +1,18 @@
 # WatermarkCamera
 
 > iOS 相机风格水印 + 拼图 App，纯本地，无后端。
-> 选图后自动读取 EXIF（机型/镜头/光圈/快门/ISO/日期/GPS），套用徕卡、富士、索尼、哈苏、理光、iPhone 等 **12 套水印模板**；或挑 **4 种拼图布局** 拼多张图，一键保存到相册或分享。
+> 选图后自动读取 EXIF（机型/镜头/光圈/快门/ISO/日期/GPS），套用徕卡、富士、索尼、哈苏、理光、iPhone、文艺/Ins 风等 **16 套水印模板**；或挑 **4 种拼图布局** 拼多张图，一键保存到相册或分享。
 
 [![iOS Build](https://github.com/kommmy/watermark/actions/workflows/ios-build.yml/badge.svg)](https://github.com/kommmy/watermark/actions/workflows/ios-build.yml)
 [![Deploy Pages](https://github.com/kommmy/watermark/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/kommmy/watermark/actions/workflows/deploy-pages.yml)
 
 > **在线预览** （iPhone 模拟外壳 + 实时编辑）：[kommmy.github.io/watermark](https://kommmy.github.io/watermark/)
-> 浏览器中即可体验 12 套水印模板 + 4 种拼图布局，最终 iOS App 与 Web 设计语言一致。
+> 浏览器中即可体验 16 套水印模板 + 4 种拼图布局，最终 iOS App 与 Web 设计语言一致。
 
 ## 功能总览
 
-- **水印模块（12 套模板）**
-  Leica White / Leica Mono / Fuji Dark / Fuji Film Strip / Sony Alpha / Hasselblad / Ricoh GR / iPhone Shot / Polaroid / Minimal Light / Minimal Dark / Date Stamp。
+- **水印模块（16 套模板）**
+  Leica White / Leica Mono / Fuji Dark / Fuji Film Strip / Sony Alpha / Hasselblad / Ricoh GR / iPhone Shot / Polaroid / Minimal Light / Minimal Dark / Date Stamp / Soft Journal / Clean Instagram / Magazine Cover / Receipt Memo。
 - **拼图模块（4 种布局）**
   Stacked（上下二格）/ Side by Side（左右二格）/ Grid 2x2（田字四格）/ Camera + Shot（相机产品图 + 实拍）。
   每种布局支持 4 种比例（3:4 / 1:1 / 4:5 / 9:16）+ 4 种背景（白 / 黑 / 米 / 渐变）+ 自定义文字。
@@ -60,7 +60,7 @@ WatermarkCamera/
 │   └── ViewModifiers.swift          # .cardStyle() / .appBackground()
 ├── Models/
 │   ├── PhotoMetadata.swift          # EXIF 摘要 + 品牌识别
-│   ├── WatermarkTemplate.swift      # 12 套水印枚举 + 工厂
+│   ├── WatermarkTemplate.swift      # 16 套水印枚举 + 工厂
 │   └── PuzzleLayout.swift           # 4 种拼图枚举 + PuzzleOptions
 ├── Services/
 │   ├── ExifReader.swift             # ImageIO 解析 TIFF/EXIF/GPS
@@ -68,7 +68,7 @@ WatermarkCamera/
 │   ├── PuzzleComposer.swift         # 拼图 ImageRenderer
 │   ├── PhotoSaver.swift             # 写入相册（addOnly）
 │   └── PlaceLookup.swift            # 可选：GPS 反查城市名
-├── Templates/                       # 12 套水印 SwiftUI View
+├── Templates/                       # 16 套水印 SwiftUI View
 │   ├── LeicaTemplate.swift / LeicaMonoTemplate.swift
 │   ├── FujiTemplate.swift / FujiFilmStripTemplate.swift
 │   ├── SonyTemplate.swift / HasselbladTemplate.swift
@@ -83,7 +83,7 @@ WatermarkCamera/
 │   ├── HomeView.swift               # TabView 根
 │   ├── Tabs/
 │   │   ├── DiscoverTab.swift        # 推荐：banner + 横滑卡片
-│   │   ├── WatermarkTab.swift       # 12 套水印瀑布流
+│   │   ├── WatermarkTab.swift       # 16 套水印瀑布流
 │   │   ├── PuzzleTab.swift          # 4 种拼图瀑布流
 │   │   └── MeTab.swift              # 我的
 │   ├── Cards/
@@ -91,7 +91,7 @@ WatermarkCamera/
 │   │   └── PuzzleLayoutCard.swift   # 拼图封面卡片
 │   ├── EditorView.swift             # 水印编辑器
 │   ├── PuzzleEditorView.swift       # 拼图编辑器
-│   ├── TemplateStrip.swift          # 横向 12 套模板选择条
+│   ├── TemplateStrip.swift          # 横向 16 套模板选择条
 │   └── MetadataEditorSheet.swift    # 手动覆盖 EXIF
 ├── Resources/
 │   └── Assets.xcassets              # AppIcon / AccentColor / 真实品牌 logo

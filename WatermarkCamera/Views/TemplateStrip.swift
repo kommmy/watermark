@@ -99,6 +99,23 @@ struct TemplateStrip: View {
 
         case .date_stamp:
             EmptyView()
+
+        case .soft_journal:
+            Rectangle().fill(Color(red: 0.96, green: 0.91, blue: 0.82)).frame(height: 10)
+
+        case .clean_instagram:
+            Rectangle().fill(Color.white).frame(height: 14)
+
+        case .magazine_cover:
+            LinearGradient(
+                colors: [Color.black.opacity(0.05), Color.black.opacity(0.55)],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .frame(height: 64)
+
+        case .receipt_memo:
+            Rectangle().fill(Color(red: 0.98, green: 0.95, blue: 0.88)).frame(height: 18)
         }
     }
 }

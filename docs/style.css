@@ -367,16 +367,26 @@ button { font-family: inherit; cursor: pointer; }
 .template-cover-minimal { background:linear-gradient(155deg,#f5f2ed,#dad6cf); }
 .template-cover-minimal_dark { background:linear-gradient(155deg,#202024,#060608); }
 .template-cover-date_stamp { background:linear-gradient(155deg,#2e1a0a,#15100b); }
+.template-cover-soft_journal { background:linear-gradient(155deg,#f8efe0,#bfae98); }
+.template-cover-clean_instagram { background:linear-gradient(155deg,#fff,#dedede); }
+.template-cover-magazine_cover { background:linear-gradient(155deg,#252d3d,#08090d); }
+.template-cover-receipt_memo { background:linear-gradient(155deg,#fbf2df,#c8bca2); }
 .template-cover-leica .cover-spec span,
 .template-cover-hasselblad .cover-spec span,
 .template-cover-iphone .cover-spec span,
 .template-cover-polaroid .cover-spec span,
-.template-cover-minimal .cover-spec span { color:#111; }
+.template-cover-minimal .cover-spec span,
+.template-cover-soft_journal .cover-spec span,
+.template-cover-clean_instagram .cover-spec span,
+.template-cover-receipt_memo .cover-spec span { color:#111; }
 .template-cover-leica .cover-spec b,
 .template-cover-hasselblad .cover-spec b,
 .template-cover-iphone .cover-spec b,
 .template-cover-polaroid .cover-spec b,
-.template-cover-minimal .cover-spec b { color:rgba(0,0,0,.55); }
+.template-cover-minimal .cover-spec b,
+.template-cover-soft_journal .cover-spec b,
+.template-cover-clean_instagram .cover-spec b,
+.template-cover-receipt_memo .cover-spec b { color:rgba(0,0,0,.55); }
 
 /* =============================================================
    Watermark editor (inside the phone)
@@ -715,4 +725,148 @@ button { font-family: inherit; cursor: pointer; }
   font-size:14px; font-weight:700;
   text-shadow: 0 0 6px rgba(0,0,0,.6);
   letter-spacing: .04em;
+}
+
+/* --- Soft Journal --- */
+.tpl-soft-journal {
+  background:#f7efe0;
+  padding:18px 18px 24px;
+}
+.tpl-soft-journal .photo {
+  border-radius:12px;
+  overflow:hidden;
+}
+.tpl-soft-journal .journal-copy {
+  text-align:center;
+  padding-top:14px;
+}
+.tpl-soft-journal .journal-title {
+  font-family:Georgia, "Times New Roman", serif;
+  font-size:17px;
+  font-weight:600;
+  color:#3b2d22;
+}
+.tpl-soft-journal .journal-meta {
+  margin-top:3px;
+  font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  font-size:9px;
+  color:#746253;
+}
+
+/* --- Clean Instagram --- */
+.tpl-clean-instagram {
+  background:#fff;
+  padding:22px 22px 18px;
+}
+.tpl-clean-instagram .insta-caption {
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  padding-top:14px;
+  color:#222;
+  font-size:10px;
+  font-weight:600;
+}
+.tpl-clean-instagram .insta-caption span:last-child {
+  font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  font-weight:400;
+}
+
+/* --- Magazine Cover --- */
+.tpl-magazine-cover {
+  position:relative;
+  color:#fff;
+  overflow:hidden;
+}
+.tpl-magazine-cover::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(180deg,rgba(0,0,0,.45),transparent 42%,rgba(0,0,0,.46));
+}
+.tpl-magazine-cover .mag-top,
+.tpl-magazine-cover .mag-bottom {
+  position:absolute;
+  left:18px;
+  right:18px;
+  z-index:1;
+}
+.tpl-magazine-cover .mag-top { top:16px; }
+.tpl-magazine-cover .mag-title {
+  font-family:Georgia, "Times New Roman", serif;
+  font-size:22px;
+  font-weight:900;
+  letter-spacing:.08em;
+}
+.tpl-magazine-cover .mag-sub {
+  margin-top:1px;
+  font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  font-size:9px;
+  letter-spacing:.18em;
+  opacity:.78;
+}
+.tpl-magazine-cover .mag-bottom {
+  bottom:16px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:16px;
+}
+.tpl-magazine-cover .mag-bottom b {
+  display:block;
+  font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  font-size:10px;
+}
+.tpl-magazine-cover .mag-bottom span {
+  display:block;
+  font-family:Georgia, "Times New Roman", serif;
+  font-size:15px;
+  font-weight:700;
+}
+.tpl-magazine-cover .mag-bottom em {
+  font-style:normal;
+  font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  font-size:8px;
+  opacity:.84;
+  white-space:nowrap;
+}
+
+/* --- Receipt Memo --- */
+.tpl-receipt-memo {
+  background:#fbf2df;
+}
+.tpl-receipt-memo .receipt {
+  padding:17px 20px 18px;
+  color:#222;
+  font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+.tpl-receipt-memo .receipt-title {
+  text-align:center;
+  font-size:15px;
+  font-weight:800;
+  letter-spacing:.12em;
+}
+.tpl-receipt-memo .receipt-line {
+  border-top:1px dashed rgba(0,0,0,.28);
+  margin:10px 0;
+}
+.tpl-receipt-memo .receipt-row {
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  font-size:10px;
+  line-height:1.7;
+}
+.tpl-receipt-memo .receipt-row b {
+  font-weight:500;
+  text-align:right;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.tpl-receipt-memo .receipt-foot {
+  text-align:center;
+  font-size:8px;
+  color:#777;
+  letter-spacing:.10em;
 }
