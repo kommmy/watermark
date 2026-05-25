@@ -3,15 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>相机水印 · 在线预览</title>
-  <meta name="description" content="徕卡 / 富士 / 索尼 / 哈苏 / 极简 5 套相机风格水印模板的浏览器预览，可上传自己的照片实时套用。" />
+  <title>相机水印 · iOS 在线预览</title>
+  <meta name="description" content="徕卡 / 富士 / 索尼 / 哈苏 / 极简 5 套相机风格水印模板的 iPhone 在线预览，可上传自己的照片实时套用。" />
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
   <header class="hero">
     <div class="hero-inner">
-      <h1>相机水印 · 在线预览</h1>
-      <p class="subtitle">5 套相机风格水印模板的纯 CSS 复刻。最终 iOS App 渲染像素级一致。</p>
+      <h1>相机水印</h1>
+      <p class="subtitle">5 套相机风格水印模板，在浏览器中模拟 iPhone 真机预览</p>
       <p class="repo-link">
         <a href="https://github.com/kommmy/watermark" target="_blank" rel="noopener">源码 GitHub</a>
         <span>·</span>
@@ -21,21 +21,105 @@
   </header>
 
   <main class="layout">
-    <section class="preview-area">
-      <div class="preview-frame" id="previewFrame">
-        <!-- 由 script.js 渲染 -->
+    <!-- =============== iPhone mockup =============== -->
+    <section class="device-stage">
+      <div class="iphone" aria-label="iPhone 16 Pro 预览">
+        <div class="iphone-frame">
+          <!-- 物理按键 -->
+          <span class="side-btn side-mute"></span>
+          <span class="side-btn side-up"></span>
+          <span class="side-btn side-down"></span>
+          <span class="side-btn side-action"></span>
+          <span class="side-btn side-power"></span>
+
+          <div class="iphone-screen">
+            <!-- Status bar -->
+            <div class="status-bar">
+              <span class="time">9:41</span>
+              <div class="island"></div>
+              <div class="indicators">
+                <svg viewBox="0 0 18 12" class="ind-signal" aria-hidden="true">
+                  <rect x="0"  y="8" width="3" height="4" rx="0.6"/>
+                  <rect x="5"  y="5" width="3" height="7" rx="0.6"/>
+                  <rect x="10" y="2" width="3" height="10" rx="0.6"/>
+                  <rect x="15" y="0" width="3" height="12" rx="0.6"/>
+                </svg>
+                <svg viewBox="0 0 16 12" class="ind-wifi" aria-hidden="true">
+                  <path d="M8 11.4a1.2 1.2 0 1 1 0-2.4 1.2 1.2 0 0 1 0 2.4z"/>
+                  <path d="M3.2 6.1a7.5 7.5 0 0 1 9.6 0l-1.4 1.4a5.5 5.5 0 0 0-6.8 0z"/>
+                  <path d="M0.4 3.4a11.5 11.5 0 0 1 15.2 0L14.2 4.8a9.5 9.5 0 0 0-12.4 0z"/>
+                </svg>
+                <span class="ind-battery">
+                  <span class="battery-shell"><span class="battery-fill"></span></span>
+                  <span class="battery-tip"></span>
+                </span>
+              </div>
+            </div>
+
+            <!-- Nav bar -->
+            <div class="nav-bar">
+              <button class="nav-back" type="button" aria-label="返回">
+                <svg viewBox="0 0 12 20" aria-hidden="true">
+                  <path d="M10 1 L2 10 L10 19" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>返回</span>
+              </button>
+              <span class="nav-title" id="navTitle">编辑</span>
+              <button class="nav-action" type="button" aria-label="编辑参数">
+                <svg viewBox="0 0 22 22" aria-hidden="true">
+                  <circle cx="6" cy="5" r="2.4" fill="none" stroke="currentColor" stroke-width="1.6"/>
+                  <line x1="0" y1="5" x2="3.6" y2="5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                  <line x1="8.4" y1="5" x2="22" y2="5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                  <circle cx="14" cy="11" r="2.4" fill="none" stroke="currentColor" stroke-width="1.6"/>
+                  <line x1="0" y1="11" x2="11.6" y2="11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                  <line x1="16.4" y1="11" x2="22" y2="11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                  <circle cx="8" cy="17" r="2.4" fill="none" stroke="currentColor" stroke-width="1.6"/>
+                  <line x1="0" y1="17" x2="5.6" y2="17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                  <line x1="10.4" y1="17" x2="22" y2="17" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- App content -->
+            <div class="app-body">
+              <div class="preview-scroll">
+                <div class="preview-frame" id="previewFrame">
+                  <!-- canvas injected by JS -->
+                </div>
+              </div>
+
+              <div class="template-strip" id="templateStrip">
+                <!-- thumbs injected by JS -->
+              </div>
+
+              <div class="action-bar">
+                <button class="btn-ghost" type="button">
+                  <svg viewBox="0 0 22 22" aria-hidden="true">
+                    <path d="M11 2 V13 M6 7 L11 2 L16 7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M3 13 V19 H19 V13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  分享
+                </button>
+                <button class="btn-primary" type="button">
+                  <svg viewBox="0 0 22 22" aria-hidden="true">
+                    <path d="M11 2 V13 M6 9 L11 14 L16 9" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M3 16 V19 H19 V16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                  保存到相册
+                </button>
+              </div>
+
+              <!-- Home indicator -->
+              <div class="home-indicator"></div>
+            </div>
+          </div>
+        </div>
+        <p class="device-hint">这是浏览器中模拟的 iPhone 真机，最终 App 像素级一致</p>
       </div>
-      <p class="hint">提示：所有字段实时生效，刷新页面会重置。</p>
     </section>
 
+    <!-- =============== Controls =============== -->
     <aside class="controls">
-      <div class="card">
-        <h2>模板</h2>
-        <div class="template-grid" id="templateGrid">
-          <!-- buttons injected by JS -->
-        </div>
-      </div>
-
       <div class="card">
         <h2>照片</h2>
         <label class="file-input">
@@ -82,7 +166,9 @@
       </div>
 
       <div class="card subtle">
-        <p>本页面是 HTML+CSS 模拟版，方便在浏览器里快速看模板效果。最终 iOS App 用同样的设计、同样的字号比例，通过 SwiftUI <code>ImageRenderer</code> 渲染输出真正的 JPEG。</p>
+        <p>iPhone 内的 UI 与底部按钮、灵动岛只是 HTML+CSS 复刻，
+           方便在浏览器里快速看模板效果。真正 iOS App 用同样的设计、
+           通过 SwiftUI <code>ImageRenderer</code> 渲染输出 JPEG。</p>
       </div>
     </aside>
   </main>

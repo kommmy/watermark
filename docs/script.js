@@ -158,22 +158,36 @@ function render() {
   const renderer = RENDERERS[state.template] || RENDERERS.leica;
   document.getElementById("previewFrame").innerHTML = renderer(state.data);
 
-  document.querySelectorAll(".tpl-btn").forEach((btn) => {
-    btn.classList.toggle("active", btn.dataset.template === state.template);
+  // Nav title 跟随当前机身名
+  document.getElementById("navTitle").textContent =
+    state.data.cameraModel || "编辑";
+
+  // 模板选择缩略图：标记选中态 + 同步缩略图里的小图
+  document.querySelectorAll(".tpl-thumb").forEach((btn) => {
+    const isActive = btn.dataset.template === state.template;
+    btn.classList.toggle("active", isActive);
+    const thumb = btn.querySelector(".tpl-thumb-img img");
+    if (thumb) thumb.src = state.data.image;
   });
 }
 
 // =============================================================
 // Wire up controls
 // =============================================================
-function buildTemplateButtons() {
-  const grid = document.getElementById("templateGrid");
-  grid.innerHTML = TEMPLATES.map(
-    (t) =>
-      `<button class="tpl-btn" type="button" data-template="${t.id}">${t.name}</button>`
+function buildTemplateStrip() {
+  const strip = document.getElementById("templateStrip");
+  strip.innerHTML = TEMPLATES.map(
+    (t) => `
+      <button class="tpl-thumb" type="button" data-template="${t.id}">
+        <div class="tpl-thumb-img">
+          <img src="${escapeHtml(state.data.image)}" alt="" />
+        </div>
+        <span class="tpl-thumb-label">${t.name}</span>
+      </button>`
   ).join("");
-  grid.addEventListener("click", (ev) => {
-    const btn = ev.target.closest(".tpl-btn");
+
+  strip.addEventListener("click", (ev) => {
+    const btn = ev.target.closest(".tpl-thumb");
     if (!btn) return;
     state.template = btn.dataset.template;
     render();
@@ -233,7 +247,7 @@ function bindImageInput() {
 // =============================================================
 // Boot
 // =============================================================
-buildTemplateButtons();
+buildTemplateStrip();
 bindForm();
 bindImageInput();
 render();
