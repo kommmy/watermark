@@ -1,5 +1,5 @@
 // =============================================================
-// 相机水印 · Web Demo
+// LumaFrame · Web Demo
 // 单文件 SPA：home (discover/watermark/puzzle/me) <-> editor
 // =============================================================
 
@@ -9,6 +9,7 @@
 const SAMPLE_LANDSCAPE = "./sample.svg";
 const SAMPLE_CAMERA    = "./sample-camera.svg";
 const SAMPLE_PORTRAIT  = "./sample-portrait.svg";
+const APP_NAME = "LumaFrame";
 
 const LOGO = {
   leica: "./assets/logos/brand_leica.svg",
@@ -29,6 +30,21 @@ const DEFAULT_DATA = {
   shutter: "1/500s",
   iso: 200,
   date: "2026.05.25 14:00",
+};
+
+const TEMPLATE_PRESETS = {
+  leica:        { cameraModel: "LEICA Q3", lensModel: "SUMMICRON 28 f/1.7 ASPH.", focal: 28, aperture: 1.7, shutter: "1/500s", iso: 200 },
+  leica_mono:   { cameraModel: "LEICA M11 Monochrom", lensModel: "SUMMILUX-M 35 f/1.4", focal: 35, aperture: 1.4, shutter: "1/250s", iso: 400 },
+  fujifilm:     { cameraModel: "FUJIFILM X100VI", lensModel: "23mm F2", focal: 35, aperture: 2, shutter: "1/320s", iso: 320 },
+  fuji_strip:   { cameraModel: "FUJIFILM X-T5", lensModel: "XF 33mm F1.4", focal: 50, aperture: 1.4, shutter: "1/640s", iso: 250 },
+  sony:         { cameraModel: "SONY A7CR", lensModel: "FE 35mm F1.4 GM", focal: 35, aperture: 1.4, shutter: "1/800s", iso: 100 },
+  hasselblad:   { cameraModel: "HASSELBLAD X2D 100C", lensModel: "XCD 55V", focal: 43, aperture: 2.5, shutter: "1/500s", iso: 64 },
+  ricoh_gr:     { cameraModel: "RICOH GR III", lensModel: "18.3mm F2.8", focal: 28, aperture: 2.8, shutter: "1/400s", iso: 200 },
+  iphone:       { cameraModel: "iPhone 15 Pro", lensModel: "Main Camera", focal: 24, aperture: 1.8, shutter: "1/120s", iso: 80 },
+  polaroid:     { cameraModel: "Polaroid Now+", lensModel: "Instant Film", focal: 35, aperture: 11, shutter: "1/60s", iso: 640 },
+  minimal:      { cameraModel: "Canon R6 Mark II", lensModel: "RF 50mm F1.2", focal: 50, aperture: 1.2, shutter: "1/1000s", iso: 100 },
+  minimal_dark: { cameraModel: "Nikon Zf", lensModel: "NIKKOR 40mm F2", focal: 40, aperture: 2, shutter: "1/250s", iso: 800 },
+  date_stamp:   { cameraModel: "Kodak Gold 200", lensModel: "35mm Film", focal: 35, aperture: 5.6, shutter: "1/125s", iso: 200 },
 };
 
 // -------------------------------------------------------------
@@ -364,7 +380,7 @@ const LAYOUT_RENDERERS = {
   },
 
   camera_detail(imgs, opts) {
-    // Like PixFrame: 上半部分相机产品图（小，居中，白底），下半部分实拍图（满铺）
+    // Camera detail layout: product photo on top, actual shot below.
     return `
       <div class="puzzle-canvas bg-${opts.bg}" style="${aspectStyle(opts.ratio)}">
         <div style="display:flex; flex-direction:column; height:100%;">
@@ -416,7 +432,7 @@ function renderHome() {
     <div class="app-root">
       <div class="app-top">
         <button class="pill pill-pro">PRO</button>
-        <h1 class="app-title">PixFrame</h1>
+        <h1 class="app-title">${APP_NAME}</h1>
         <button class="icon-btn" aria-label="设置">${ICON.gear}</button>
       </div>
 
@@ -453,6 +469,7 @@ function renderHome() {
   root.querySelectorAll("[data-template-id]").forEach(el => {
     el.addEventListener("click", () => {
       state.watermark.templateId = el.dataset.templateId;
+      applyTemplatePreset(el.dataset.templateId);
       state.page = "editor-watermark";
       renderApp();
     });
@@ -484,15 +501,15 @@ function renderTab(tab) {
 }
 
 function renderDiscover() {
-  const previewImg = state.watermark.data.image;
   return `
     <div class="discover">
       <div class="banner">
         <div class="banner-text">
-          <p class="banner-title">分享体验送会员</p>
-          <p class="banner-sub">把作品分享给朋友，解锁全部模板</p>
+          <p class="banner-kicker">TODAY'S PICK</p>
+          <p class="banner-title">把照片变成一张作品卡</p>
+          <p class="banner-sub">真实品牌 logo、水印签名和拼图布局都在本地完成</p>
         </div>
-        <button class="banner-cta">立即分享</button>
+        <button class="banner-cta">开始创作</button>
       </div>
 
       <div class="section">
@@ -503,9 +520,7 @@ function renderDiscover() {
         <div class="h-scroll">
           ${TEMPLATES.slice(0, 8).map(t => `
             <button class="cover-card" data-template-id="${t.id}">
-              <div class="cover">
-                <img src="${escapeHtml(previewImg)}" alt="" />
-              </div>
+              ${renderTemplateCover(t)}
               <div class="meta">
                 <p class="name">${escapeHtml(t.name)}</p>
                 <p class="desc">${escapeHtml(t.brand)}</p>
@@ -536,12 +551,11 @@ function renderDiscover() {
 }
 
 function renderWatermarkList() {
-  const previewImg = state.watermark.data.image;
   return `
     <div class="grid-2" style="padding-top: 8px; padding-bottom: 16px;">
       ${TEMPLATES.map(t => `
         <button class="cover-card" data-template-id="${t.id}">
-          <div class="cover"><img src="${escapeHtml(previewImg)}" alt="" /></div>
+          ${renderTemplateCover(t)}
           <div class="meta">
             <p class="name">${escapeHtml(t.name)}</p>
             <p class="desc">${escapeHtml(t.brand)}</p>
@@ -575,6 +589,44 @@ function renderMe() {
       <p>这是一个开源的相机水印 + 拼图工具，仓库：</p>
       <p><a href="https://github.com/kommmy/watermark" target="_blank" style="color: var(--accent-blue); text-decoration: none;">github.com/kommmy/watermark</a></p>
     </div>`;
+}
+
+function applyTemplatePreset(id) {
+  const preset = TEMPLATE_PRESETS[id];
+  if (!preset) return;
+  state.watermark.data = {
+    ...state.watermark.data,
+    ...preset,
+    image: state.watermark.data.image,
+    date: state.watermark.data.date || DEFAULT_DATA.date,
+  };
+}
+
+function renderTemplateCover(t) {
+  const logoKey = logoKeyForTemplate(t.id);
+  const preset = TEMPLATE_PRESETS[t.id] || {};
+  const logo = LOGO[logoKey] ? `<img src="${LOGO[logoKey]}" alt="${escapeHtml(t.brand)}" />` : `<span>${escapeHtml(t.brand)}</span>`;
+  return `
+    <div class="cover template-cover template-cover-${t.id}">
+      <div class="cover-glow"></div>
+      <div class="cover-photo-mark"></div>
+      <div class="cover-logo ${logoKey === "sony" || logoKey === "ricoh" ? "invert" : ""}">${logo}</div>
+      <div class="cover-spec">
+        <span>${escapeHtml(preset.cameraModel || t.brand)}</span>
+        <b>${escapeHtml(paramsLine({ ...DEFAULT_DATA, ...preset }))}</b>
+      </div>
+    </div>`;
+}
+
+function logoKeyForTemplate(id) {
+  if (id.startsWith("leica")) return "leica";
+  if (id.startsWith("fuji")) return "fujifilm";
+  if (id === "sony") return "sony";
+  if (id === "hasselblad") return "hasselblad";
+  if (id === "ricoh_gr") return "ricoh";
+  if (id === "iphone") return "apple";
+  if (id === "polaroid") return "polaroid";
+  return null;
 }
 
 // SVG cover for puzzle layouts (since we don't have real previews)

@@ -30,7 +30,7 @@ struct HomeView: View {
         .onAppear(perform: configureTabBarAppearance)
     }
 
-    /// 让底部 TabBar 在深色主题下保持半透明黑色，跟 PixFrame 风格一致。
+    /// Keep the tab bar dark and translucent so it feels native inside the app.
     private func configureTabBarAppearance() {
         let appearance = UITabBarAppearance()
         appearance.configureWithDefaultBackground()

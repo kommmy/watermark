@@ -1,6 +1,6 @@
 import SwiftUI
 
-// Signature PixFrame-style layout:
+// Signature camera-detail layout:
 //   - Top: white tile holding the camera product image + a caption (e.g. "Ricoh GR 3")
 //   - Bottom: the actual photo filling the rest
 struct CameraDetailLayout: View {

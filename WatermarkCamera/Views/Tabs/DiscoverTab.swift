@@ -45,7 +45,7 @@ struct DiscoverTab: View {
                 }
                 .padding(.vertical, AppTheme.Spacing.m)
             }
-            .navigationTitle("PixFrame")
+            .navigationTitle("LumaFrame")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -74,15 +74,15 @@ struct DiscoverTab: View {
             )
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Share to unlock PRO")
+                    Text("Make it a photo card")
                         .font(AppTheme.Font.bodyBold)
                         .foregroundColor(AppTheme.Palette.textPrimary)
-                    Text("Send a friend a watermark to get all templates.")
+                    Text("Real logos, refined watermarks, and collage layouts.")
                         .font(AppTheme.Font.small)
                         .foregroundColor(AppTheme.Palette.textSecondary)
                 }
                 Spacer()
-                Text("Share")
+                Text("Create")
                     .font(AppTheme.Font.small.weight(.semibold))
                     .foregroundColor(.black)
                     .padding(.horizontal, 14).padding(.vertical, 8)

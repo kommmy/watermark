@@ -14,9 +14,9 @@
 - **水印模块（12 套模板）**
   Leica White / Leica Mono / Fuji Dark / Fuji Film Strip / Sony Alpha / Hasselblad / Ricoh GR / iPhone Shot / Polaroid / Minimal Light / Minimal Dark / Date Stamp。
 - **拼图模块（4 种布局）**
-  Stacked（上下二格）/ Side by Side（左右二格）/ Grid 2x2（田字四格）/ Camera + Shot（相机产品图 + 实拍，PixFrame 招牌玩法）。
+  Stacked（上下二格）/ Side by Side（左右二格）/ Grid 2x2（田字四格）/ Camera + Shot（相机产品图 + 实拍）。
   每种布局支持 4 种比例（3:4 / 1:1 / 4:5 / 9:16）+ 4 种背景（白 / 黑 / 米 / 渐变）+ 自定义文字。
-- **首页 4 个 Tab**：Discover（推荐）/ Watermarks（水印）/ Puzzles（拼图）/ Me（我的），深色 PixFrame 风格。
+- **首页 4 个 Tab**：Discover（推荐）/ Watermarks（水印）/ Puzzles（拼图）/ Me（我的），深色卡片风格。
 - 全程本地处理，无任何网络请求。
 
 ## 环境要求

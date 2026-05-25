@@ -3,8 +3,8 @@
 iPhone 模拟外壳 + 实时编辑器，演示 iOS App 的设计与功能：
 
 - **水印** 12 套：Leica / Leica Mono / Fuji Dark / Fuji Film Strip / Sony / Hasselblad / Ricoh GR / iPhone / Polaroid / Minimal Light / Minimal Dark / Date Stamp
-- **拼图** 4 种：上下二格 / 左右二格 / 田字四格 / 相机 + 实拍（PixFrame 招牌玩法）
-- 深色 PixFrame 风格：顶部 chips、底部 tabbar、横滑卡片、毛玻璃
+- **拼图** 4 种：上下二格 / 左右二格 / 田字四格 / 相机 + 实拍
+- 深色卡片风格：顶部 chips、底部 tabbar、横滑卡片、毛玻璃
 
 线上地址：[kommmy.github.io/watermark](https://kommmy.github.io/watermark/)
 
