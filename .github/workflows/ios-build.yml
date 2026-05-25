@@ -10,7 +10,7 @@ on:
 jobs:
   build:
     name: Build for iOS Simulator
-    runs-on: macos-14
+    runs-on: macos-15
     timeout-minutes: 25
 
     steps:
@@ -21,12 +21,19 @@ jobs:
         run: |
           xcodebuild -version
           xcode-select -p
+          ls /Applications/ | grep -i xcode || true
 
       - name: Install XcodeGen
         run: brew install xcodegen
 
       - name: Generate Xcode project
-        run: xcodegen generate
+        run: |
+          xcodegen generate
+          # XcodeGen 2.x 默认生成 objectVersion = 77（Xcode 16 格式）。
+          # 如果 runner 用的是更老的 Xcode，会打不开。保险起见把它降到 60（Xcode 15 OK，Xcode 16 也能向下兼容）。
+          sed -i.bak 's/objectVersion = 77;/objectVersion = 60;/' WatermarkCamera.xcodeproj/project.pbxproj
+          echo "Final objectVersion:"
+          grep "objectVersion" WatermarkCamera.xcodeproj/project.pbxproj | head -1
 
       - name: Build with verbose output
         run: |
