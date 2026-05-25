@@ -17,7 +17,7 @@ struct PuzzleTab: View {
                         .font(AppTheme.Font.caption)
                         .foregroundColor(AppTheme.Palette.textTertiary)
                         .padding(.horizontal, AppTheme.Spacing.l)
-                        .padding(.bottom, AppTheme.Spacing.xl)
+                        .padding(.bottom, 104)
                 }
                 .padding(.vertical, AppTheme.Spacing.m)
             }

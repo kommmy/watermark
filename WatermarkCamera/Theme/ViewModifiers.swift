@@ -120,6 +120,33 @@ struct FloatingCreateButton: View {
     }
 }
 
+// MARK: - Loading overlay
+
+struct LoadingOverlay: View {
+    var message: String = "Preparing..."
+
+    var body: some View {
+        ZStack {
+            Color.black.opacity(0.38)
+                .ignoresSafeArea()
+            VStack(spacing: 10) {
+                ProgressView()
+                    .tint(.white)
+                Text(message)
+                    .font(AppTheme.Font.small.weight(.semibold))
+                    .foregroundColor(.white)
+            }
+            .padding(.horizontal, 20)
+            .padding(.vertical, 16)
+            .background(
+                RoundedRectangle(cornerRadius: AppTheme.Radius.card, style: .continuous)
+                    .fill(Color.black.opacity(0.82))
+            )
+        }
+        .transition(.opacity)
+    }
+}
+
 // MARK: - View extensions
 
 extension View {

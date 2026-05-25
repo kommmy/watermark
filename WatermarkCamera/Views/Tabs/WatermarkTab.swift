@@ -29,7 +29,7 @@ struct WatermarkTab: View {
                         .font(AppTheme.Font.caption)
                         .foregroundColor(AppTheme.Palette.textTertiary)
                         .padding(.horizontal, AppTheme.Spacing.l)
-                        .padding(.bottom, AppTheme.Spacing.xl)
+                        .padding(.bottom, 104)
                 }
                 .padding(.vertical, AppTheme.Spacing.m)
             }
@@ -38,6 +38,11 @@ struct WatermarkTab: View {
             .overlay(alignment: .bottom) {
                 FloatingCreateButton { begin(.soft_journal) }
                     .padding(.bottom, AppTheme.Spacing.xl)
+            }
+            .overlay {
+                if isLoading {
+                    LoadingOverlay(message: "Preparing photo...")
+                }
             }
             .toolbarBackground(AppTheme.Palette.background, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
@@ -116,6 +121,8 @@ struct WatermarkTab: View {
                                 TemplateCard(template: template, width: 142, height: 178)
                             }
                             .buttonStyle(.plain)
+                            .disabled(isLoading)
+                            .opacity(isLoading ? 0.6 : 1)
                             .accessibilityLabel("Use \(template.displayName)")
                         }
                     }
@@ -126,6 +133,7 @@ struct WatermarkTab: View {
     }
 
     private func begin(_ template: WatermarkTemplate) {
+        guard !isLoading else { return }
         resetFlow()
         selectedTemplate = template
         showPhotoPicker = true

@@ -11,7 +11,9 @@ struct PuzzleEditorView: View {
     @State private var options: PuzzleOptions = PuzzleOptions()
 
     @State private var pickerSlot: Int? = nil
+    @State private var pendingPickerSlot: Int? = nil
     @State private var pickerItem: PhotosPickerItem?
+    @State private var isLoadingImage = false
     @State private var isExporting = false
     @State private var toast: String?
 
@@ -44,7 +46,7 @@ struct PuzzleEditorView: View {
             photoLibrary: .shared()
         )
         .onChange(of: pickerItem) { newItem in
-            guard let newItem, let slot = pickerSlot else { return }
+            guard let newItem, let slot = pickerSlot ?? pendingPickerSlot else { return }
             Task { await loadImage(newItem, into: slot) }
         }
         .onChange(of: currentLayout) { newLayout in
@@ -62,6 +64,11 @@ struct PuzzleEditorView: View {
                     .background(Capsule().fill(Color.black.opacity(0.85)))
                     .padding(.top, 8)
                     .transition(.move(edge: .top).combined(with: .opacity))
+            }
+        }
+        .overlay {
+            if isLoadingImage {
+                LoadingOverlay(message: "Loading photo...")
             }
         }
     }
@@ -84,6 +91,7 @@ struct PuzzleEditorView: View {
         HStack(spacing: 10) {
             ForEach(0..<currentLayout.slotCount, id: \.self) { idx in
                 Button {
+                    pendingPickerSlot = idx
                     pickerSlot = idx
                 } label: {
                     ZStack {
@@ -108,6 +116,8 @@ struct PuzzleEditorView: View {
                     }
                 }
                 .buttonStyle(.plain)
+                .disabled(isLoadingImage || isExporting)
+                .opacity(isLoadingImage ? 0.55 : 1)
             }
             Spacer()
         }
@@ -263,6 +273,14 @@ struct PuzzleEditorView: View {
     }
 
     private func loadImage(_ item: PhotosPickerItem, into slot: Int) async {
+        isLoadingImage = true
+        defer {
+            isLoadingImage = false
+            pickerItem = nil
+            pickerSlot = nil
+            pendingPickerSlot = nil
+        }
+
         do {
             guard let data = try await item.loadTransferable(type: Data.self),
                   let img = UIImage(data: data) else {
@@ -272,7 +290,6 @@ struct PuzzleEditorView: View {
             if slot < images.count {
                 images[slot] = img
             }
-            pickerItem = nil
         } catch {
             showToast(error.localizedDescription)
         }

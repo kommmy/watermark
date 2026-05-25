@@ -29,15 +29,20 @@ struct DiscoverTab: View {
                         .font(AppTheme.Font.caption)
                         .foregroundColor(AppTheme.Palette.textTertiary)
                         .padding(.horizontal, AppTheme.Spacing.l)
-                        .padding(.bottom, AppTheme.Spacing.xl)
+                        .padding(.bottom, 104)
                 }
                 .padding(.vertical, AppTheme.Spacing.m)
             }
             .navigationTitle("LumaFrame")
             .navigationBarTitleDisplayMode(.inline)
             .overlay(alignment: .bottom) {
-                FloatingCreateButton { switchTo(.watermark) }
+                FloatingCreateButton { beginWatermark(.soft_journal) }
                     .padding(.bottom, AppTheme.Spacing.xl)
+            }
+            .overlay {
+                if isLoading {
+                    LoadingOverlay(message: "Preparing photo...")
+                }
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -138,6 +143,8 @@ struct DiscoverTab: View {
                 TemplateCard(template: template, width: 136, height: 172)
             }
             .buttonStyle(.plain)
+            .disabled(isLoading)
+            .opacity(isLoading ? 0.6 : 1)
             .accessibilityLabel("Use \(template.displayName)")
         case .puzzle(let layout):
             NavigationLink {
@@ -151,6 +158,7 @@ struct DiscoverTab: View {
     }
 
     private func beginWatermark(_ template: WatermarkTemplate) {
+        guard !isLoading else { return }
         resetWatermarkFlow()
         selectedTemplate = template
         showPhotoPicker = true
@@ -205,7 +213,7 @@ struct DiscoverTab: View {
                 }
                 Spacer()
                 Button {
-                    switchTo(.watermark)
+                    beginWatermark(.soft_journal)
                 } label: {
                     Text("Create")
                         .font(AppTheme.Font.small.weight(.semibold))
