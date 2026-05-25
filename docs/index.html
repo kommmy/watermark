@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>相机水印 · 在线预览</title>
+  <meta name="description" content="徕卡 / 富士 / 索尼 / 哈苏 / 极简 5 套相机风格水印模板的浏览器预览，可上传自己的照片实时套用。" />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div class="hero-inner">
+      <h1>相机水印 · 在线预览</h1>
+      <p class="subtitle">5 套相机风格水印模板的纯 CSS 复刻。最终 iOS App 渲染像素级一致。</p>
+      <p class="repo-link">
+        <a href="https://github.com/kommmy/watermark" target="_blank" rel="noopener">源码 GitHub</a>
+        <span>·</span>
+        <a href="https://github.com/kommmy/watermark/actions" target="_blank" rel="noopener">CI 状态</a>
+      </p>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="preview-area">
+      <div class="preview-frame" id="previewFrame">
+        <!-- 由 script.js 渲染 -->
+      </div>
+      <p class="hint">提示：所有字段实时生效，刷新页面会重置。</p>
+    </section>
+
+    <aside class="controls">
+      <div class="card">
+        <h2>模板</h2>
+        <div class="template-grid" id="templateGrid">
+          <!-- buttons injected by JS -->
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>照片</h2>
+        <label class="file-input">
+          <input type="file" accept="image/*" id="fileInput" />
+          <span>上传一张照片</span>
+        </label>
+        <button class="reset-btn" id="resetImageBtn" type="button">恢复默认示例图</button>
+      </div>
+
+      <div class="card">
+        <h2>参数（EXIF）</h2>
+        <div class="field">
+          <label for="fieldCamera">机身</label>
+          <input id="fieldCamera" type="text" />
+        </div>
+        <div class="field">
+          <label for="fieldLens">镜头</label>
+          <input id="fieldLens" type="text" />
+        </div>
+        <div class="row">
+          <div class="field">
+            <label for="fieldFocal">焦距 (mm)</label>
+            <input id="fieldFocal" type="number" min="0" step="1" />
+          </div>
+          <div class="field">
+            <label for="fieldAperture">光圈 f/</label>
+            <input id="fieldAperture" type="number" min="0" step="0.1" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="field">
+            <label for="fieldShutter">快门</label>
+            <input id="fieldShutter" type="text" placeholder="1/500s" />
+          </div>
+          <div class="field">
+            <label for="fieldIso">ISO</label>
+            <input id="fieldIso" type="number" min="0" step="100" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="fieldDate">日期</label>
+          <input id="fieldDate" type="text" placeholder="2026.05.25 14:00" />
+        </div>
+      </div>
+
+      <div class="card subtle">
+        <p>本页面是 HTML+CSS 模拟版，方便在浏览器里快速看模板效果。最终 iOS App 用同样的设计、同样的字号比例，通过 SwiftUI <code>ImageRenderer</code> 渲染输出真正的 JPEG。</p>
+      </div>
+    </aside>
+  </main>
+
+  <footer class="footer">
+    <p>Made with care · <a href="https://github.com/kommmy/watermark" target="_blank" rel="noopener">github.com/kommmy/watermark</a></p>
+  </footer>
+
+  <script src="./script.js"></script>
+</body>
+</html>

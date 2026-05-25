@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1067" width="1600" height="1067" role="img" aria-label=":‹Îo">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1c2541"/>
+      <stop offset="0.45" stop-color="#5a3d65"/>
+      <stop offset="0.8" stop-color="#e08e69"/>
+      <stop offset="1" stop-color="#f5c08c"/>
+    </linearGradient>
+    <radialGradient id="sun" cx="0.78" cy="0.6" r="0.18">
+      <stop offset="0" stop-color="#ffe4b5" stop-opacity="1"/>
+      <stop offset="0.5" stop-color="#ffb579" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#ffb579" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3a2a4a"/>
+      <stop offset="0.4" stop-color="#1f1830"/>
+      <stop offset="1" stop-color="#0e0a18"/>
+    </linearGradient>
+    <linearGradient id="mountainFar" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3b2e4a"/>
+      <stop offset="1" stop-color="#241a32"/>
+    </linearGradient>
+    <linearGradient id="mountainNear" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1a1424"/>
+      <stop offset="1" stop-color="#0a0710"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="1600" height="700" fill="url(#sky)"/>
+
+  <!-- Sun glow -->
+  <rect width="1600" height="700" fill="url(#sun)"/>
+
+  <!-- Sun disc -->
+  <circle cx="1248" cy="430" r="62" fill="#ffeac3" opacity="0.95"/>
+
+  <!-- Far mountains -->
+  <path d="M0 540 L120 470 L240 520 L380 440 L540 510 L680 460 L820 520 L980 470 L1140 530 L1320 480 L1500 520 L1600 500 L1600 700 L0 700 Z"
+        fill="url(#mountainFar)" opacity="0.85"/>
+
+  <!-- Near mountains -->
+  <path d="M0 620 L160 540 L320 600 L500 530 L640 590 L820 540 L1000 610 L1200 550 L1380 600 L1600 560 L1600 700 L0 700 Z"
+        fill="url(#mountainNear)"/>
+
+  <!-- Water -->
+  <rect y="700" width="1600" height="367" fill="url(#water)"/>
+
+  <!-- Water reflections -->
+  <g opacity="0.35" fill="#ffb579">
+    <ellipse cx="1248" cy="730" rx="180" ry="3"/>
+    <ellipse cx="1248" cy="760" rx="140" ry="2"/>
+    <ellipse cx="1248" cy="790" rx="220" ry="3"/>
+    <ellipse cx="1248" cy="830" rx="160" ry="2"/>
+    <ellipse cx="1248" cy="870" rx="260" ry="3"/>
+    <ellipse cx="1248" cy="920" rx="180" ry="2"/>
+  </g>
+
+  <!-- Subtle stars -->
+  <g fill="#ffffff" opacity="0.6">
+    <circle cx="120" cy="80" r="1.2"/>
+    <circle cx="240" cy="50" r="1.0"/>
+    <circle cx="380" cy="120" r="0.9"/>
+    <circle cx="560" cy="60" r="1.4"/>
+    <circle cx="720" cy="100" r="1.1"/>
+    <circle cx="880" cy="40" r="0.8"/>
+  </g>
+</svg>

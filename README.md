@@ -3,6 +3,12 @@
 > iOS 相机风格水印 App，纯本地，无后端。
 > 选图后自动读取 EXIF（机型/镜头/光圈/快门/ISO/日期/GPS），套用徕卡、富士、索尼、哈苏、极简等模板，一键保存到相册或分享。
 
+[![iOS Build](https://github.com/kommmy/watermark/actions/workflows/ios-build.yml/badge.svg)](https://github.com/kommmy/watermark/actions/workflows/ios-build.yml)
+[![Deploy Pages](https://github.com/kommmy/watermark/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/kommmy/watermark/actions/workflows/deploy-pages.yml)
+
+> **在线预览** 5 套模板效果： [kommmy.github.io/watermark](https://kommmy.github.io/watermark/)
+> （HTML+CSS 复刻版，可上传自己的照片即时套用，最终 iOS App 设计同款）
+
 ## 环境要求
 
 - macOS 13 + Xcode 15 及以上
