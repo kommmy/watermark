@@ -116,14 +116,14 @@ struct FloatingCreateButton: View {
                 .shadow(color: Color.black.opacity(0.32), radius: 18, x: 0, y: 10)
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("Quick create")
+        .accessibilityLabel("快速创建")
     }
 }
 
 // MARK: - Loading overlay
 
 struct LoadingOverlay: View {
-    var message: String = "Preparing..."
+    var message: String = "正在准备..."
 
     var body: some View {
         ZStack {

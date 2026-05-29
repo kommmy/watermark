@@ -10,7 +10,7 @@ struct TemplateStrip: View {
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 14) {
-                ForEach(WatermarkTemplate.allCases) { tpl in
+                ForEach(WatermarkTemplate.leicaTemplates) { tpl in
                     Button {
                         withAnimation(.easeInOut(duration: 0.15)) {
                             selected = tpl
@@ -66,6 +66,21 @@ struct TemplateStrip: View {
             }
             .frame(height: 12)
 
+        case .leica_frame:
+            Rectangle().fill(Color.white).frame(height: 18)
+
+        case .leica_compact:
+            HStack {
+                Image("brand_leica").resizable().scaledToFit().frame(width: 16, height: 16)
+                Spacer()
+            }
+            .padding(.horizontal, 5)
+            .frame(height: 20)
+            .background(Color.black.opacity(0.72))
+
+        case .leica_gallery:
+            Rectangle().fill(Color(red: 0.965, green: 0.953, blue: 0.925)).frame(height: 18)
+
         case .fujifilm:
             Rectangle().fill(Color.black).frame(height: 12)
 
@@ -116,6 +131,12 @@ struct TemplateStrip: View {
 
         case .receipt_memo:
             Rectangle().fill(Color(red: 0.98, green: 0.95, blue: 0.88)).frame(height: 18)
+
+        case .film_border:
+            Color.black.frame(height: 18)
+
+        case .gallery_frame:
+            Color(red: 0.960, green: 0.952, blue: 0.940).frame(height: 18)
         }
     }
 }

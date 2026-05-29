@@ -9,7 +9,13 @@ struct MinimalDarkTemplate: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            Image(uiImage: image).resizable().aspectRatio(contentMode: .fit)
+            WatermarkPhotoFrame(
+                image: image,
+                borderColor: Color.white.opacity(0.12),
+                shadowColor: Color.black.opacity(0.25),
+                shadowRadius: 8,
+                shadowY: 3
+            )
 
             HStack(spacing: 10) {
                 if let model = preferredModel {
@@ -34,9 +40,7 @@ struct MinimalDarkTemplate: View {
     }
 
     private var preferredModel: String? {
-        if let m = meta.cameraModel, !m.isEmpty { return m }
-        let brand = meta.brand.displayName
-        return brand.isEmpty ? nil : brand
+        meta.cameraDisplayName == "未知相机" ? nil : meta.cameraDisplayName
     }
 
     private var infoLine: String {

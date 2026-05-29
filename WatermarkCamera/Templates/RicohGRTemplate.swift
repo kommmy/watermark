@@ -9,7 +9,13 @@ struct RicohGRTemplate: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            Image(uiImage: image).resizable().aspectRatio(contentMode: .fit)
+            WatermarkPhotoFrame(
+                image: image,
+                borderColor: Color.white.opacity(0.10),
+                shadowColor: Color.black.opacity(0.25),
+                shadowRadius: 8,
+                shadowY: 3
+            )
 
             HStack(spacing: barHeight * 0.3) {
                 Image("brand_ricoh")
@@ -20,12 +26,12 @@ struct RicohGRTemplate: View {
                     .frame(width: barHeight * 1.65, height: barHeight * 0.30, alignment: .leading)
 
                 VStack(alignment: .leading, spacing: barHeight * 0.04) {
-                    Text(meta.cameraModel ?? "RICOH GR III")
+                    Text(meta.cameraDisplayName == "未知相机" ? "RICOH GR III" : meta.cameraDisplayName)
                         .font(.system(size: barHeight * 0.26, weight: .semibold))
                         .foregroundColor(.white)
                         .lineLimit(1)
-                    if let lens = meta.lensModel, !lens.isEmpty {
-                        Text(lens)
+                    if !meta.lensDisplayName.isEmpty {
+                        Text(meta.lensDisplayName)
                             .font(.system(size: barHeight * 0.16))
                             .foregroundColor(.white.opacity(0.55))
                             .lineLimit(1)

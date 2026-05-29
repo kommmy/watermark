@@ -12,7 +12,13 @@ struct FujiFilmStripTemplate: View {
     var body: some View {
         VStack(spacing: 0) {
             perforationStrip
-            Image(uiImage: image).resizable().aspectRatio(contentMode: .fit)
+            WatermarkPhotoFrame(
+                image: image,
+                borderColor: Color.white.opacity(0.12),
+                shadowColor: Color.black.opacity(0.25),
+                shadowRadius: 8,
+                shadowY: 3
+            )
             perforationStrip
 
             HStack(spacing: barHeight * 0.3) {
@@ -21,7 +27,7 @@ struct FujiFilmStripTemplate: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: barHeight * 1.65, height: barHeight * 0.30, alignment: .leading)
-                    Text(meta.cameraModel ?? "")
+                    Text(meta.cameraDisplayName == "未知相机" ? "X SERIES" : meta.cameraDisplayName)
                         .font(.system(size: barHeight * 0.22, weight: .bold))
                         .foregroundColor(Color(white: 0.94))
                         .lineLimit(1)

@@ -11,25 +11,29 @@ struct ReceiptMemoTemplate: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            Image(uiImage: image)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
+            WatermarkPhotoFrame(
+                image: image,
+                borderColor: Color.black.opacity(0.08),
+                shadowColor: Color.black.opacity(0.10),
+                shadowRadius: 8,
+                shadowY: 3
+            )
 
             VStack(spacing: pad * 0.28) {
-                Text("LUMA CAFE")
+                Text("光影小票")
                     .font(.system(size: titleSize, weight: .bold, design: .monospaced))
                     .tracking(titleSize * 0.10)
                     .foregroundColor(Color(white: 0.12))
 
                 dashedLine
 
-                receiptRow("DATE", meta.dateText ?? "2026.05.25")
-                receiptRow("MOOD", "SUNNY")
-                receiptRow("SHOT", meta.paramsLine.isEmpty ? "35MM / FILM" : meta.paramsLine)
+                receiptRow("日期", meta.dateText ?? "2026.05.25")
+                receiptRow("相机", meta.cameraDisplayName)
+                receiptRow("参数", meta.paramsLine)
 
                 dashedLine
 
-                Text("THANK YOU FOR THE MEMORY")
+                Text("感谢这次回忆")
                     .font(.system(size: rowSize * 0.82, weight: .medium, design: .monospaced))
                     .tracking(rowSize * 0.08)
                     .foregroundColor(Color(white: 0.42))

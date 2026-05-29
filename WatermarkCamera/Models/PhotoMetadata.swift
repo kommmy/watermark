@@ -53,7 +53,7 @@ struct PhotoMetadata {
     }
 
     var isoText: String? {
-        iso.map { "ISO\($0)" }
+        iso.map { "ISO \($0)" }
     }
 
     var dateText: String? {
@@ -68,17 +68,59 @@ struct PhotoMetadata {
         return String(format: "%.4f°, %.4f°", c.latitude, c.longitude)
     }
 
-    /// 一行参数串："28mm  f/1.7  1/500s  ISO200"
+    var brandDisplayName: String {
+        if !brand.displayName.isEmpty { return brand.displayName }
+        if let make = cameraMake?.trimmedNonEmpty { return make }
+        return "未知品牌"
+    }
+
+    var cameraDisplayName: String {
+        if let model = cameraModel?.trimmedNonEmpty { return model }
+        if let make = cameraMake?.trimmedNonEmpty { return make }
+        if !brand.displayName.isEmpty { return brand.displayName }
+        return "M11"
+    }
+
+    // Returns empty string when lens info is unavailable — templates skip display rather than show ugly fallback.
+    var lensDisplayName: String {
+        lensModel?.trimmedNonEmpty ?? ""
+    }
+
+    var exposureSummary: String {
+        [apertureText, shutter, isoText].compactMap { $0 }.joined(separator: "  ")
+    }
+
+    var hasCameraIdentity: Bool {
+        brand != .other || cameraMake?.trimmedNonEmpty != nil || cameraModel?.trimmedNonEmpty != nil
+    }
+
+    /// 一行参数串："35mm  f/1.4  1/250s  ISO 200"。读不到 EXIF 时填充徕卡风格默认值。
     var paramsLine: String {
-        [focalLengthText, apertureText, shutter, isoText]
-            .compactMap { $0 }
-            .joined(separator: "  ")
+        let parts = [focalLengthText, apertureText, shutter, isoText].compactMap { $0 }
+        if !parts.isEmpty { return parts.joined(separator: "  ") }
+        // Auto-fill: return brand-appropriate placeholder so the frame always looks complete
+        switch brand {
+        case .leica:       return "35mm  f/1.4  1/250s  ISO 200"
+        case .fujifilm:    return "23mm  f/2  1/500s  ISO 400"
+        case .ricoh:       return "28mm  f/2.8  1/125s  ISO 800"
+        case .sony:        return "50mm  f/1.8  1/320s  ISO 100"
+        case .hasselblad:  return "80mm  f/2.8  1/500s  ISO 200"
+        default:           return "50mm  f/2  1/250s  ISO 200"
+        }
+    }
+
+    /// 日期，读不到时返回今天（确保边框始终有内容）。
+    var paramsDate: String {
+        if let d = dateText { return d }
+        let fmt = DateFormatter()
+        fmt.dateFormat = "yyyy.MM.dd"
+        return fmt.string(from: Date())
     }
 }
 
 /// 相机品牌识别，影响默认模板选择与 logo 显示。
 enum CameraBrand: String {
-    case leica, fujifilm, sony, hasselblad, canon, nikon, apple, other
+    case leica, fujifilm, sony, hasselblad, ricoh, canon, nikon, apple, other
 
     static func detect(make: String?, model: String?) -> CameraBrand {
         let s = ((make ?? "") + " " + (model ?? "")).uppercased()
@@ -86,6 +128,7 @@ enum CameraBrand: String {
         if s.contains("FUJIFILM") || s.contains("FUJI") { return .fujifilm }
         if s.contains("SONY") || s.contains("ILCE") { return .sony }
         if s.contains("HASSELBLAD") { return .hasselblad }
+        if s.contains("RICOH") || s.contains("GR III") || s.contains("GR3") { return .ricoh }
         if s.contains("CANON") { return .canon }
         if s.contains("NIKON") { return .nikon }
         if s.contains("APPLE") || s.contains("IPHONE") { return .apple }
@@ -98,10 +141,27 @@ enum CameraBrand: String {
         case .fujifilm: return "FUJIFILM"
         case .sony: return "SONY"
         case .hasselblad: return "HASSELBLAD"
+        case .ricoh: return "RICOH"
         case .canon: return "Canon"
         case .nikon: return "Nikon"
         case .apple: return "iPhone"
         case .other: return ""
         }
+    }
+
+    var hasDedicatedTemplate: Bool {
+        switch self {
+        case .leica, .fujifilm, .sony, .hasselblad, .ricoh, .apple:
+            return true
+        case .canon, .nikon, .other:
+            return false
+        }
+    }
+}
+
+private extension String {
+    var trimmedNonEmpty: String? {
+        let value = trimmingCharacters(in: .whitespacesAndNewlines)
+        return value.isEmpty ? nil : value
     }
 }

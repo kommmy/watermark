@@ -11,15 +11,19 @@ struct SoftJournalTemplate: View {
 
     var body: some View {
         VStack(spacing: pad * 0.42) {
-            Image(uiImage: image)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .clipShape(RoundedRectangle(cornerRadius: pad * 0.34, style: .continuous))
+            WatermarkPhotoFrame(
+                image: image,
+                cornerRadius: pad * 0.34,
+                borderColor: Color(red: 0.50, green: 0.40, blue: 0.30).opacity(0.20),
+                shadowColor: Color(red: 0.34, green: 0.24, blue: 0.16).opacity(0.18),
+                shadowRadius: 12,
+                shadowY: 5
+            )
                 .padding(.top, pad)
                 .padding(.horizontal, pad)
 
             VStack(spacing: pad * 0.18) {
-                Text("a quiet little moment")
+                Text("安静的一刻")
                     .font(.system(size: titleSize, weight: .semibold, design: .serif))
                     .foregroundColor(Color(red: 0.22, green: 0.18, blue: 0.14))
                 Text(metaLine)
@@ -33,7 +37,7 @@ struct SoftJournalTemplate: View {
     }
 
     private var metaLine: String {
-        [meta.dateText, meta.placeName ?? "Shanghai", meta.focalLengthText]
+        [meta.dateText, meta.placeName ?? "城市未识别", meta.focalLengthText, meta.exposureSummary]
             .compactMap { $0 }
             .joined(separator: " / ")
     }

@@ -9,7 +9,13 @@ struct iPhoneNativeTemplate: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            Image(uiImage: image).resizable().aspectRatio(contentMode: .fit)
+            WatermarkPhotoFrame(
+                image: image,
+                borderColor: Color.black.opacity(0.08),
+                shadowColor: Color.black.opacity(0.08),
+                shadowRadius: 6,
+                shadowY: 2
+            )
 
             HStack(spacing: 6) {
                 Image("brand_apple")
@@ -18,13 +24,16 @@ struct iPhoneNativeTemplate: View {
                     .scaledToFit()
                     .foregroundColor(.black)
                     .frame(width: barHeight * 0.34, height: barHeight * 0.34)
-                Text("Shot on ")
+                Text("由 ")
                     .font(.system(size: barHeight * 0.30, weight: .regular))
                     .foregroundColor(.black)
-                Text(meta.cameraModel ?? "iPhone")
+                Text(meta.cameraDisplayName == "未知相机" ? "iPhone" : meta.cameraDisplayName)
                     .font(.system(size: barHeight * 0.32, weight: .semibold))
                     .foregroundColor(.black)
                     .lineLimit(1)
+                Text(" 拍摄")
+                    .font(.system(size: barHeight * 0.30, weight: .regular))
+                    .foregroundColor(.black)
             }
             .frame(maxWidth: .infinity)
             .frame(height: barHeight)

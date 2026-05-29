@@ -12,7 +12,13 @@ struct PolaroidTemplate: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            Image(uiImage: image).resizable().aspectRatio(contentMode: .fit)
+            WatermarkPhotoFrame(
+                image: image,
+                borderColor: Color.black.opacity(0.08),
+                shadowColor: Color.black.opacity(0.12),
+                shadowRadius: 10,
+                shadowY: 4
+            )
                 .padding(.top, paddingSide)
                 .padding(.horizontal, paddingSide)
 
@@ -21,7 +27,7 @@ struct PolaroidTemplate: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: image.size.width * 0.32, height: captionSize * 1.2)
-                Text(meta.cameraModel ?? "untitled")
+                Text(meta.cameraDisplayName == "未知相机" ? "未命名照片" : meta.cameraDisplayName)
                     .font(.custom("Snell Roundhand", size: captionSize))
                     .foregroundColor(Color(white: 0.13))
                     .lineLimit(1)

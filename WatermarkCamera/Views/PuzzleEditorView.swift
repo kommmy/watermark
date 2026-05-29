@@ -1,8 +1,7 @@
 import SwiftUI
 import PhotosUI
 
-// Puzzle editor: live preview of the chosen layout + toolbar to switch layout,
-// ratio, background, caption, and to re-pick any slot image.
+// Puzzle editor for the focused Leica camera collage.
 struct PuzzleEditorView: View {
     let layout: PuzzleLayout
 
@@ -68,7 +67,7 @@ struct PuzzleEditorView: View {
         }
         .overlay {
             if isLoadingImage {
-                LoadingOverlay(message: "Loading photo...")
+                LoadingOverlay(message: "正在载入照片...")
             }
         }
     }
@@ -108,7 +107,7 @@ struct PuzzleEditorView: View {
                             VStack(spacing: 2) {
                                 Image(systemName: "plus")
                                     .font(.system(size: 16, weight: .semibold))
-                                Text("Slot \(idx + 1)")
+                                Text("选择照片")
                                     .font(AppTheme.Font.caption)
                             }
                             .foregroundColor(AppTheme.Palette.textSecondary)
@@ -128,62 +127,19 @@ struct PuzzleEditorView: View {
 
     // MARK: - Options bar (layout / ratio / background / caption)
 
+    // Aspect ratio bar only — background and caption removed
     private var optionsBar: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: AppTheme.Spacing.m) {
-                optionsRow(title: "Layout") {
-                    HStack(spacing: 6) {
-                        ForEach(PuzzleLayout.allCases) { lyt in
-                            chip(label: lyt.displayName, selected: lyt == currentLayout) {
-                                currentLayout = lyt
-                            }
-                        }
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 6) {
+                ForEach(PuzzleOptions.Ratio.allCases) { ratio in
+                    chip(label: ratio.displayName, selected: ratio == options.aspect) {
+                        options.aspect = ratio
                     }
-                }
-                optionsRow(title: "Ratio") {
-                    HStack(spacing: 6) {
-                        ForEach(PuzzleOptions.Ratio.allCases) { ratio in
-                            chip(label: ratio.displayName, selected: ratio == options.aspect) {
-                                options.aspect = ratio
-                            }
-                        }
-                    }
-                }
-                optionsRow(title: "Background") {
-                    HStack(spacing: 8) {
-                        ForEach(PuzzleOptions.Background.allCases) { bg in
-                            Button { options.background = bg } label: {
-                                Circle()
-                                    .fill(swatchColor(for: bg))
-                                    .frame(width: 28, height: 28)
-                                    .overlay(
-                                        Circle().stroke(
-                                            options.background == bg ? Color.white : Color.white.opacity(0.15),
-                                            lineWidth: options.background == bg ? 2 : 1
-                                        )
-                                    )
-                            }
-                            .buttonStyle(.plain)
-                        }
-                    }
-                }
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Caption")
-                        .font(AppTheme.Font.caption)
-                        .foregroundColor(AppTheme.Palette.textSecondary)
-                    TextField("e.g. Ricoh GR 3", text: $options.caption)
-                        .font(AppTheme.Font.body)
-                        .foregroundColor(AppTheme.Palette.textPrimary)
-                        .padding(8)
-                        .background(
-                            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                                .fill(AppTheme.Palette.surface)
-                        )
                 }
             }
-            .padding(16)
+            .padding(.horizontal, 16)
         }
-        .frame(maxHeight: 220)
+        .padding(.vertical, 10)
         .background(AppTheme.Palette.background)
     }
 
@@ -213,15 +169,6 @@ struct PuzzleEditorView: View {
         .buttonStyle(.plain)
     }
 
-    private func swatchColor(for bg: PuzzleOptions.Background) -> Color {
-        switch bg {
-        case .white:    return .white
-        case .black:    return .black
-        case .warm:     return Color(red: 0.965, green: 0.937, blue: 0.890)
-        case .gradient: return Color(red: 1.0, green: 0.831, blue: 0.678)
-        }
-    }
-
     // MARK: - Action bar
 
     private var actionBar: some View {
@@ -229,7 +176,7 @@ struct PuzzleEditorView: View {
             Button {
                 Task { await share() }
             } label: {
-                actionLabel(title: "Share", system: "square.and.arrow.up", filled: false)
+                actionLabel(title: "分享", system: "square.and.arrow.up", filled: false)
             }
             .disabled(isExporting || filledImages.isEmpty)
 
@@ -237,7 +184,7 @@ struct PuzzleEditorView: View {
                 Task { await save() }
             } label: {
                 actionLabel(
-                    title: isExporting ? "Working..." : "Save to Photos",
+                    title: isExporting ? "处理中..." : "保存到相册",
                     system: "square.and.arrow.down",
                     filled: true
                 )
@@ -284,7 +231,7 @@ struct PuzzleEditorView: View {
         do {
             guard let data = try await item.loadTransferable(type: Data.self),
                   let img = UIImage(data: data) else {
-                showToast("Cannot read photo")
+                showToast("无法读取照片")
                 return
             }
             if slot < images.count {
@@ -301,11 +248,11 @@ struct PuzzleEditorView: View {
         guard let out = PuzzleComposer.render(
             images: filledImages, layout: currentLayout, options: options
         ) else {
-            showToast("Render failed"); return
+            showToast("渲染失败"); return
         }
         do {
             try await PhotoSaver.save(out)
-            showToast("Saved to Photos")
+            showToast("已保存到相册")
         } catch {
             showToast(error.localizedDescription)
         }
@@ -317,7 +264,7 @@ struct PuzzleEditorView: View {
         guard let out = PuzzleComposer.render(
             images: filledImages, layout: currentLayout, options: options
         ) else {
-            showToast("Render failed"); return
+            showToast("渲染失败"); return
         }
         presentShareSheet(image: out)
     }

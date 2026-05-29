@@ -25,7 +25,7 @@ struct WatermarkTab: View {
                         watermarkSection(section)
                     }
 
-                    Text("Pick a style first, then choose a photo. You can still change metadata in the editor.")
+                    Text("选图后会读取 EXIF 参数；如果读不到，可以在编辑页右上角手动修正。")
                         .font(AppTheme.Font.caption)
                         .foregroundColor(AppTheme.Palette.textTertiary)
                         .padding(.horizontal, AppTheme.Spacing.l)
@@ -33,15 +33,16 @@ struct WatermarkTab: View {
                 }
                 .padding(.vertical, AppTheme.Spacing.m)
             }
-            .navigationTitle("Watermarks")
+            .navigationTitle("徕卡水印")
             .navigationBarTitleDisplayMode(.inline)
-            .overlay(alignment: .bottom) {
-                FloatingCreateButton { begin(.soft_journal) }
+            .overlay(alignment: .bottomTrailing) {
+                FloatingCreateButton { begin() }
+                    .padding(.trailing, AppTheme.Spacing.l)
                     .padding(.bottom, AppTheme.Spacing.xl)
             }
             .overlay {
                 if isLoading {
-                    LoadingOverlay(message: "Preparing photo...")
+                    LoadingOverlay(message: "正在读取照片信息...")
                 }
             }
             .toolbarBackground(AppTheme.Palette.background, for: .navigationBar)
@@ -79,25 +80,37 @@ struct WatermarkTab: View {
                 }
             }
             .alert(
-                "Cannot read photo",
+                "无法读取照片",
                 isPresented: Binding(
                     get: { errorMessage != nil },
                     set: { if !$0 { errorMessage = nil } }
                 )
             ) {
-                Button("OK", role: .cancel) {}
+                Button("好", role: .cancel) {}
             } message: { Text(errorMessage ?? "") }
         }
     }
 
     private var intro: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Choose a look")
+            Text("徕卡水印")
                 .font(AppTheme.Font.title)
                 .foregroundColor(AppTheme.Palette.textPrimary)
-            Text("Brand watermarks, quiet borders, film notes and Xiaohongshu-friendly cards.")
+            Text("专注 5 个徕卡样式，自动读取 ISO、光圈、快门和机型。")
                 .font(AppTheme.Font.small)
                 .foregroundColor(AppTheme.Palette.textSecondary)
+            Button {
+                begin()
+            } label: {
+                Label("选择照片，智能匹配", systemImage: "sparkles")
+                    .font(AppTheme.Font.small.weight(.semibold))
+                    .foregroundColor(.black)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 8)
+                    .background(Capsule().fill(Color.white))
+            }
+            .buttonStyle(.plain)
+            .padding(.top, 8)
         }
         .padding(.horizontal, AppTheme.Spacing.l)
     }
@@ -123,7 +136,7 @@ struct WatermarkTab: View {
                             .buttonStyle(.plain)
                             .disabled(isLoading)
                             .opacity(isLoading ? 0.6 : 1)
-                            .accessibilityLabel("Use \(template.displayName)")
+                            .accessibilityLabel("使用\(template.displayName)")
                         }
                     }
                 }
@@ -132,7 +145,7 @@ struct WatermarkTab: View {
         }
     }
 
-    private func begin(_ template: WatermarkTemplate) {
+    private func begin(_ template: WatermarkTemplate? = nil) {
         guard !isLoading else { return }
         resetFlow()
         selectedTemplate = template
@@ -147,12 +160,14 @@ struct WatermarkTab: View {
             guard let data = try await item.loadTransferable(type: Data.self),
                   let img = UIImage(data: data)
             else {
-                errorMessage = "Cannot read this photo."
+                errorMessage = "这张照片读取失败，请换一张试试。"
                 resetFlow()
                 return
             }
             loadedImage = img
-            metadata = ExifReader.read(from: data)
+            let photoMetadata = ExifReader.read(from: data)
+            metadata = photoMetadata
+            selectedTemplate = WatermarkTemplate.resolved(initial: selectedTemplate, for: photoMetadata)
             showPhotoPicker = false
             navigate = true
             pickerItem = nil

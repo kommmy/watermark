@@ -8,30 +8,33 @@ enum PuzzleLayout: String, CaseIterable, Identifiable, Hashable {
     case grid4
     case cameraDetail
 
+    static let allCases: [PuzzleLayout] = [.cameraDetail]
+
     var id: String { rawValue }
 
     var displayName: String {
         switch self {
-        case .vertical2:    return "Stacked"
-        case .horizontal2:  return "Side by Side"
-        case .grid4:        return "Grid 2x2"
-        case .cameraDetail: return "Camera + Shot"
+        case .vertical2:    return "上下双图"
+        case .horizontal2:  return "左右对比"
+        case .grid4:        return "四宫格"
+        case .cameraDetail: return "徕卡相机拼图"
         }
     }
 
     var slotCount: Int {
         switch self {
-        case .vertical2, .horizontal2, .cameraDetail: return 2
+        case .vertical2, .horizontal2: return 2
+        case .cameraDetail: return 1
         case .grid4: return 4
         }
     }
 
     var hint: String {
         switch self {
-        case .vertical2:    return "Wide + detail"
-        case .horizontal2:  return "Before & after"
-        case .grid4:        return "Series"
-        case .cameraDetail: return "Signature look"
+        case .vertical2:    return "主图与细节"
+        case .horizontal2:  return "前后对比"
+        case .grid4:        return "照片系列"
+        case .cameraDetail: return "取景框 + 成片"
         }
     }
 
@@ -52,10 +55,10 @@ struct PuzzleOptions {
         var id: String { rawValue }
         var displayName: String {
             switch self {
-            case .white:    return "White"
-            case .black:    return "Black"
-            case .warm:     return "Warm"
-            case .gradient: return "Gradient"
+            case .white:    return "白色"
+            case .black:    return "黑色"
+            case .warm:     return "暖色"
+            case .gradient: return "渐变"
             }
         }
     }

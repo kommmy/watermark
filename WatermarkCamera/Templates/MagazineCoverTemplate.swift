@@ -9,9 +9,13 @@ struct MagazineCoverTemplate: View {
 
     var body: some View {
         ZStack {
-            Image(uiImage: image)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
+            WatermarkPhotoFrame(
+                image: image,
+                borderColor: Color.white.opacity(0.18),
+                shadowColor: Color.black.opacity(0.18),
+                shadowRadius: 8,
+                shadowY: 3
+            )
 
             LinearGradient(
                 colors: [.black.opacity(0.42), .clear, .black.opacity(0.38)],
@@ -20,12 +24,12 @@ struct MagazineCoverTemplate: View {
             )
 
             VStack(alignment: .leading) {
-                Text("LUMA JOURNAL")
+                Text("光影手记")
                     .font(.system(size: unit * 1.25, weight: .black, design: .serif))
                     .tracking(unit * 0.10)
                     .foregroundColor(.white)
 
-                Text("WEEKEND NOTES")
+                Text("周末影像")
                     .font(.system(size: unit * 0.48, weight: .medium, design: .monospaced))
                     .tracking(unit * 0.12)
                     .foregroundColor(.white.opacity(0.82))
@@ -34,9 +38,9 @@ struct MagazineCoverTemplate: View {
 
                 HStack(alignment: .bottom) {
                     VStack(alignment: .leading, spacing: unit * 0.14) {
-                        Text("No. 025")
+                        Text("第 025 张")
                             .font(.system(size: unit * 0.56, weight: .semibold, design: .monospaced))
-                        Text(meta.placeName ?? "Shanghai")
+                        Text(meta.placeName ?? meta.cameraDisplayName)
                             .font(.system(size: unit * 0.88, weight: .semibold, design: .serif))
                     }
                     Spacer()

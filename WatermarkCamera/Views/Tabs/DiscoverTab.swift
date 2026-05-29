@@ -25,7 +25,7 @@ struct DiscoverTab: View {
                         browseSection(section)
                     }
 
-                    Text("Tip: tap any card to start. The app will only ask for photos when it needs them.")
+                    Text("提示：也可以直接点加号，选图后会根据 EXIF 自动匹配相机品牌水印。")
                         .font(AppTheme.Font.caption)
                         .foregroundColor(AppTheme.Palette.textTertiary)
                         .padding(.horizontal, AppTheme.Spacing.l)
@@ -35,18 +35,19 @@ struct DiscoverTab: View {
             }
             .navigationTitle("LumaFrame")
             .navigationBarTitleDisplayMode(.inline)
-            .overlay(alignment: .bottom) {
-                FloatingCreateButton { beginWatermark(.soft_journal) }
+            .overlay(alignment: .bottomTrailing) {
+                FloatingCreateButton { beginWatermark() }
+                    .padding(.trailing, AppTheme.Spacing.l)
                     .padding(.bottom, AppTheme.Spacing.xl)
             }
             .overlay {
                 if isLoading {
-                    LoadingOverlay(message: "Preparing photo...")
+                    LoadingOverlay(message: "正在读取照片信息...")
                 }
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Text("PRO")
+                    Text("会员")
                         .font(AppTheme.Font.caption.weight(.bold))
                         .foregroundColor(AppTheme.Palette.proOrange)
                         .padding(.horizontal, 8).padding(.vertical, 3)
@@ -86,13 +87,13 @@ struct DiscoverTab: View {
                 }
             }
             .alert(
-                "Cannot read photo",
+                "无法读取照片",
                 isPresented: Binding(
                     get: { errorMessage != nil },
                     set: { if !$0 { errorMessage = nil } }
                 )
             ) {
-                Button("OK", role: .cancel) {}
+                Button("好", role: .cancel) {}
             } message: { Text(errorMessage ?? "") }
         }
     }
@@ -111,7 +112,7 @@ struct DiscoverTab: View {
                         .lineLimit(1)
                 }
                 Spacer()
-                Button("More >") {
+                Button("更多 >") {
                     switch section.destination {
                     case .watermark: switchTo(.watermark)
                     case .puzzle: switchTo(.puzzle)
@@ -145,7 +146,7 @@ struct DiscoverTab: View {
             .buttonStyle(.plain)
             .disabled(isLoading)
             .opacity(isLoading ? 0.6 : 1)
-            .accessibilityLabel("Use \(template.displayName)")
+            .accessibilityLabel("使用\(template.displayName)")
         case .puzzle(let layout):
             NavigationLink {
                 PuzzleEditorView(layout: layout)
@@ -153,11 +154,11 @@ struct DiscoverTab: View {
                 PuzzleLayoutCard(layout: layout, width: 136, height: 172)
             }
             .buttonStyle(.plain)
-            .accessibilityLabel("Open \(layout.displayName)")
+            .accessibilityLabel("打开\(layout.displayName)")
         }
     }
 
-    private func beginWatermark(_ template: WatermarkTemplate) {
+    private func beginWatermark(_ template: WatermarkTemplate? = nil) {
         guard !isLoading else { return }
         resetWatermarkFlow()
         selectedTemplate = template
@@ -172,12 +173,14 @@ struct DiscoverTab: View {
             guard let data = try await item.loadTransferable(type: Data.self),
                   let image = UIImage(data: data)
             else {
-                errorMessage = "Cannot read this photo."
+                errorMessage = "这张照片读取失败，请换一张试试。"
                 resetWatermarkFlow()
                 return
             }
             loadedImage = image
-            metadata = ExifReader.read(from: data)
+            let photoMetadata = ExifReader.read(from: data)
+            metadata = photoMetadata
+            selectedTemplate = WatermarkTemplate.resolved(initial: selectedTemplate, for: photoMetadata)
             pickerItem = nil
             showPhotoPicker = false
             navigateToEditor = true
@@ -203,19 +206,19 @@ struct DiscoverTab: View {
             )
             HStack {
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Make it a photo card")
+                    Text("让照片自带相机感")
                         .font(AppTheme.Font.bodyBold)
                         .foregroundColor(AppTheme.Palette.textPrimary)
-                    Text("Choose a style first. We guide you to the next step.")
+                    Text("先选照片，自动识别品牌、光圈、快门和 ISO。")
                         .font(AppTheme.Font.small)
                         .foregroundColor(AppTheme.Palette.textSecondary)
                         .lineLimit(2)
                 }
                 Spacer()
                 Button {
-                    beginWatermark(.soft_journal)
+                    beginWatermark()
                 } label: {
-                    Text("Create")
+                    Text("选择照片")
                         .font(AppTheme.Font.small.weight(.semibold))
                         .foregroundColor(.black)
                         .padding(.horizontal, 14).padding(.vertical, 8)

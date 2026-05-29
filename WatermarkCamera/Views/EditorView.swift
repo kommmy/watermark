@@ -26,11 +26,12 @@ struct EditorView: View {
     var body: some View {
         VStack(spacing: 0) {
             previewArea
+            MetadataSummaryBar(metadata: metadata)
             TemplateStrip(selected: $template, thumbnail: thumbnail)
             actionBar
         }
         .appBackground()
-        .navigationTitle(metadata.cameraModel ?? "Editor")
+        .navigationTitle(metadata.cameraDisplayName)
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(AppTheme.Palette.background, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
@@ -39,7 +40,7 @@ struct EditorView: View {
                 Button { showMetadataSheet = true } label: {
                     Image(systemName: "slider.horizontal.3")
                 }
-                .accessibilityLabel("Edit metadata")
+                .accessibilityLabel("编辑照片参数")
                 .foregroundColor(AppTheme.Palette.textPrimary)
             }
         }
@@ -62,20 +63,23 @@ struct EditorView: View {
 
     @ViewBuilder
     private var previewArea: some View {
-        ScrollView {
+        GeometryReader { geo in
             ZStack {
+                Color.black
                 if let previewImage {
                     Image(uiImage: previewImage)
                         .resizable()
                         .scaledToFit()
+                        .frame(
+                            maxWidth:  geo.size.width  - 40,
+                            maxHeight: geo.size.height - 40
+                        )
                         .shadow(color: Color.black.opacity(0.55), radius: 18, y: 8)
                 } else {
                     ProgressView()
                         .tint(AppTheme.Palette.textPrimary)
-                        .frame(maxWidth: .infinity, minHeight: 240)
                 }
             }
-            .padding(20)
         }
         .background(Color.black)
     }
@@ -87,7 +91,7 @@ struct EditorView: View {
             Button {
                 Task { await share() }
             } label: {
-                actionLabel(title: "Share", system: "square.and.arrow.up", filled: false)
+                actionLabel(title: "分享", system: "square.and.arrow.up", filled: false)
             }
             .disabled(isExporting)
 
@@ -95,7 +99,7 @@ struct EditorView: View {
                 Task { await save() }
             } label: {
                 actionLabel(
-                    title: isExporting ? "Working..." : "Save to Photos",
+                    title: isExporting ? "处理中..." : "保存到相册",
                     system: "square.and.arrow.down",
                     filled: true
                 )
@@ -147,12 +151,12 @@ struct EditorView: View {
         defer { isExporting = false }
 
         guard let full = await renderFull() else {
-            showToast("Render failed")
+            showToast("渲染失败")
             return
         }
         do {
             try await PhotoSaver.save(full)
-            showToast("Saved to Photos")
+            showToast("已保存到相册")
         } catch {
             showToast(error.localizedDescription)
         }
@@ -162,7 +166,7 @@ struct EditorView: View {
         isExporting = true
         defer { isExporting = false }
         guard let full = await renderFull() else {
-            showToast("Render failed")
+            showToast("渲染失败")
             return
         }
         presentShareSheet(image: full)
@@ -216,5 +220,55 @@ private struct ToastView: View {
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
             .background(Capsule().fill(Color.black.opacity(0.85)))
+    }
+}
+
+private struct MetadataSummaryBar: View {
+    let metadata: PhotoMetadata
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 8) {
+                Label(metadata.brandDisplayName, systemImage: "camera.aperture")
+                    .font(AppTheme.Font.small.weight(.semibold))
+                    .foregroundColor(AppTheme.Palette.textPrimary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.75)
+                Spacer(minLength: 8)
+                Text(metadata.cameraDisplayName)
+                    .font(AppTheme.Font.caption)
+                    .foregroundColor(AppTheme.Palette.textSecondary)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.75)
+            }
+
+            HStack(spacing: 8) {
+                metadataChip(metadata.apertureText ?? "f/--")
+                metadataChip(metadata.shutter ?? "快门 --")
+                metadataChip(metadata.isoText ?? "ISO --")
+                if let focal = metadata.focalLengthText {
+                    metadataChip(focal)
+                }
+            }
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+        .background(AppTheme.Palette.background)
+        .overlay(alignment: .top) {
+            Rectangle().fill(AppTheme.Palette.separator).frame(height: 1)
+        }
+    }
+
+    private func metadataChip(_ text: String) -> some View {
+        Text(text)
+            .font(AppTheme.Font.caption.weight(.medium))
+            .foregroundColor(AppTheme.Palette.textPrimary)
+            .lineLimit(1)
+            .minimumScaleFactor(0.75)
+            .padding(.horizontal, 9)
+            .padding(.vertical, 5)
+            .background(
+                Capsule().fill(AppTheme.Palette.surface)
+            )
     }
 }

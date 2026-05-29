@@ -9,7 +9,13 @@ struct DateStampTemplate: View {
 
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
-            Image(uiImage: image).resizable().aspectRatio(contentMode: .fit)
+            WatermarkPhotoFrame(
+                image: image,
+                borderColor: Color.white.opacity(0.20),
+                shadowColor: Color.black.opacity(0.18),
+                shadowRadius: 8,
+                shadowY: 3
+            )
 
             Text(stampText)
                 .font(.custom("Courier", size: fontSize).weight(.bold))

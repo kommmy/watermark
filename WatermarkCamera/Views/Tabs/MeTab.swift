@@ -8,17 +8,17 @@ struct MeTab: View {
                 VStack(alignment: .leading, spacing: AppTheme.Spacing.xl) {
                     header
 
-                    sectionTitle("Recent")
+                    sectionTitle("最近作品")
                     emptyState
                         .padding(.horizontal, AppTheme.Spacing.l)
 
-                    sectionTitle("About")
+                    sectionTitle("关于")
                     aboutCard
                         .padding(.horizontal, AppTheme.Spacing.l)
                 }
                 .padding(.vertical, AppTheme.Spacing.l)
             }
-            .navigationTitle("Me")
+            .navigationTitle("我的")
             .navigationBarTitleDisplayMode(.inline)
             .toolbarBackground(AppTheme.Palette.background, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
@@ -39,10 +39,10 @@ struct MeTab: View {
                         .foregroundColor(.white)
                 )
             VStack(alignment: .leading, spacing: 2) {
-                Text("Hello, Photographer")
+                Text("你好，摄影师")
                     .font(AppTheme.Font.bodyBold)
                     .foregroundColor(AppTheme.Palette.textPrimary)
-                Text("v1.0 - fully on-device")
+                Text("v1.0 - 全程本地处理")
                     .font(AppTheme.Font.small)
                     .foregroundColor(AppTheme.Palette.textSecondary)
             }
@@ -64,10 +64,10 @@ struct MeTab: View {
                 .font(.system(size: 24, weight: .light))
                 .foregroundColor(AppTheme.Palette.textSecondary)
             VStack(alignment: .leading, spacing: 2) {
-                Text("No works yet")
+                Text("还没有作品")
                     .font(AppTheme.Font.bodyBold)
                     .foregroundColor(AppTheme.Palette.textPrimary)
-                Text("Pick a template from Watermarks or Puzzles to start.")
+                Text("从水印或拼图里选择一个模板开始。")
                     .font(AppTheme.Font.small)
                     .foregroundColor(AppTheme.Palette.textSecondary)
             }
@@ -79,7 +79,7 @@ struct MeTab: View {
 
     private var aboutCard: some View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.s) {
-            Text("Open-source camera watermark + puzzle tool.")
+            Text("开源的相机水印与拼图工具。")
                 .font(AppTheme.Font.body)
                 .foregroundColor(AppTheme.Palette.textPrimary)
             Link("github.com/kommmy/watermark",

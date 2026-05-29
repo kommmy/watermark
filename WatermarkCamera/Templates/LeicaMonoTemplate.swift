@@ -10,7 +10,13 @@ struct LeicaMonoTemplate: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            Image(uiImage: image).resizable().aspectRatio(contentMode: .fit)
+            WatermarkPhotoFrame(
+                image: image,
+                borderColor: Color.white.opacity(0.14),
+                shadowColor: Color.black.opacity(0.35),
+                shadowRadius: 10,
+                shadowY: 4
+            )
 
             HStack(alignment: .center, spacing: 0) {
                 HStack(spacing: barHeight * 0.22) {
@@ -20,12 +26,12 @@ struct LeicaMonoTemplate: View {
                         .frame(width: barHeight * 0.74, height: barHeight * 0.74)
 
                     VStack(alignment: .leading, spacing: barHeight * 0.05) {
-                        Text(meta.cameraModel ?? meta.brand.displayName)
+                        Text(meta.cameraDisplayName)
                             .font(.system(size: barHeight * 0.28, weight: .semibold))
                             .foregroundColor(.white)
                             .lineLimit(1)
-                        if let lens = meta.lensModel, !lens.isEmpty {
-                            Text(lens)
+                        if !meta.lensDisplayName.isEmpty {
+                            Text(meta.lensDisplayName)
                                 .font(.system(size: barHeight * 0.16))
                                 .foregroundColor(.white.opacity(0.55))
                                 .lineLimit(1)

@@ -10,7 +10,13 @@ struct SonyTemplate: View {
 
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
-            Image(uiImage: image).resizable().aspectRatio(contentMode: .fit)
+            WatermarkPhotoFrame(
+                image: image,
+                borderColor: Color.white.opacity(0.16),
+                shadowColor: Color.black.opacity(0.20),
+                shadowRadius: 8,
+                shadowY: 3
+            )
 
             VStack(alignment: .leading, spacing: unit * 0.35) {
                 Image("brand_sony")
@@ -19,8 +25,8 @@ struct SonyTemplate: View {
                     .scaledToFit()
                     .foregroundColor(.white)
                     .frame(width: unit * 5.1, height: unit * 1.15, alignment: .leading)
-                if let model = meta.cameraModel {
-                    Text(model)
+                if meta.cameraDisplayName != "未知相机" {
+                    Text(meta.cameraDisplayName)
                         .font(.system(size: unit * 0.85, weight: .medium))
                         .foregroundColor(.white.opacity(0.85))
                         .lineLimit(1)

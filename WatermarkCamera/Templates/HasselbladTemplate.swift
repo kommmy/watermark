@@ -11,9 +11,13 @@ struct HasselbladTemplate: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            Image(uiImage: image)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
+            WatermarkPhotoFrame(
+                image: image,
+                borderColor: Color.black.opacity(0.08),
+                shadowColor: Color.black.opacity(0.12),
+                shadowRadius: 12,
+                shadowY: 5
+            )
                 .padding(.horizontal, pad)
                 .padding(.top, pad)
 
@@ -25,8 +29,8 @@ struct HasselbladTemplate: View {
                         .scaledToFit()
                         .foregroundColor(.black)
                         .frame(width: footerHeight * 3.2, height: footerHeight * 0.36, alignment: .leading)
-                    if let model = meta.cameraModel {
-                        Text(model)
+                    if meta.cameraDisplayName != "未知相机" {
+                        Text(meta.cameraDisplayName)
                             .font(.system(size: footerHeight * 0.22))
                             .foregroundColor(Color(white: 0.45))
                             .lineLimit(1)

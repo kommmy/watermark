@@ -9,11 +9,17 @@ struct MinimalTemplate: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            Image(uiImage: image).resizable().aspectRatio(contentMode: .fit)
+            WatermarkPhotoFrame(
+                image: image,
+                borderColor: Color.black.opacity(0.08),
+                shadowColor: Color.black.opacity(0.08),
+                shadowRadius: 6,
+                shadowY: 2
+            )
 
             HStack(spacing: barHeight * 0.5) {
-                if let model = meta.cameraModel {
-                    Text(model)
+                if meta.cameraDisplayName != "未知相机" {
+                    Text(meta.cameraDisplayName)
                         .font(.system(size: barHeight * 0.32, weight: .medium))
                         .foregroundColor(.black)
                         .lineLimit(1)

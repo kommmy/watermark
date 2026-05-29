@@ -13,7 +13,7 @@ struct PuzzleTab: View {
                         puzzleSection(section)
                     }
 
-                    Text("Every layout opens with clear slots. Tap each slot to add or replace a photo.")
+                    Text("只需要选择一张照片，会自动放进徕卡取景框和下方成片。")
                         .font(AppTheme.Font.caption)
                         .foregroundColor(AppTheme.Palette.textTertiary)
                         .padding(.horizontal, AppTheme.Spacing.l)
@@ -21,14 +21,15 @@ struct PuzzleTab: View {
                 }
                 .padding(.vertical, AppTheme.Spacing.m)
             }
-            .navigationTitle("Puzzles")
+            .navigationTitle("拼图")
             .navigationBarTitleDisplayMode(.inline)
-            .overlay(alignment: .bottom) {
+            .overlay(alignment: .bottomTrailing) {
                 FloatingCreateButton { openQuickLayout = true }
+                    .padding(.trailing, AppTheme.Spacing.l)
                     .padding(.bottom, AppTheme.Spacing.xl)
             }
             .navigationDestination(isPresented: $openQuickLayout) {
-                PuzzleEditorView(layout: .vertical2)
+                PuzzleEditorView(layout: .cameraDetail)
             }
             .toolbarBackground(AppTheme.Palette.background, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
@@ -38,10 +39,10 @@ struct PuzzleTab: View {
 
     private var intro: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("Build a story")
+            Text("徕卡相机拼图")
                 .font(AppTheme.Font.title)
                 .foregroundColor(AppTheme.Palette.textPrimary)
-            Text("Before/after, camera detail and series layouts for social posts.")
+            Text("上面是一台徕卡相机，取景框里显示照片；下面展示同一张成片。")
                 .font(AppTheme.Font.small)
                 .foregroundColor(AppTheme.Palette.textSecondary)
         }
@@ -67,7 +68,7 @@ struct PuzzleTab: View {
                                 PuzzleLayoutCard(layout: layout, width: 148, height: 184)
                             }
                             .buttonStyle(.plain)
-                            .accessibilityLabel("Open \(layout.displayName)")
+                            .accessibilityLabel("打开\(layout.displayName)")
                         }
                     }
                 }

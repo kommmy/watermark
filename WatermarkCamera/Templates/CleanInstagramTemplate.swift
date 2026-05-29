@@ -10,9 +10,13 @@ struct CleanInstagramTemplate: View {
 
     var body: some View {
         VStack(spacing: pad * 0.42) {
-            Image(uiImage: image)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
+            WatermarkPhotoFrame(
+                image: image,
+                borderColor: Color.black.opacity(0.08),
+                shadowColor: Color.black.opacity(0.10),
+                shadowRadius: 10,
+                shadowY: 4
+            )
                 .padding(.top, pad)
                 .padding(.horizontal, pad)
 
@@ -20,7 +24,7 @@ struct CleanInstagramTemplate: View {
                 Text("@lumaframe")
                     .font(.system(size: captionSize, weight: .semibold, design: .rounded))
                 Spacer()
-                Text(meta.dateText ?? "25 MAY 2026")
+                Text(meta.exposureSummary)
                     .font(.system(size: captionSize, weight: .regular, design: .monospaced))
             }
             .foregroundColor(Color(white: 0.20))
