@@ -12,6 +12,8 @@ enum WatermarkTemplate: String, CaseIterable, Identifiable, Hashable {
     case leica_frame      // swiftlint:disable:this identifier_name
     case leica_compact    // swiftlint:disable:this identifier_name
     case leica_gallery    // swiftlint:disable:this identifier_name
+    case leica_glass      // swiftlint:disable:this identifier_name
+    case leica_white_space // swiftlint:disable:this identifier_name
     case fujifilm
     case fuji_strip       // swiftlint:disable:this identifier_name
     case sony
@@ -33,12 +35,9 @@ enum WatermarkTemplate: String, CaseIterable, Identifiable, Hashable {
 
     static let leicaTemplates: [WatermarkTemplate] = [
         .leica,
-        .leica_mono,
-        .film_border,
-        .gallery_frame,
-        .leica_frame,
+        .leica_white_space,
         .leica_compact,
-        .leica_gallery
+        .leica_glass
     ]
 
     var displayName: String {
@@ -48,6 +47,8 @@ enum WatermarkTemplate: String, CaseIterable, Identifiable, Hashable {
         case .leica_frame:  return "徕卡相纸"
         case .leica_compact:return "徕卡角标"
         case .leica_gallery:return "徕卡画廊"
+        case .leica_glass:  return "徕卡毛玻璃"
+        case .leica_white_space: return "徕卡留白"
         case .fujifilm:     return "富士暗调"
         case .fuji_strip:   return "富士胶片"
         case .sony:         return "索尼 Alpha"
@@ -70,7 +71,7 @@ enum WatermarkTemplate: String, CaseIterable, Identifiable, Hashable {
     var brandLabel: String {
         switch self {
         case .leica, .leica_mono, .leica_frame, .leica_compact, .leica_gallery,
-             .film_border, .gallery_frame: return "LEICA"
+             .leica_glass, .leica_white_space, .film_border, .gallery_frame: return "LEICA"
         case .fujifilm, .fuji_strip:return "FUJIFILM"
         case .sony:                 return "SONY"
         case .hasselblad:           return "HASSELBLAD"
@@ -89,7 +90,7 @@ enum WatermarkTemplate: String, CaseIterable, Identifiable, Hashable {
     var isBrandSpecific: Bool {
         switch self {
         case .leica, .leica_mono, .leica_frame, .leica_compact, .leica_gallery,
-             .film_border, .gallery_frame,
+             .leica_glass, .leica_white_space, .film_border, .gallery_frame,
              .fujifilm, .fuji_strip, .sony, .hasselblad, .ricoh_gr, .iphone:
             return true
         case .polaroid, .minimal, .minimal_dark, .date_stamp, .soft_journal,
@@ -106,6 +107,8 @@ enum WatermarkTemplate: String, CaseIterable, Identifiable, Hashable {
         case .leica_frame:  LeicaFrameTemplate(image: image, meta: meta)
         case .leica_compact: LeicaCompactTemplate(image: image, meta: meta)
         case .leica_gallery: LeicaGalleryTemplate(image: image, meta: meta)
+        case .leica_glass:  LeicaGlassTemplate(image: image, meta: meta)
+        case .leica_white_space: LeicaWhiteSpaceTemplate(image: image, meta: meta)
         case .fujifilm:     FujiTemplate(image: image, meta: meta)
         case .fuji_strip:   FujiFilmStripTemplate(image: image, meta: meta)
         case .sony:         SonyTemplate(image: image, meta: meta)

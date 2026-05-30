@@ -6,7 +6,8 @@ struct LeicaMonoTemplate: View {
     let image: UIImage
     let meta: PhotoMetadata
 
-    private var barHeight: CGFloat { max(image.size.height * 0.11, 56) }
+    private var isPortrait: Bool { image.size.height > image.size.width * 1.08 }
+    private var barHeight: CGFloat { max(min(image.size.height * 0.10, image.size.width * 0.18), 46) }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -30,12 +31,7 @@ struct LeicaMonoTemplate: View {
                             .font(.system(size: barHeight * 0.28, weight: .semibold))
                             .foregroundColor(.white)
                             .lineLimit(1)
-                        if !meta.lensDisplayName.isEmpty {
-                            Text(meta.lensDisplayName)
-                                .font(.system(size: barHeight * 0.16))
-                                .foregroundColor(.white.opacity(0.55))
-                                .lineLimit(1)
-                        }
+                            .minimumScaleFactor(0.55)
                     }
                 }
 
@@ -47,19 +43,21 @@ struct LeicaMonoTemplate: View {
                     .padding(.horizontal, barHeight * 0.2)
 
                 VStack(alignment: .trailing, spacing: barHeight * 0.05) {
-                    Text(meta.paramsLine)
+                    Text(meta.compactExposureLine)
                         .font(.system(size: barHeight * 0.22, weight: .medium, design: .monospaced))
                         .foregroundColor(.white)
                         .lineLimit(1)
-                    if let date = meta.dateText {
+                        .minimumScaleFactor(isPortrait ? 0.36 : 0.48)
+                    if !isPortrait, let date = meta.dateText {
                         Text(date)
                             .font(.system(size: barHeight * 0.16, design: .monospaced))
                             .foregroundColor(.white.opacity(0.55))
                             .lineLimit(1)
+                            .minimumScaleFactor(0.55)
                     }
                 }
             }
-            .padding(.horizontal, barHeight * 0.4)
+            .padding(.horizontal, isPortrait ? barHeight * 0.24 : barHeight * 0.4)
             .frame(height: barHeight)
             .frame(maxWidth: .infinity)
             .background(Color(white: 0.04))

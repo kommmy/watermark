@@ -35,6 +35,7 @@ const DEFAULT_DATA = {
 const TEMPLATE_PRESETS = {
   leica:        { cameraModel: "LEICA Q3", lensModel: "SUMMICRON 28 f/1.7 ASPH.", focal: 28, aperture: 1.7, shutter: "1/500s", iso: 200 },
   leica_mono:   { cameraModel: "LEICA M11 Monochrom", lensModel: "SUMMILUX-M 35 f/1.4", focal: 35, aperture: 1.4, shutter: "1/250s", iso: 400 },
+  leica_glass:  { cameraModel: "LEICA M11", lensModel: "SUMMICRON-M 50 F/2", focal: 50, aperture: 2, shutter: "1/4000s", iso: 100 },
   fujifilm:     { cameraModel: "FUJIFILM X100VI", lensModel: "23mm F2", focal: 35, aperture: 2, shutter: "1/320s", iso: 320 },
   fuji_strip:   { cameraModel: "FUJIFILM X-T5", lensModel: "XF 33mm F1.4", focal: 50, aperture: 1.4, shutter: "1/640s", iso: 250 },
   sony:         { cameraModel: "SONY A7CR", lensModel: "FE 35mm F1.4 GM", focal: 35, aperture: 1.4, shutter: "1/800s", iso: 100 },
@@ -57,6 +58,7 @@ const TEMPLATE_PRESETS = {
 const TEMPLATES = [
   { id: "leica",          name: "Leica White",  group: "leica",      brand: "LEICA" },
   { id: "leica_mono",     name: "Leica Mono",   group: "leica",      brand: "LEICA" },
+  { id: "leica_glass",    name: "Leica Glass",  group: "leica",      brand: "LEICA" },
   { id: "fujifilm",       name: "Fuji Dark",    group: "fujifilm",   brand: "FUJIFILM" },
   { id: "fuji_strip",     name: "Fuji Film",    group: "fujifilm",   brand: "FUJIFILM" },
   { id: "sony",           name: "Sony Alpha",   group: "sony",       brand: "SONY" },
@@ -256,6 +258,31 @@ const RENDERERS = {
           <div class="params">
             <div class="line">${escapeHtml(paramsLine(d))}</div>
             ${d.date ? `<div class="date">${escapeHtml(d.date)}</div>` : ""}
+          </div>
+        </div>
+      </div>`;
+  },
+
+  leica_glass(d) {
+    const params = [
+      d.shutter || null,
+      d.aperture ? `f/${d.aperture}` : null,
+      d.iso ? `ISO ${d.iso}` : null,
+      d.focal ? `${d.focal}mm` : null,
+    ].filter(Boolean).join("  ·  ");
+    const title = (d.lensModel || d.cameraModel || "LEICA").toUpperCase();
+    return `
+      <div class="canvas tpl-leica-glass">
+        <div class="frost" style="background-image:url('${escapeHtml(d.image)}')"></div>
+        <div class="frost-tint"></div>
+        <div class="glass-inner">
+          <img src="${escapeHtml(d.image)}" class="photo" alt="" />
+          <div class="glass-bar">
+            <div class="glass-title">
+              <img src="${LOGO.leica}" class="logo-img glass-logo" alt="Leica" />
+              <span>${escapeHtml(title)}</span>
+            </div>
+            <div class="glass-params">${escapeHtml(params)}</div>
           </div>
         </div>
       </div>`;

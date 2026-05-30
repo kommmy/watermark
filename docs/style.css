@@ -655,6 +655,33 @@ button { font-family: inherit; cursor: pointer; }
 .tpl-leica-mono .params .line { font-size:9.5px; color:#fff; font-weight:500; }
 .tpl-leica-mono .params .date { font-size:7.5px; color:rgba(255,255,255,.55); margin-top:2px; }
 
+/* --- Leica Glass (frosted) --- */
+.tpl-leica-glass { position:relative; overflow:hidden; background:#eaeaea; }
+.tpl-leica-glass .frost {
+  position:absolute; inset:0;
+  background-size:cover; background-position:center;
+  filter: blur(28px) saturate(1.1);
+  transform: scale(1.25);
+}
+.tpl-leica-glass .frost-tint { position:absolute; inset:0; background:rgba(255,255,255,.40); }
+.tpl-leica-glass .glass-inner { position:relative; padding:14px 14px 0; }
+.tpl-leica-glass .photo {
+  width:100%; display:block; border-radius:2px;
+  box-shadow:0 6px 18px rgba(0,0,0,.18);
+}
+.tpl-leica-glass .glass-bar { text-align:center; padding:14px 8px 18px; }
+.tpl-leica-glass .glass-title {
+  display:flex; align-items:center; justify-content:center; gap:7px;
+}
+.tpl-leica-glass .glass-logo { width:18px; height:18px; }
+.tpl-leica-glass .glass-title span {
+  font-size:12px; font-weight:600; color:rgba(0,0,0,.85); letter-spacing:.5px;
+}
+.tpl-leica-glass .glass-params {
+  margin-top:5px; font-size:9px; font-weight:500; color:rgba(0,0,0,.5);
+  font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; letter-spacing:.4px;
+}
+
 /* --- Fuji Dark --- */
 .tpl-fujifilm .bar { background:#141414; display:flex; align-items:center; padding:14px; gap:14px; color:#efe9da; }
 .tpl-fujifilm .brand .logo {

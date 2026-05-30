@@ -27,7 +27,6 @@ struct PuzzleEditorView: View {
         VStack(spacing: 0) {
             preview
             slotPickerBar
-            optionsBar
             actionBar
         }
         .appBackground()
@@ -81,7 +80,7 @@ struct PuzzleEditorView: View {
                 .frame(maxWidth: .infinity)
                 .padding(20)
         }
-        .background(Color.black)
+        .background(AppTheme.Palette.previewBackdrop)
     }
 
     // MARK: - Slot picker bar (lets user pick each slot's image)

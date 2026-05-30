@@ -30,7 +30,7 @@ enum BrowseCatalog {
         BrowseSection(
             id: "watermark",
             title: "徕卡水印",
-            subtitle: "5 个徕卡样式，自动读取照片参数",
+            subtitle: "4 个徕卡样式，自动读取照片参数",
             destination: .watermark,
             items: WatermarkTemplate.leicaTemplates.map { .watermark($0) }
         ),

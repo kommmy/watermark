@@ -90,6 +90,13 @@ struct PhotoMetadata {
         [apertureText, shutter, isoText].compactMap { $0 }.joined(separator: "  ")
     }
 
+    /// 水印中精简展示的一行曝光参数：只保留光圈、快门、ISO，避免和镜头/焦段重复。
+    var compactExposureLine: String {
+        let parts = [apertureText, shutter, isoText].compactMap { $0 }
+        if !parts.isEmpty { return parts.joined(separator: "  ") }
+        return "f/1.4  1/250s  ISO 200"
+    }
+
     var hasCameraIdentity: Bool {
         brand != .other || cameraMake?.trimmedNonEmpty != nil || cameraModel?.trimmedNonEmpty != nil
     }

@@ -81,6 +81,19 @@ struct TemplateStrip: View {
         case .leica_gallery:
             Rectangle().fill(Color(red: 0.965, green: 0.953, blue: 0.925)).frame(height: 18)
 
+        case .leica_glass:
+            HStack(spacing: 0) {
+                Rectangle().fill(Color(red: 0.86, green: 0.07, blue: 0.13)).frame(width: 10)
+                Rectangle().fill(Color.white.opacity(0.55))
+            }
+            .frame(height: 16)
+            .background(.ultraThinMaterial)
+
+        case .leica_white_space:
+            Rectangle()
+                .fill(Color(red: 0.985, green: 0.982, blue: 0.973))
+                .frame(height: 18)
+
         case .fujifilm:
             Rectangle().fill(Color.black).frame(height: 12)
 

@@ -5,7 +5,8 @@ struct LeicaFrameTemplate: View {
     let meta: PhotoMetadata
 
     private var pad: CGFloat { max(image.size.width * 0.052, 28) }
-    private var footerHeight: CGFloat { max(image.size.width * 0.12, 70) }
+    private var footerHeight: CGFloat { max(min(image.size.width * 0.12, image.size.height * 0.085), 64) }
+    private var isPortrait: Bool { image.size.height > image.size.width * 1.08 }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -30,31 +31,30 @@ struct LeicaFrameTemplate: View {
                         .font(.system(size: footerHeight * 0.24, weight: .semibold))
                         .foregroundColor(.black)
                         .lineLimit(1)
-                    if !meta.lensDisplayName.isEmpty {
-                        Text(meta.lensDisplayName)
-                            .font(.system(size: footerHeight * 0.15))
-                            .foregroundColor(Color(white: 0.45))
-                            .lineLimit(1)
-                    }
+                        .minimumScaleFactor(0.55)
                 }
 
                 Spacer(minLength: 0)
 
                 VStack(alignment: .trailing, spacing: footerHeight * 0.08) {
-                    Text(meta.paramsLine)
+                    Text(meta.compactExposureLine)
                         .font(.system(size: footerHeight * 0.20, weight: .medium, design: .monospaced))
                         .foregroundColor(.black)
                         .lineLimit(1)
-                    Text(meta.paramsDate)
-                        .font(.system(size: footerHeight * 0.15, design: .monospaced))
-                        .foregroundColor(Color(white: 0.48))
-                        .lineLimit(1)
+                        .minimumScaleFactor(isPortrait ? 0.36 : 0.48)
+                    if !isPortrait {
+                        Text(meta.paramsDate)
+                            .font(.system(size: footerHeight * 0.15, design: .monospaced))
+                            .foregroundColor(Color(white: 0.48))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.55)
+                    }
                 }
             }
             .padding(.horizontal, pad)
             .frame(height: footerHeight)
         }
-        .background(Color.white)
+        .background(Color(red: 0.985, green: 0.976, blue: 0.948))
     }
 }
 
@@ -84,10 +84,12 @@ struct LeicaCompactTemplate: View {
                     Text(meta.cameraDisplayName)
                         .font(.system(size: unit * 0.82, weight: .semibold))
                         .lineLimit(1)
-                    Text(meta.exposureSummary)
+                        .minimumScaleFactor(0.55)
+                    Text(meta.compactExposureLine)
                         .font(.system(size: unit * 0.68, weight: .medium, design: .monospaced))
                         .opacity(0.72)
                         .lineLimit(1)
+                        .minimumScaleFactor(0.48)
                 }
             }
             .foregroundColor(.white)
@@ -112,6 +114,7 @@ struct LeicaGalleryTemplate: View {
     private var pad: CGFloat { max(image.size.width * 0.070, 36) }
     private var titleSize: CGFloat { max(image.size.width * 0.026, 16) }
     private var smallSize: CGFloat { max(image.size.width * 0.016, 10) }
+    private var isPortrait: Bool { image.size.height > image.size.width * 1.08 }
 
     var body: some View {
         VStack(spacing: pad * 0.38) {
@@ -143,18 +146,15 @@ struct LeicaGalleryTemplate: View {
                     Text(meta.cameraDisplayName)
                         .font(.system(size: titleSize * 0.78, weight: .semibold))
                         .foregroundColor(.black)
-                    if !meta.lensDisplayName.isEmpty {
-                        Text(meta.lensDisplayName)
-                            .font(.system(size: smallSize))
-                            .foregroundColor(Color(white: 0.45))
-                            .lineLimit(1)
-                    }
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.55)
                 }
                 Spacer(minLength: pad * 0.4)
-                Text(meta.paramsLine)
+                Text(meta.compactExposureLine)
                     .font(.system(size: smallSize, weight: .medium, design: .monospaced))
                     .foregroundColor(Color(white: 0.28))
                     .lineLimit(1)
+                    .minimumScaleFactor(isPortrait ? 0.36 : 0.48)
             }
             .padding(.horizontal, pad)
             .padding(.bottom, pad)

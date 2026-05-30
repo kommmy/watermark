@@ -65,7 +65,7 @@ struct EditorView: View {
     private var previewArea: some View {
         GeometryReader { geo in
             ZStack {
-                Color.black
+                AppTheme.Palette.previewBackdrop
                 if let previewImage {
                     Image(uiImage: previewImage)
                         .resizable()
@@ -77,11 +77,11 @@ struct EditorView: View {
                         .shadow(color: Color.black.opacity(0.55), radius: 18, y: 8)
                 } else {
                     ProgressView()
-                        .tint(AppTheme.Palette.textPrimary)
+                        .tint(.white)
                 }
             }
         }
-        .background(Color.black)
+        .background(AppTheme.Palette.previewBackdrop)
     }
 
     // MARK: - Action bar
