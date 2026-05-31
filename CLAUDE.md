@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-WatermarkCamera is a 100% local, no-backend iOS (SwiftUI, iOS 16+) app that adds
+markit is a 100% local, no-backend iOS (SwiftUI, iOS 16+) app that adds
 camera-brand-style EXIF watermarks to photos and composes multi-photo puzzles.
 A companion browser demo under `docs/` re-implements the same templates in
 JavaScript and is deployed to GitHub Pages. README.md is in Chinese and describes
@@ -19,16 +19,16 @@ removing, or moving source files:
 
 ```bash
 brew install xcodegen        # once
-xcodegen generate            # regenerates WatermarkCamera.xcodeproj from project.yml
-open WatermarkCamera.xcodeproj
+xcodegen generate            # regenerates Markit.xcodeproj from project.yml
+open Markit.xcodeproj
 ```
 
 Command-line build (mirrors `.github/workflows/ios-build.yml`):
 
 ```bash
 xcodebuild \
-  -project WatermarkCamera.xcodeproj \
-  -scheme WatermarkCamera \
+  -project Markit.xcodeproj \
+  -scheme Markit \
   -configuration Debug \
   -sdk iphonesimulator \
   -destination 'generic/platform=iOS Simulator' \

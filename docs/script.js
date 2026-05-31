@@ -1,5 +1,5 @@
 // =============================================================
-// LumaFrame · Web Demo
+// markit · Web Demo
 // 单文件 SPA：home (discover/watermark/puzzle/me) <-> editor
 // =============================================================
 
@@ -9,7 +9,7 @@
 const SAMPLE_LANDSCAPE = "./sample.svg";
 const SAMPLE_CAMERA    = "./sample-camera.svg";
 const SAMPLE_PORTRAIT  = "./sample-portrait.svg";
-const APP_NAME = "LumaFrame";
+const APP_NAME = "markit";
 
 const LOGO = {
   leica: "./assets/logos/brand_leica.svg",

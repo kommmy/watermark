@@ -1,4 +1,4 @@
-# WatermarkCamera
+# markit
 
 > iOS 相机风格水印 + 拼图 App，纯本地，无后端。
 > 选图后自动读取 EXIF（机型/镜头/光圈/快门/ISO/日期/GPS），套用徕卡、富士、索尼、哈苏、理光、iPhone、文艺/Ins 风等 **16 套水印模板**；或挑 **4 种拼图布局** 拼多张图，一键保存到相册或分享。
@@ -37,26 +37,38 @@
 brew install xcodegen
 cd /path/to/this/repo
 xcodegen
-open WatermarkCamera.xcodeproj
+open Markit.xcodeproj
 ```
 
 然后选一个 iOS 16+ 模拟器，Cmd+R 即可。
 
+## 上架物料
+
+App Store 上架草稿放在 `AppStoreAssets/`：
+
+- `icon/markit-icon-1024.png`：1024x1024 App Store 图标。
+- `screenshots/`：iPhone 6.9 / 6.5 / 5.5 英寸截图素材。
+- `metadata/zh-Hans.md`：中文上架文案、关键词、审核备注、隐私选项。
+- `metadata/en-US.md`：英文备用文案。
+- `metadata/submission-checklist.md`：提交前检查清单。
+
+隐私政策与支持页放在 `docs/privacy.html` 和 `docs/support.html`。
+
 ### 方式二：手动新建 Xcode 工程
 
 1. Xcode > File > New > Project > iOS > App
-2. Product Name 填 `WatermarkCamera`，Interface 选 SwiftUI，Language 选 Swift，Minimum Deployments 选 iOS 16.0
+2. Product Name 填 `Markit`，Interface 选 SwiftUI，Language 选 Swift，Minimum Deployments 选 iOS 16.0
 3. 删除自动生成的 `ContentView.swift` 和 `<ProjectName>App.swift`
-4. 把本仓库 `WatermarkCamera/` 目录下的所有 `.swift` 文件、`Info.plist`、`Resources/Assets.xcassets` 全部拖入工程（选 Copy items if needed，加入 target）
+4. 把本仓库 `Markit/` 目录下的所有 `.swift` 文件、`Info.plist`、`Resources/Assets.xcassets` 全部拖入工程（选 Copy items if needed，加入 target）
 5. Project Settings > Info > 把 `Info.plist` 指向拖入的那份
 6. Cmd+R
 
 ## 目录结构
 
 ```
-WatermarkCamera/
+Markit/
 ├── App/
-│   └── WatermarkCameraApp.swift     # @main 入口
+│   └── MarkitApp.swift              # @main 入口
 ├── Theme/
 │   ├── AppTheme.swift               # 深色 token：色板/字号/圆角/阴影
 │   └── ViewModifiers.swift          # .cardStyle() / .appBackground() / LoadingOverlay / 浮动创建按钮

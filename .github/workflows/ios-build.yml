@@ -31,9 +31,9 @@ jobs:
           xcodegen generate
           # XcodeGen 2.x 默认生成 objectVersion = 77（Xcode 16 格式）。
           # 如果 runner 用的是更老的 Xcode，会打不开。保险起见把它降到 60（Xcode 15 OK，Xcode 16 也能向下兼容）。
-          sed -i.bak 's/objectVersion = 77;/objectVersion = 60;/' WatermarkCamera.xcodeproj/project.pbxproj
+          sed -i.bak 's/objectVersion = 77;/objectVersion = 60;/' Markit.xcodeproj/project.pbxproj
           echo "Final objectVersion:"
-          grep "objectVersion" WatermarkCamera.xcodeproj/project.pbxproj | head -1
+          grep "objectVersion" Markit.xcodeproj/project.pbxproj | head -1
 
       - name: Build with verbose output
         run: |
@@ -41,11 +41,11 @@ jobs:
           set -o pipefail
 
           echo "::group::Project file listing"
-          ls -la WatermarkCamera.xcodeproj/ || true
+          ls -la Markit.xcodeproj/ || true
           echo "::endgroup::"
 
           echo "::group::xcodebuild -list"
-          xcodebuild -list -project WatermarkCamera.xcodeproj 2>&1 | tee list.log
+          xcodebuild -list -project Markit.xcodeproj 2>&1 | tee list.log
           LIST_RC=${PIPESTATUS[0]}
           echo "::endgroup::"
 
@@ -59,8 +59,8 @@ jobs:
 
           echo "::group::xcodebuild build"
           xcodebuild \
-            -project WatermarkCamera.xcodeproj \
-            -scheme WatermarkCamera \
+            -project Markit.xcodeproj \
+            -scheme Markit \
             -configuration Debug \
             -sdk iphonesimulator \
             -destination 'generic/platform=iOS Simulator' \
@@ -89,7 +89,7 @@ jobs:
           path: |
             xcodebuild.log
             list.log
-            WatermarkCamera.xcodeproj/project.pbxproj
-            build/Build/Products/Debug-iphonesimulator/WatermarkCamera.app
+            Markit.xcodeproj/project.pbxproj
+            build/Build/Products/Debug-iphonesimulator/Markit.app
           if-no-files-found: warn
           retention-days: 7

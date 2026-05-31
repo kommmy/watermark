@@ -1,4 +1,4 @@
-# WatermarkCamera · Web Demo
+# markit · Web Demo
 
 iPhone 模拟外壳 + 实时编辑器，演示 iOS App 的设计与功能：
 
@@ -30,11 +30,11 @@ docs/
 1. 在 `script.js` 的 `TEMPLATES` 数组加 `{ id, name, group, brand }`
 2. 在 `script.js` 的 `RENDERERS` 对象里加一个 `<id>(d) { return "..." }` 渲染函数
 3. 在 `style.css` 加一段 `.tpl-<id> { ... }` 的样式
-4. iOS 端对应改 `WatermarkCamera/Templates/<Xxx>Template.swift` 与 `WatermarkCamera/Models/WatermarkTemplate.swift`
+4. iOS 端对应改 `Markit/Templates/<Xxx>Template.swift` 与 `Markit/Models/WatermarkTemplate.swift`
 
 ## 添加新拼图布局（与 iOS 同步）
 
 1. 在 `script.js` 的 `LAYOUTS` 数组加 `{ id, name, slots, hint }`
 2. 在 `script.js` 的 `LAYOUT_RENDERERS` 加 `<id>(imgs, opts) { return "..." }`
 3. 在 `puzzleCoverSvg()` 里给 id 加一个封面 SVG
-4. iOS 端对应在 `WatermarkCamera/PuzzleLayouts/` 加 `<Xxx>Layout.swift` 并补 `Models/PuzzleLayout.swift` 的 case
+4. iOS 端对应在 `Markit/PuzzleLayouts/` 加 `<Xxx>Layout.swift` 并补 `Models/PuzzleLayout.swift` 的 case
