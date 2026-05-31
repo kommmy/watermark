@@ -1,10 +1,15 @@
 import SwiftUI
 import PhotosUI
 
-// Watermark tab: grouped browse rows for all 16 templates. Tap a card to pick a photo,
-// then jump into EditorView with the chosen template + image.
+// Unified creation hub: watermark templates and collage layouts live on one page.
 struct WatermarkTab: View {
+    enum InitialFocus {
+        case watermark
+        case puzzle
+    }
+
     var preselectedTemplate: WatermarkTemplate? = nil
+    var initialFocus: InitialFocus = .watermark
 
     @State private var selectedTemplate: WatermarkTemplate?
     @State private var pickerItem: PhotosPickerItem?
@@ -15,20 +20,33 @@ struct WatermarkTab: View {
     @State private var navigate = false
     @State private var errorMessage: String?
     @State private var didApplyPreselection = false
+    @State private var didApplyInitialFocus = false
+    @State private var openQuickLayout = false
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: AppTheme.Spacing.l) {
-                    intro
-                    ForEach(BrowseCatalog.watermarkSections) { section in
-                        watermarkSection(section)
+            ScrollViewReader { proxy in
+                ScrollView {
+                    VStack(alignment: .leading, spacing: AppTheme.Spacing.xl) {
+                        intro
+
+                        ForEach(BrowseCatalog.watermarkSections) { section in
+                            watermarkSection(section)
+                        }
+
+                        ForEach(BrowseCatalog.puzzleSections) { section in
+                            puzzleSection(section)
+                        }
                     }
+                    .padding(.top, AppTheme.Spacing.m)
+                    .padding(.bottom, 104)
                 }
-                .padding(.top, AppTheme.Spacing.m)
-                .padding(.bottom, 104)
+                .onAppear {
+                    applyPreselectionIfNeeded()
+                    applyInitialFocusIfNeeded(proxy)
+                }
             }
-            .navigationTitle("徕卡水印")
+            .navigationTitle("照片创作")
             .navigationBarTitleDisplayMode(.inline)
             .overlay(alignment: .bottomTrailing) {
                 FloatingCreateButton { begin() }
@@ -48,18 +66,15 @@ struct WatermarkTab: View {
                     EditorView(image: img, initialMetadata: metadata, initialTemplate: tpl)
                 }
             }
+            .navigationDestination(isPresented: $openQuickLayout) {
+                PuzzleEditorView(layout: .cameraDetail)
+            }
             .photosPicker(
                 isPresented: $showPhotoPicker,
                 selection: $pickerItem,
                 matching: .images,
                 photoLibrary: .shared()
             )
-            .onAppear {
-                if !didApplyPreselection, let pre = preselectedTemplate {
-                    didApplyPreselection = true
-                    begin(pre)
-                }
-            }
             .onChange(of: pickerItem) { newItem in
                 guard let newItem else { return }
                 Task { await load(newItem) }
@@ -90,7 +105,7 @@ struct WatermarkTab: View {
         Button {
             begin()
         } label: {
-            Label("选择照片，智能匹配", systemImage: "sparkles")
+            Label("选择照片，生成作品卡", systemImage: "sparkles")
                 .font(AppTheme.Font.small.weight(.semibold))
                 .foregroundColor(.black)
                 .padding(.horizontal, 14)
@@ -103,6 +118,8 @@ struct WatermarkTab: View {
 
     private func watermarkSection(_ section: BrowseSection) -> some View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.m) {
+            SectionHeader(title: section.title, trailing: nil)
+
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: AppTheme.Spacing.m) {
                     ForEach(section.items) { item in
@@ -122,6 +139,31 @@ struct WatermarkTab: View {
                 .padding(.horizontal, AppTheme.Spacing.l)
             }
         }
+        .id(section.id)
+    }
+
+    private func puzzleSection(_ section: BrowseSection) -> some View {
+        VStack(alignment: .leading, spacing: AppTheme.Spacing.m) {
+            SectionHeader(title: section.title, trailing: nil)
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: AppTheme.Spacing.m) {
+                    ForEach(section.items) { item in
+                        if case .puzzle(let layout) = item {
+                            NavigationLink {
+                                PuzzleEditorView(layout: layout)
+                            } label: {
+                                PuzzleLayoutCard(layout: layout, width: 148, height: 184)
+                            }
+                            .buttonStyle(.plain)
+                            .accessibilityLabel("打开\(layout.displayName)")
+                        }
+                    }
+                }
+                .padding(.horizontal, AppTheme.Spacing.l)
+            }
+        }
+        .id(section.id)
     }
 
     private func begin(_ template: WatermarkTemplate? = nil) {
@@ -162,6 +204,24 @@ struct WatermarkTab: View {
         loadedImage = nil
         metadata = .empty
         showPhotoPicker = false
+    }
+
+    private func applyPreselectionIfNeeded() {
+        if !didApplyPreselection, let pre = preselectedTemplate {
+            didApplyPreselection = true
+            begin(pre)
+        }
+    }
+
+    private func applyInitialFocusIfNeeded(_ proxy: ScrollViewProxy) {
+        guard !didApplyInitialFocus else { return }
+        didApplyInitialFocus = true
+        guard initialFocus == .puzzle, let target = BrowseCatalog.puzzleSections.first?.id else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+            withAnimation(.easeInOut(duration: 0.35)) {
+                proxy.scrollTo(target, anchor: .top)
+            }
+        }
     }
 }
 

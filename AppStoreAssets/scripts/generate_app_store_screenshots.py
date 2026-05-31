@@ -214,7 +214,7 @@ def main():
         page(
             size,
             "相机拼图\n做成作品封面",
-            "拼图页使用真实卡片和底部 Tab，外层只做商店级包装。",
+            "拼图区域使用真实卡片，外层只做商店级包装。",
             "puzzle",
             (name, "03-real-puzzle-tab.png"),
             badges=["M11 / Q3", "小红书 / Ins", "多图布局"],

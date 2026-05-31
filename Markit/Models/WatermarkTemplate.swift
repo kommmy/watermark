@@ -42,13 +42,13 @@ enum WatermarkTemplate: String, CaseIterable, Identifiable, Hashable {
 
     var displayName: String {
         switch self {
-        case .leica:        return "徕卡白标"
-        case .leica_mono:   return "徕卡黑白"
-        case .leica_frame:  return "徕卡相纸"
-        case .leica_compact:return "徕卡角标"
-        case .leica_gallery:return "徕卡画廊"
-        case .leica_glass:  return "徕卡毛玻璃"
-        case .leica_white_space: return "徕卡留白"
+        case .leica:        return "白标作品卡"
+        case .leica_mono:   return "黑白作品卡"
+        case .leica_frame:  return "相纸边框"
+        case .leica_compact:return "角标参数"
+        case .leica_gallery:return "画廊留白"
+        case .leica_glass:  return "毛玻璃"
+        case .leica_white_space: return "留白相框"
         case .fujifilm:     return "富士暗调"
         case .fuji_strip:   return "富士胶片"
         case .sony:         return "索尼 Alpha"
@@ -71,7 +71,7 @@ enum WatermarkTemplate: String, CaseIterable, Identifiable, Hashable {
     var brandLabel: String {
         switch self {
         case .leica, .leica_mono, .leica_frame, .leica_compact, .leica_gallery,
-             .leica_glass, .leica_white_space, .film_border, .gallery_frame: return "LEICA"
+             .leica_glass, .leica_white_space, .film_border, .gallery_frame: return "作品卡"
         case .fujifilm, .fuji_strip:return "FUJIFILM"
         case .sony:                 return "SONY"
         case .hasselblad:           return "HASSELBLAD"

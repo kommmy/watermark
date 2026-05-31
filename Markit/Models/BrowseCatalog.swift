@@ -29,14 +29,14 @@ enum BrowseCatalog {
     static let discoverSections: [BrowseSection] = [
         BrowseSection(
             id: "watermark",
-            title: "徕卡水印",
-            subtitle: "4 个徕卡样式，自动读取照片参数",
+            title: "照片水印",
+            subtitle: "自动读取照片参数，生成干净作品卡",
             destination: .watermark,
             items: WatermarkTemplate.leicaTemplates.map { .watermark($0) }
         ),
         BrowseSection(
             id: "camera-vs-photo",
-            title: "徕卡相机拼图",
+            title: "相机拼图",
             subtitle: "取景框里是照片，下方是成片",
             destination: .puzzle,
             items: [
@@ -47,8 +47,8 @@ enum BrowseCatalog {
 
     static let watermarkSections: [BrowseSection] = [
         BrowseSection(
-            id: "leica",
-            title: "徕卡水印",
+            id: "photo-watermark",
+            title: "照片水印",
             subtitle: "选择一张照片，自动读取 ISO、光圈、快门和机型",
             destination: .watermark,
             items: WatermarkTemplate.leicaTemplates.map { .watermark($0) }
@@ -57,9 +57,9 @@ enum BrowseCatalog {
 
     static let puzzleSections: [BrowseSection] = [
         BrowseSection(
-            id: "leica-camera",
-            title: "徕卡相机拼图",
-            subtitle: "上方徕卡相机取景框嵌入照片，下方展示原片",
+            id: "camera-collage",
+            title: "相机拼图",
+            subtitle: "上方相机取景框嵌入照片，下方展示原片",
             destination: .puzzle,
             items: [
                 .puzzle(.cameraDetail),
