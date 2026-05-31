@@ -2,7 +2,7 @@
 
 ## App Information
 
-- App Name: markit
+- App Name (store display): Markit Frame
 - Bundle ID: com.kommmy.markit
 - SKU: markit-ios
 - Version: 1.0.0

@@ -2,7 +2,7 @@
 
 ## 已准备
 
-- App 显示名：markit
+- App Store 商店显示名：Markit Frame（"markit" 已被占用）；手机桌面图标名仍为 Markit
 - Bundle ID：com.kommmy.markit
 - App Icon：`AppStoreAssets/icon/markit-icon-1024.png`
 - Xcode AppIcon：`Markit/Resources/Assets.xcassets/AppIcon.appiconset/markit-icon-1024.png`
@@ -16,7 +16,7 @@
 
 ## App Store Connect 填写建议
 
-- App 名称：markit
+- App 名称：Markit Frame
 - 副标题：相机水印与拼图工具
 - Bundle ID：com.kommmy.markit
 - SKU：markit-ios

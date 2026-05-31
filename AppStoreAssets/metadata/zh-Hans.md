@@ -2,7 +2,7 @@
 
 ## App 信息
 
-- App 名称：markit
+- App 名称（商店显示名）：Markit Frame
 - Bundle ID：com.kommmy.markit
 - SKU：markit-ios
 - 版本号：1.0.0
