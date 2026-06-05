@@ -16,6 +16,8 @@ struct PhotoMetadata {
     var captureDate: Date?
     var coordinate: CLLocationCoordinate2D?
     var placeName: String?
+    /// 用户手写的点评/标题（色彩漫步模板用）。nil 时模板回退到艺术日期。
+    var caption: String?
     var pixelSize: CGSize
 
     static let empty = PhotoMetadata(pixelSize: .zero)
@@ -66,6 +68,20 @@ struct PhotoMetadata {
     var coordinateText: String? {
         guard let c = coordinate else { return nil }
         return String(format: "%.4f°, %.4f°", c.latitude, c.longitude)
+    }
+
+    /// 艺术风格日期，如 "January 29, 2026"。读不到拍摄日期则用今天。
+    var artisticDate: String {
+        let fmt = DateFormatter()
+        fmt.locale = Locale(identifier: "en_US")
+        fmt.dateFormat = "MMMM d, yyyy"
+        return fmt.string(from: captureDate ?? Date())
+    }
+
+    /// 色彩漫步模板展示的文字：优先用户输入的点评，否则用艺术日期。
+    var colorWalkText: String {
+        if let c = caption?.trimmingCharacters(in: .whitespacesAndNewlines), !c.isEmpty { return c }
+        return artisticDate
     }
 
     var brandDisplayName: String {

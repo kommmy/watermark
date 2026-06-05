@@ -10,6 +10,15 @@ struct MetadataEditorSheet: View {
     var body: some View {
         NavigationStack {
             Form {
+                Section {
+                    TextField("点评 / 标题（色彩漫步模板显示）",
+                              text: optional($metadata.caption), axis: .vertical)
+                        .lineLimit(1...3)
+                } header: {
+                    Text("点评")
+                } footer: {
+                    Text("留空时自动使用拍摄日期。")
+                }
                 Section("相机") {
                     TextField("品牌（如 LEICA CAMERA AG）",
                               text: optional($metadata.cameraMake))

@@ -84,7 +84,7 @@ enum TemplatePreviewRenderer {
         switch template {
         case .leica_mono, .leica_compact:
             return "sample_portrait_bw"
-        case .leica_gallery, .minimal, .clean_instagram:
+        case .leica_gallery, .minimal, .clean_instagram, .color_walk:
             return "sample_flowers"
         case .leica_frame, .gallery_frame, .soft_journal, .polaroid:
             return "sample_book"

@@ -50,6 +50,7 @@ const TEMPLATE_PRESETS = {
   clean_instagram: { cameraModel: "@lumaframe", lensModel: "Clean Feed", focal: 50, aperture: 2, shutter: "1/500s", iso: 100 },
   magazine_cover: { cameraModel: "LUMA JOURNAL", lensModel: "Weekend Notes", focal: 28, aperture: 4, shutter: "1/320s", iso: 200 },
   receipt_memo: { cameraModel: "LUMA CAFE", lensModel: "Receipt Memo", focal: 35, aperture: 2.8, shutter: "1/125s", iso: 400 },
+  color_walk:   { cameraModel: "Color Walk", caption: "" },
 };
 
 // -------------------------------------------------------------
@@ -73,6 +74,7 @@ const TEMPLATES = [
   { id: "clean_instagram",name: "Clean Instagram", group: "lifestyle", brand: "Lifestyle" },
   { id: "magazine_cover", name: "Magazine Cover", group: "editorial", brand: "Magazine" },
   { id: "receipt_memo",   name: "Receipt Memo", group: "cafe",       brand: "Cafe" },
+  { id: "color_walk",     name: "Color Walk",   group: "lifestyle",  brand: "色卡" },
 ];
 
 const BROWSE_SECTIONS = [
@@ -102,9 +104,9 @@ const BROWSE_SECTIONS = [
   },
   {
     title: "Color Walk",
-    subtitle: "适合小红书的暖色生活方式模板",
+    subtitle: "取照片主色铺成色块，配一句艺术点评",
     more: "watermark",
-    items: ["template:soft_journal", "template:receipt_memo", "template:magazine_cover", "template:hasselblad"],
+    items: ["template:color_walk", "template:soft_journal", "template:receipt_memo", "template:magazine_cover"],
   },
   {
     title: "自由拼图",
@@ -218,6 +220,64 @@ function paramsLine(d) {
 // =============================================================
 // Watermark template renderers (innerHTML for .editor-preview-frame)
 // =============================================================
+// -------------------------------------------------------------
+// 主色提取（Color Walk）：把图缩到小图，按通道量化分桶取众数，
+// 对有彩度的颜色略加权、对近白/近黑/近灰降权。结果按图片 src 缓存。
+// 与 iOS DominantColor.swift 的算法保持一致。
+// -------------------------------------------------------------
+const _dominantCache = {};
+
+function computeDominant(src, cb) {
+  const img = new Image();
+  img.crossOrigin = "anonymous";
+  img.onload = () => {
+    try {
+      const w = 48;
+      const h = Math.max(1, Math.round(48 * img.height / img.width));
+      const cv = document.createElement("canvas");
+      cv.width = w; cv.height = h;
+      const ctx = cv.getContext("2d", { willReadFrequently: true });
+      ctx.drawImage(img, 0, 0, w, h);
+      const px = ctx.getImageData(0, 0, w, h).data;
+      const counts = {}, sums = {};
+      for (let i = 0; i < px.length; i += 4) {
+        if (px[i + 3] < 16) continue;
+        const r = px[i], g = px[i + 1], b = px[i + 2];
+        const key = ((r >> 3) << 10) | ((g >> 3) << 5) | (b >> 3);
+        counts[key] = (counts[key] || 0) + 1;
+        const s = sums[key] || (sums[key] = [0, 0, 0]);
+        s[0] += r; s[1] += g; s[2] += b;
+      }
+      let bestKey = -1, bestScore = -1;
+      for (const k in counts) {
+        const n = counts[k], s = sums[k];
+        const r = s[0] / n / 255, g = s[1] / n / 255, b = s[2] / n / 255;
+        const hi = Math.max(r, g, b), lo = Math.min(r, g, b);
+        const sat = hi > 0 ? (hi - lo) / hi : 0;
+        let score = n * (0.4 + 0.6 * sat);
+        if ((hi > 0.93 && sat < 0.08) || hi < 0.07) score *= 0.25;
+        if (score > bestScore) { bestScore = score; bestKey = k; }
+      }
+      if (bestKey < 0) { cb(null); return; }
+      const s = sums[bestKey], n = counts[bestKey];
+      cb(`rgb(${Math.round(s[0] / n)}, ${Math.round(s[1] / n)}, ${Math.round(s[2] / n)})`);
+    } catch (e) {
+      cb(null);   // 跨域/被污染的 canvas 读取失败时回退
+    }
+  };
+  img.onerror = () => cb(null);
+  img.src = src;
+}
+
+/// 主色上可读的文字色：亮背景给深字，暗背景给白字。
+function readableOn(rgb) {
+  const m = (rgb || "").match(/\d+/g);
+  if (!m) return "rgba(255,255,255,0.95)";
+  const [r, g, b] = m.map(Number);
+  const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+  return lum > 0.62 ? "rgba(0,0,0,0.8)" : "rgba(255,255,255,0.95)";
+}
+
 const RENDERERS = {
   leica(d) {
     return `
@@ -285,6 +345,19 @@ const RENDERERS = {
             <div class="glass-params">${escapeHtml(params)}</div>
           </div>
         </div>
+      </div>`;
+  },
+
+  color_walk(d) {
+    const bg = d._dominant || "rgb(108, 122, 94)";
+    const fg = readableOn(bg);
+    const text = d.caption || d.date || "";
+    return `
+      <div class="canvas tpl-color-walk">
+        <div class="cw-block" style="background:${bg}; color:${fg}">
+          <span class="cw-text">${escapeHtml(text)}</span>
+        </div>
+        <img src="${escapeHtml(d.image)}" class="photo" alt="" />
       </div>`;
   },
 
@@ -862,6 +935,21 @@ function puzzleCoverSvg(id) {
 function renderWatermarkEditor() {
   const tpl = TEMPLATES.find(t => t.id === state.watermark.templateId) || TEMPLATES[0];
   const root = document.getElementById("appRoot");
+
+  // Color Walk 需要照片主色：缓存命中直接用；未命中先用回退色渲染，
+  // 异步算好后写回缓存并重渲染一次（缓存命中后不再触发，无循环）。
+  if (tpl.id === "color_walk") {
+    const src = state.watermark.data.image;
+    if (_dominantCache[src] !== undefined) {
+      state.watermark.data._dominant = _dominantCache[src];
+    } else {
+      computeDominant(src, (color) => {
+        _dominantCache[src] = color || null;
+        state.watermark.data._dominant = color || null;
+        renderWatermarkEditor();
+      });
+    }
+  }
   root.innerHTML = `
     <div class="app-root">
       <div class="editor">

@@ -682,6 +682,20 @@ button { font-family: inherit; cursor: pointer; }
   font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace; letter-spacing:.4px;
 }
 
+/* --- Color Walk --- */
+.tpl-color-walk { display:flex; flex-direction:column; }
+.tpl-color-walk .cw-block {
+  width:100%; aspect-ratio: 1 / 0.66;
+  display:flex; align-items:center; justify-content:center;
+  padding: 0 12%; box-sizing:border-box; text-align:center;
+}
+.tpl-color-walk .cw-text {
+  font-family: Georgia, "Times New Roman", serif;
+  font-style: italic;
+  font-size: clamp(14px, 5.6vw, 30px);
+  line-height: 1.25;
+}
+
 /* --- Fuji Dark --- */
 .tpl-fujifilm .bar { background:#141414; display:flex; align-items:center; padding:14px; gap:14px; color:#efe9da; }
 .tpl-fujifilm .brand .logo {

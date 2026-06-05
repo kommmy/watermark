@@ -17,7 +17,10 @@ struct EditorView: View {
 
     init(image: UIImage, initialMetadata: PhotoMetadata, initialTemplate: WatermarkTemplate? = nil) {
         self.image = image
-        self._metadata = State(initialValue: initialMetadata)
+        // 预填点评为艺术日期，色彩漫步模板默认就有内容，用户可在参数表里改写。
+        var meta = initialMetadata
+        if meta.caption == nil { meta.caption = meta.artisticDate }
+        self._metadata = State(initialValue: meta)
         let startTpl = initialTemplate ?? .recommended(for: initialMetadata)
         self._template = State(initialValue: startTpl)
         self.thumbnail = image.resized(toWidth: 200) ?? image
@@ -174,11 +177,12 @@ struct EditorView: View {
 
     @MainActor
     private func renderFull() async -> UIImage? {
+        // 不传 maxLongEdge：使用 ImageComposer 按设备内存自适应的上限，
+        // 在能力足够的机型上尽量保留原图分辨率。
         ImageComposer.render(
             image: image,
             meta: metadata,
-            template: template,
-            maxLongEdge: 4096
+            template: template
         )
     }
 

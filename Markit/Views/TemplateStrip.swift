@@ -150,6 +150,12 @@ struct TemplateStrip: View {
 
         case .gallery_frame:
             Color(red: 0.960, green: 0.952, blue: 0.940).frame(height: 18)
+
+        case .color_walk:
+            // 主色由照片动态决定，这里用一条有彩度的色带示意。
+            Rectangle()
+                .fill(Color(red: 0.42, green: 0.52, blue: 0.36))
+                .frame(height: 22)
         }
     }
 }

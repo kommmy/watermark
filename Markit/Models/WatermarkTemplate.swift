@@ -30,14 +30,17 @@ enum WatermarkTemplate: String, CaseIterable, Identifiable, Hashable {
     case receipt_memo     // swiftlint:disable:this identifier_name
     case film_border      // swiftlint:disable:this identifier_name
     case gallery_frame    // swiftlint:disable:this identifier_name
+    case color_walk       // swiftlint:disable:this identifier_name
 
     var id: String { rawValue }
 
+    /// 编辑器切换条 / Browse「照片水印」分组 / resolved 白名单共用的上架集合。
     static let leicaTemplates: [WatermarkTemplate] = [
         .leica,
         .leica_white_space,
         .leica_compact,
-        .leica_glass
+        .leica_glass,
+        .color_walk
     ]
 
     var displayName: String {
@@ -65,6 +68,7 @@ enum WatermarkTemplate: String, CaseIterable, Identifiable, Hashable {
         case .receipt_memo:   return "小票手记"
         case .film_border:    return "胶片边框"
         case .gallery_frame:  return "画廊边框"
+        case .color_walk:     return "色彩漫步"
         }
     }
 
@@ -84,6 +88,7 @@ enum WatermarkTemplate: String, CaseIterable, Identifiable, Hashable {
         case .clean_instagram:      return "社媒卡片"
         case .magazine_cover:       return "杂志"
         case .receipt_memo:         return "小票"
+        case .color_walk:           return "色卡"
         }
     }
 
@@ -94,7 +99,7 @@ enum WatermarkTemplate: String, CaseIterable, Identifiable, Hashable {
              .fujifilm, .fuji_strip, .sony, .hasselblad, .ricoh_gr, .iphone:
             return true
         case .polaroid, .minimal, .minimal_dark, .date_stamp, .soft_journal,
-             .clean_instagram, .magazine_cover, .receipt_memo:
+             .clean_instagram, .magazine_cover, .receipt_memo, .color_walk:
             return false
         }
     }
@@ -125,6 +130,7 @@ enum WatermarkTemplate: String, CaseIterable, Identifiable, Hashable {
         case .receipt_memo:   ReceiptMemoTemplate(image: image, meta: meta)
         case .film_border:    FilmBorderTemplate(image: image, meta: meta)
         case .gallery_frame:  GalleryFrameTemplate(image: image, meta: meta)
+        case .color_walk:     ColorWalkTemplate(image: image, meta: meta)
         }
     }
 
