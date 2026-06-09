@@ -8,8 +8,8 @@ enum CameraBackModel: String, Hashable {
 
     var displayName: String {
         switch self {
-        case .m11: return "徕卡 M11"
-        case .q3:  return "徕卡 Q3"
+        case .m11: return L10n.text("徕卡 M11")
+        case .q3:  return L10n.text("徕卡 Q3")
         }
     }
 

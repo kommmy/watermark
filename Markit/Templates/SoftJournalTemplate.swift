@@ -37,7 +37,7 @@ struct SoftJournalTemplate: View {
     }
 
     private var metaLine: String {
-        [meta.dateText, meta.placeName ?? "城市未识别", meta.focalLengthText, meta.exposureSummary]
+        [meta.dateText, meta.placeName ?? L10n.text("城市未识别"), meta.focalLengthText, meta.exposureSummary]
             .compactMap { $0 }
             .joined(separator: " / ")
     }

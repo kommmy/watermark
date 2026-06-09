@@ -20,14 +20,14 @@ enum PuzzleLayout: String, CaseIterable, Identifiable, Hashable {
 
     var displayName: String {
         switch self {
-        case .vertical2:    return "上下双图"
-        case .horizontal2:  return "左右对比"
-        case .grid4:        return "四宫格"
-        case .cameraDetail: return "经典相机拼图"
-        case .cameraDetailQ3: return "轻便相机拼图"
-        case .polaroidStack: return "拍立得散落"
-        case .filmStrip:    return "胶片条"
-        case .magazineCover: return "杂志封面"
+        case .vertical2:    return L10n.text("上下双图")
+        case .horizontal2:  return L10n.text("左右对比")
+        case .grid4:        return L10n.text("四宫格")
+        case .cameraDetail: return L10n.text("经典相机拼图")
+        case .cameraDetailQ3: return L10n.text("轻便相机拼图")
+        case .polaroidStack: return L10n.text("拍立得散落")
+        case .filmStrip:    return L10n.text("胶片条")
+        case .magazineCover: return L10n.text("杂志封面")
         }
     }
 
@@ -42,14 +42,14 @@ enum PuzzleLayout: String, CaseIterable, Identifiable, Hashable {
 
     var hint: String {
         switch self {
-        case .vertical2:    return "主图与细节"
-        case .horizontal2:  return "前后对比"
-        case .grid4:        return "照片系列"
-        case .cameraDetail: return "取景框 + 成片"
-        case .cameraDetailQ3: return "取景框 + 成片"
-        case .polaroidStack: return "随手拼贴"
-        case .filmStrip:    return "复古胶片"
-        case .magazineCover: return "封面感"
+        case .vertical2:    return L10n.text("主图与细节")
+        case .horizontal2:  return L10n.text("前后对比")
+        case .grid4:        return L10n.text("照片系列")
+        case .cameraDetail: return L10n.text("取景框 + 成片")
+        case .cameraDetailQ3: return L10n.text("取景框 + 成片")
+        case .polaroidStack: return L10n.text("随手拼贴")
+        case .filmStrip:    return L10n.text("复古胶片")
+        case .magazineCover: return L10n.text("封面感")
         }
     }
 
@@ -74,10 +74,10 @@ struct PuzzleOptions {
         var id: String { rawValue }
         var displayName: String {
             switch self {
-            case .white:    return "白色"
-            case .black:    return "黑色"
-            case .warm:     return "暖色"
-            case .gradient: return "渐变"
+            case .white:    return L10n.text("白色")
+            case .black:    return L10n.text("黑色")
+            case .warm:     return L10n.text("暖色")
+            case .gradient: return L10n.text("渐变")
             }
         }
     }

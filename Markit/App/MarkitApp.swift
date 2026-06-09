@@ -20,6 +20,8 @@ struct MarkitApp: App {
             }
         } else if ProcessInfo.processInfo.arguments.contains("--screenshot-puzzle-tab") {
             HomeView(initialTab: .puzzle)
+        } else if ProcessInfo.processInfo.arguments.contains("--screenshot-collage-tab") {
+            HomeView(initialSelection: .collage)
         } else {
             HomeView()
         }

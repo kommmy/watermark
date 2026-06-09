@@ -25,7 +25,7 @@ struct FujiTemplate: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: barHeight * 1.8, height: barHeight * 0.34, alignment: .leading)
-                    Text(meta.cameraDisplayName == "未知相机" ? "X SERIES" : meta.cameraDisplayName)
+                    Text(L10n.text(meta.cameraDisplayName == "未知相机" ? "X SERIES" : meta.cameraDisplayName))
                         .font(.system(size: barHeight * 0.18))
                         .foregroundColor(warmWhite.opacity(0.7))
                         .lineLimit(1)

@@ -119,7 +119,7 @@ struct EditorView: View {
     private func actionLabel(title: String, system: String, filled: Bool) -> some View {
         HStack(spacing: 8) {
             Image(systemName: system)
-            Text(title).font(.headline)
+            Text(L10n.text(title)).font(.headline)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 14)
@@ -200,7 +200,7 @@ struct EditorView: View {
     }
 
     private func showToast(_ message: String) {
-        withAnimation { toast = ToastMessage(text: message) }
+        withAnimation { toast = ToastMessage(text: L10n.text(message)) }
         Task {
             try? await Task.sleep(nanoseconds: 1_800_000_000)
             withAnimation { toast = nil }
@@ -264,7 +264,7 @@ private struct MetadataSummaryBar: View {
     }
 
     private func metadataChip(_ text: String) -> some View {
-        Text(text)
+        Text(L10n.text(text))
             .font(AppTheme.Font.caption.weight(.medium))
             .foregroundColor(AppTheme.Palette.textPrimary)
             .lineLimit(1)

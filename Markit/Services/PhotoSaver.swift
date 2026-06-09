@@ -8,7 +8,7 @@ enum PhotoSaverError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .notAuthorized:
-            return "未授权写入相册，请到「设置」开启相册权限。"
+            return L10n.text("未授权写入相册，请到「设置」开启相册权限。")
         case .underlying(let e):
             return e.localizedDescription
         }

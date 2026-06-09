@@ -85,13 +85,13 @@ struct SectionHeader: View {
 
     var body: some View {
         HStack(alignment: .firstTextBaseline) {
-            Text(title)
+            Text(L10n.text(title))
                 .font(AppTheme.Font.sectionTitle)
                 .foregroundColor(AppTheme.Palette.textPrimary)
             Spacer()
             if let trailing {
                 Button(action: { trailingAction?() }) {
-                    Text(trailing)
+                    Text(L10n.text(trailing))
                         .font(AppTheme.Font.small)
                         .foregroundColor(AppTheme.Palette.textSecondary)
                 }
@@ -116,7 +116,7 @@ struct FloatingCreateButton: View {
                 .shadow(color: Color.black.opacity(0.32), radius: 18, x: 0, y: 10)
         }
         .buttonStyle(.plain)
-        .accessibilityLabel("快速创建")
+        .accessibilityLabel(Text("快速创建"))
     }
 }
 
@@ -132,7 +132,7 @@ struct LoadingOverlay: View {
             VStack(spacing: 10) {
                 ProgressView()
                     .tint(.white)
-                Text(message)
+                Text(L10n.text(message))
                     .font(AppTheme.Font.small.weight(.semibold))
                     .foregroundColor(.white)
             }

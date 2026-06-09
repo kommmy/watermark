@@ -132,7 +132,7 @@ struct WatermarkTab: View {
                             .buttonStyle(.plain)
                             .disabled(isLoading)
                             .opacity(isLoading ? 0.6 : 1)
-                            .accessibilityLabel("使用\(template.displayName)")
+                            .accessibilityLabel(Text(L10n.format("使用%@", template.displayName)))
                         }
                     }
                 }
@@ -156,7 +156,7 @@ struct WatermarkTab: View {
                                 PuzzleLayoutCard(layout: layout, width: 148, height: 184)
                             }
                             .buttonStyle(.plain)
-                            .accessibilityLabel("打开\(layout.displayName)")
+                            .accessibilityLabel(Text(L10n.format("打开%@", layout.displayName)))
                         }
                     }
                 }
@@ -181,7 +181,7 @@ struct WatermarkTab: View {
             guard let data = try await item.loadTransferable(type: Data.self),
                   let img = UIImage(data: data)
             else {
-                errorMessage = "这张照片读取失败，请换一张试试。"
+                errorMessage = L10n.text("这张照片读取失败，请换一张试试。")
                 resetFlow()
                 return
             }

@@ -26,7 +26,7 @@ struct RicohGRTemplate: View {
                     .frame(width: barHeight * 1.65, height: barHeight * 0.30, alignment: .leading)
 
                 VStack(alignment: .leading, spacing: barHeight * 0.04) {
-                    Text(meta.cameraDisplayName == "未知相机" ? "RICOH GR III" : meta.cameraDisplayName)
+                    Text(L10n.text(meta.cameraDisplayName == "未知相机" ? "RICOH GR III" : meta.cameraDisplayName))
                         .font(.system(size: barHeight * 0.26, weight: .semibold))
                         .foregroundColor(.white)
                         .lineLimit(1)

@@ -52,7 +52,7 @@ struct MeTab: View {
     }
 
     private func sectionTitle(_ text: String) -> some View {
-        Text(text)
+        Text(L10n.text(text))
             .font(AppTheme.Font.sectionTitle)
             .foregroundColor(AppTheme.Palette.textPrimary)
             .padding(.horizontal, AppTheme.Spacing.l)

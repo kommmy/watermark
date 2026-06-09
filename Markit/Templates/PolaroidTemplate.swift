@@ -27,7 +27,7 @@ struct PolaroidTemplate: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: image.size.width * 0.32, height: captionSize * 1.2)
-                Text(meta.cameraDisplayName == "未知相机" ? "未命名照片" : meta.cameraDisplayName)
+                Text(L10n.text(meta.cameraDisplayName == "未知相机" ? "未命名照片" : meta.cameraDisplayName))
                     .font(.custom("Snell Roundhand", size: captionSize))
                     .foregroundColor(Color(white: 0.13))
                     .lineLimit(1)

@@ -59,7 +59,19 @@ Watermark:  PhotosPicker → Data → ExifReader → PhotoMetadata
 Puzzle:     PhotosPicker × N → [UIImage] → PuzzleLayout.makeView(images:options:)
                                          → PuzzleComposer.render (SwiftUI ImageRenderer)
                                          → PhotoSaver / share sheet
+
+Collage:    PhotosPicker × N → [UIImage?] → CollageGridView(frame:images:options:)
+                                          → CollageComposer.render (SwiftUI ImageRenderer)
+                                          → PhotoSaver / share sheet
 ```
+
+The **collage** module (the 拼图 tab) is data-driven, unlike the other two: a
+`CollageFrame` (`Models/CollageFrame.swift`) is just a list of normalized cell
+rectangles, and a single generic `CollageGridView` renders any frame. Adding a new
+shape is one entry in `CollageFrame.all` — no new View, no enum case, and (being a
+separate system from `PuzzleLayout`) it is **not** bound by the web lockstep contract
+below. `CollageGalleryView` lists frames grouped by photo count; `CollageEditorView`
+fills/exports them. It reuses `PuzzleOptions` (aspect / background / gap).
 
 - **A template / layout *is* a SwiftUI `View`.** `WatermarkTemplate` and `PuzzleLayout`
   (in `Models/`) are enums that map a case → a concrete View via `makeView(...)`.
@@ -122,7 +134,9 @@ Same pattern: View in `PuzzleLayouts/`, `case` + `makeView` + `slotCount` in
 The code is intentionally narrowed to a **Leica-focused** experience even though more
 templates/tabs exist in the tree. Don't "fix" these to match the README without intent:
 
-- `HomeView` mounts only **two tabs** (徕卡水印 / 相机拼图). `DiscoverTab` and `MeTab`
+- `HomeView` is a `TabView` with **two tabs**: 创作 (`WatermarkTab`, which itself
+  bundles the watermark templates + the Leica 相机拼图 sections) and 拼图
+  (`CollageGalleryView`, the data-driven collage frames). `DiscoverTab` and `MeTab`
   exist as files but are not wired into the TabView.
 - `PuzzleLayout.allCases` is **overridden to `[.cameraDetail]`** — only the Leica
   camera+shot puzzle is user-selectable, though 4 layouts are implemented.

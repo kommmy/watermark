@@ -31,6 +31,7 @@ struct Vertical2Layout: View {
 // Shared slot view: fills with image (scaledToFill) or shows surface placeholder.
 struct PuzzleSlot: View {
     let image: UIImage?
+    var cornerRadius: CGFloat = 6
 
     var body: some View {
         ZStack {
@@ -41,7 +42,7 @@ struct PuzzleSlot: View {
                     .scaledToFill()
             }
         }
-        .clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous))
+        .clipShape(RoundedRectangle(cornerRadius: cornerRadius, style: .continuous))
         .clipped()
     }
 }

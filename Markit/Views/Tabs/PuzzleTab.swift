@@ -45,7 +45,7 @@ struct PuzzleTab: View {
                                 PuzzleLayoutCard(layout: layout, width: 148, height: 184)
                             }
                             .buttonStyle(.plain)
-                            .accessibilityLabel("打开\(layout.displayName)")
+                            .accessibilityLabel(Text(L10n.format("打开%@", layout.displayName)))
                         }
                     }
                 }

@@ -19,7 +19,7 @@ struct PuzzleLayoutCard: View {
                     .fontWeight(.semibold)
                     .foregroundColor(AppTheme.Palette.textPrimary)
                     .lineLimit(1)
-                Text("\(layout.slotCount) 张照片 · \(layout.hint)")
+                Text(L10n.photoCountHint(layout.slotCount, hint: layout.hint))
                     .font(AppTheme.Font.caption)
                     .foregroundColor(AppTheme.Palette.textSecondary)
                     .lineLimit(1)

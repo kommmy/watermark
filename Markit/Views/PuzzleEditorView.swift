@@ -146,7 +146,7 @@ struct PuzzleEditorView: View {
     @ViewBuilder
     private func optionsRow<C: View>(title: String, @ViewBuilder content: () -> C) -> some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text(title)
+            Text(L10n.text(title))
                 .font(AppTheme.Font.caption)
                 .foregroundColor(AppTheme.Palette.textSecondary)
             ScrollView(.horizontal, showsIndicators: false) {
@@ -158,7 +158,7 @@ struct PuzzleEditorView: View {
     @ViewBuilder
     private func chip(label: String, selected: Bool, action: @escaping () -> Void) -> some View {
         Button(action: action) {
-            Text(label)
+            Text(L10n.text(label))
                 .font(AppTheme.Font.small.weight(.semibold))
                 .foregroundColor(selected ? .black : AppTheme.Palette.textPrimary)
                 .padding(.horizontal, 12).padding(.vertical, 6)
@@ -201,7 +201,7 @@ struct PuzzleEditorView: View {
     private func actionLabel(title: String, system: String, filled: Bool) -> some View {
         HStack(spacing: 8) {
             Image(systemName: system)
-            Text(title).font(.headline)
+            Text(L10n.text(title)).font(.headline)
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 14)
@@ -282,7 +282,7 @@ struct PuzzleEditorView: View {
     }
 
     private func showToast(_ message: String) {
-        withAnimation { toast = message }
+        withAnimation { toast = L10n.text(message) }
         Task {
             try? await Task.sleep(nanoseconds: 1_800_000_000)
             withAnimation { toast = nil }

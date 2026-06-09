@@ -1,0 +1,2 @@
+"NSPhotoLibraryAddUsageDescription" = "Allow Markit to save watermarked photos to your photo library.";
+"NSPhotoLibraryUsageDescription" = "Allow Markit to read selected photos so it can parse EXIF details and create watermarks.";

@@ -57,11 +57,11 @@ struct ReceiptMemoTemplate: View {
 
     private func receiptRow(_ key: String, _ value: String) -> some View {
         HStack(alignment: .firstTextBaseline) {
-            Text(key)
+            Text(L10n.text(key))
                 .font(.system(size: rowSize, weight: .semibold, design: .monospaced))
                 .foregroundColor(Color(white: 0.25))
             Spacer()
-            Text(value)
+            Text(L10n.text(value))
                 .font(.system(size: rowSize, weight: .regular, design: .monospaced))
                 .foregroundColor(Color(white: 0.18))
                 .lineLimit(1)

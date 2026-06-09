@@ -1,0 +1,2 @@
+"NSPhotoLibraryAddUsageDescription" = "用于将带水印的照片保存到您的相册。";
+"NSPhotoLibraryUsageDescription" = "读取您选择的照片以解析 EXIF 信息并生成水印。";

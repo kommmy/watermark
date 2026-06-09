@@ -103,10 +103,10 @@ struct DiscoverTab: View {
         VStack(alignment: .leading, spacing: AppTheme.Spacing.m) {
             HStack(alignment: .firstTextBaseline) {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(section.title)
+                    Text(L10n.text(section.title))
                         .font(AppTheme.Font.sectionTitle)
                         .foregroundColor(AppTheme.Palette.textPrimary)
-                    Text(section.subtitle)
+                    Text(L10n.text(section.subtitle))
                         .font(AppTheme.Font.caption)
                         .foregroundColor(AppTheme.Palette.textSecondary)
                         .lineLimit(1)
@@ -146,7 +146,7 @@ struct DiscoverTab: View {
             .buttonStyle(.plain)
             .disabled(isLoading)
             .opacity(isLoading ? 0.6 : 1)
-            .accessibilityLabel("使用\(template.displayName)")
+            .accessibilityLabel(Text(L10n.format("使用%@", template.displayName)))
         case .puzzle(let layout):
             NavigationLink {
                 PuzzleEditorView(layout: layout)
@@ -154,7 +154,7 @@ struct DiscoverTab: View {
                 PuzzleLayoutCard(layout: layout, width: 136, height: 172)
             }
             .buttonStyle(.plain)
-            .accessibilityLabel("打开\(layout.displayName)")
+            .accessibilityLabel(Text(L10n.format("打开%@", layout.displayName)))
         }
     }
 
@@ -173,7 +173,7 @@ struct DiscoverTab: View {
             guard let data = try await item.loadTransferable(type: Data.self),
                   let image = UIImage(data: data)
             else {
-                errorMessage = "这张照片读取失败，请换一张试试。"
+                errorMessage = L10n.text("这张照片读取失败，请换一张试试。")
                 resetWatermarkFlow()
                 return
             }

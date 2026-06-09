@@ -35,7 +35,7 @@ struct PhotoMetadata {
         iso: 200,
         captureDate: Date(),
         coordinate: CLLocationCoordinate2D(latitude: 31.2304, longitude: 121.4737),
-        placeName: "上海",
+        placeName: L10n.text("上海"),
         pixelSize: CGSize(width: 6000, height: 4000)
     )
 
@@ -87,7 +87,7 @@ struct PhotoMetadata {
     var brandDisplayName: String {
         if !brand.displayName.isEmpty { return brand.displayName }
         if let make = cameraMake?.trimmedNonEmpty { return make }
-        return "未知品牌"
+        return L10n.text("未知品牌")
     }
 
     var cameraDisplayName: String {

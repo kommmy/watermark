@@ -27,7 +27,7 @@ struct FujiFilmStripTemplate: View {
                         .resizable()
                         .scaledToFit()
                         .frame(width: barHeight * 1.65, height: barHeight * 0.30, alignment: .leading)
-                    Text(meta.cameraDisplayName == "未知相机" ? "X SERIES" : meta.cameraDisplayName)
+                    Text(L10n.text(meta.cameraDisplayName == "未知相机" ? "X SERIES" : meta.cameraDisplayName))
                         .font(.system(size: barHeight * 0.22, weight: .bold))
                         .foregroundColor(Color(white: 0.94))
                         .lineLimit(1)

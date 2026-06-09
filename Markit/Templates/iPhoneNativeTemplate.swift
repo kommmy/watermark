@@ -27,7 +27,7 @@ struct iPhoneNativeTemplate: View {
                 Text("由 ")
                     .font(.system(size: barHeight * 0.30, weight: .regular))
                     .foregroundColor(.black)
-                Text(meta.cameraDisplayName == "未知相机" ? "iPhone" : meta.cameraDisplayName)
+                Text(L10n.text(meta.cameraDisplayName == "未知相机" ? "iPhone" : meta.cameraDisplayName))
                     .font(.system(size: barHeight * 0.32, weight: .semibold))
                     .foregroundColor(.black)
                     .lineLimit(1)

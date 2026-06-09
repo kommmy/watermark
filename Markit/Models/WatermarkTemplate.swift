@@ -45,50 +45,50 @@ enum WatermarkTemplate: String, CaseIterable, Identifiable, Hashable {
 
     var displayName: String {
         switch self {
-        case .leica:        return "白标作品卡"
-        case .leica_mono:   return "黑白作品卡"
-        case .leica_frame:  return "相纸边框"
-        case .leica_compact:return "角标参数"
-        case .leica_gallery:return "画廊留白"
-        case .leica_glass:  return "毛玻璃"
-        case .leica_white_space: return "留白相框"
-        case .fujifilm:     return "富士暗调"
-        case .fuji_strip:   return "富士胶片"
-        case .sony:         return "索尼 Alpha"
-        case .hasselblad:   return "哈苏相纸"
-        case .ricoh_gr:     return "理光 GR"
-        case .iphone:       return "iPhone 拍摄"
-        case .polaroid:     return "宝丽来"
-        case .minimal:      return "极简白框"
-        case .minimal_dark: return "极简黑框"
-        case .date_stamp:   return "日期戳"
-        case .soft_journal: return "柔和手记"
-        case .clean_instagram: return "干净社媒"
-        case .magazine_cover: return "杂志封面"
-        case .receipt_memo:   return "小票手记"
-        case .film_border:    return "胶片边框"
-        case .gallery_frame:  return "画廊边框"
-        case .color_walk:     return "色彩漫步"
+        case .leica:        return L10n.text("白标作品卡")
+        case .leica_mono:   return L10n.text("黑白作品卡")
+        case .leica_frame:  return L10n.text("相纸边框")
+        case .leica_compact:return L10n.text("角标参数")
+        case .leica_gallery:return L10n.text("画廊留白")
+        case .leica_glass:  return L10n.text("毛玻璃")
+        case .leica_white_space: return L10n.text("留白相框")
+        case .fujifilm:     return L10n.text("富士暗调")
+        case .fuji_strip:   return L10n.text("富士胶片")
+        case .sony:         return L10n.text("索尼 Alpha")
+        case .hasselblad:   return L10n.text("哈苏相纸")
+        case .ricoh_gr:     return L10n.text("理光 GR")
+        case .iphone:       return L10n.text("iPhone 拍摄")
+        case .polaroid:     return L10n.text("宝丽来")
+        case .minimal:      return L10n.text("极简白框")
+        case .minimal_dark: return L10n.text("极简黑框")
+        case .date_stamp:   return L10n.text("日期戳")
+        case .soft_journal: return L10n.text("柔和手记")
+        case .clean_instagram: return L10n.text("干净社媒")
+        case .magazine_cover: return L10n.text("杂志封面")
+        case .receipt_memo:   return L10n.text("小票手记")
+        case .film_border:    return L10n.text("胶片边框")
+        case .gallery_frame:  return L10n.text("画廊边框")
+        case .color_walk:     return L10n.text("色彩漫步")
         }
     }
 
     var brandLabel: String {
         switch self {
         case .leica, .leica_mono, .leica_frame, .leica_compact, .leica_gallery,
-             .leica_glass, .leica_white_space, .film_border, .gallery_frame: return "作品卡"
-        case .fujifilm, .fuji_strip:return "FUJIFILM"
-        case .sony:                 return "SONY"
-        case .hasselblad:           return "HASSELBLAD"
-        case .ricoh_gr:             return "RICOH"
-        case .iphone:               return "iPhone"
-        case .polaroid:             return "宝丽来"
-        case .minimal, .minimal_dark:  return "极简"
-        case .date_stamp:           return "胶片日期"
-        case .soft_journal:         return "生活手记"
-        case .clean_instagram:      return "社媒卡片"
-        case .magazine_cover:       return "杂志"
-        case .receipt_memo:         return "小票"
-        case .color_walk:           return "色卡"
+             .leica_glass, .leica_white_space, .film_border, .gallery_frame: return L10n.text("作品卡")
+        case .fujifilm, .fuji_strip:return L10n.text("FUJIFILM")
+        case .sony:                 return L10n.text("SONY")
+        case .hasselblad:           return L10n.text("HASSELBLAD")
+        case .ricoh_gr:             return L10n.text("RICOH")
+        case .iphone:               return L10n.text("iPhone")
+        case .polaroid:             return L10n.text("宝丽来")
+        case .minimal, .minimal_dark:  return L10n.text("极简")
+        case .date_stamp:           return L10n.text("胶片日期")
+        case .soft_journal:         return L10n.text("生活手记")
+        case .clean_instagram:      return L10n.text("社媒卡片")
+        case .magazine_cover:       return L10n.text("杂志")
+        case .receipt_memo:         return L10n.text("小票")
+        case .color_walk:           return L10n.text("色卡")
         }
     }
 
